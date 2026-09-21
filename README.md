@@ -266,6 +266,16 @@ python src/cost_by_regime.py     # execution cost by regime, from recorder serie
 python src/score.py              # grade matured verdicts
 ```
 
+## Claude Skill
+
+[`.claude/skills/reef-pricer/SKILL.md`](.claude/skills/reef-pricer/SKILL.md) packages
+`verdict.py` as a Claude Skill: point Claude Code at this repo and it can
+answer "is this RWA pair's carry real" questions directly, scoped by an
+explicit rule — every number in the answer must come from the evidence JSON
+`verdict.py` prints, never invented or rounded by the model. It's the same
+constraint the project enforces on itself (`DECISIONS.md` D-08): the pricer
+decides what a number means, the language layer only reports it.
+
 ## Project layout
 
 ```
