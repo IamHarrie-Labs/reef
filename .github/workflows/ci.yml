@@ -27,6 +27,12 @@ jobs:
       - name: Mirage index run against cached data
         run: python src/mirage_index.py
 
+      - name: Confidence intervals compute
+        run: python src/intervals.py
+
+      - name: Edge decay across funding windows
+        run: python src/edge_decay.py
+
       - name: Web export regenerates without error
         run: python src/export_web.py
 

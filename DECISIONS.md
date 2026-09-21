@@ -1,112 +1,259 @@
-# Engineering decisions
+# Decisions
 
-Why the model and the demo are built the way they are, for the calls that
-weren't obvious.
+Material engineering decisions taken during the build, and why. Several
+were forced by something that actually broke, and two reversed a headline
+result.
 
-## Risk is the residual spread, not funding volatility
+---
 
-A pair trade's daily P&L has two live components: funding carry and
-residual-spread drift. It's tempting to compute a Sharpe from funding alone
-— funding is the return you're actually being paid. But the position is
-*not* riding out funding-rate noise; it's riding out the beta-hedged price
-spread between two instruments for the full holding period, and that
-spread moves independently of funding.
+## D-01 · Risk is the residual spread, not funding volatility
 
-Pricing SMH/SOXL on funding volatility alone gives a Sharpe of ~5.1.
-Pricing it on residual-spread volatility — the risk that's actually being
-carried — gives 0.05. That's roughly a 100× difference, not a rounding
-error, and it inverts the trade's viability entirely. `capacity.py`'s
-docstring states this directly: *"reporting a funding-only Sharpe would
-overstate the trade by an order of magnitude."* Every Sharpe number in this
-repo is computed against `resid_vol_hr`, scaled as √t, never against
-funding's own standard deviation.
+**Context.** A pair trade's P&L has two live components: funding carry and
+beta-hedged residual-spread drift. Funding is the return being paid, so a
+Sharpe computed from funding's own mean and standard deviation is the
+obvious first construction.
 
-## Execution cost is amortized once, not charged per rebalance
+**Finding.** It is wrong by about two orders of magnitude. SMH/SOXL prices
+to a funding-only Sharpe around 5.1. The position is not riding out
+funding-rate noise — it is carrying the beta-hedged price spread for the
+full holding period, and that spread moves independently of funding.
+Priced against residual-spread risk, the same trade earns **0.21**.
 
-`round_trip_cost()` walks the book once for entry and once for exit —
-that's the whole cost model. It is **not** charged again for each 8h
-funding interval, because the position isn't being closed and reopened
-every interval; it's held. This is what makes the capacity curve
-non-trivial: a trade that looks unprofitable at a 1-day hold (cost
-dominates) can turn profitable at 30 days (carry accumulates linearly,
-cost stays fixed). Get this amortization wrong in either direction and
-every number in the capacity grid is wrong.
+**Decision.** Every Sharpe in this project is computed against
+`resid_vol_hr`, scaled as √t. `capacity.py` states this in its module
+docstring so the constraint travels with the code.
 
-## Beta is fitted in-sample only, then held fixed out-of-sample
+**Rejected.** Reporting both and letting the reader choose. A funding-only
+Sharpe has no defensible interpretation here; publishing it alongside the
+correct number would have laundered it as a legitimate alternative.
 
-`hedge_ratio()` takes an optional `upto` cutoff and is always called with
-the in-sample boundary when validating the model, never fitted on the same
-data it's tested against. This is the standard walk-forward discipline for
-avoiding a hedge ratio that's secretly overfit to the test window — and
-it's why the leveraged-product betas (TQQQ 2.89, SOXS -3.72, TSLL 1.99)
-recovering their true mechanical multiples out-of-sample was the check that
-validated the whole pipeline, not just a nice-to-have.
+---
 
-## XAU/XAUT is the one pair that survives, and that's reported, not hidden
+## D-02 · Execution cost is amortized once, not charged per interval
 
-Screening 18 same-underlying pairs and finding that only gold clears
-Sharpe 0.5 is an uncomfortable result for a *tokenized-equity* hackathon —
-the surviving pair isn't even an equity. The alternative was to keep
-hunting for a second survivor among the equity pairs, or to quietly drop
-the finding. Neither happened. The result is reported as-is in the README,
-the evidence files, and the project description, because the finding
-itself — *17 of 18 apparent opportunities are priced illusions, and the
-naive ranking points at exactly the wrong one* — is the actual contribution
-here, independent of which specific pair happens to be the exception.
+**Context.** `round_trip_cost()` walks the order book for entry and exit.
+The question was whether that cost recurs across a multi-interval hold.
 
-## The original hedge-survival concept ("SOLVENT") was abandoned, not softened
+**Decision.** It is charged exactly once. The position is held, not closed
+and reopened each funding interval.
 
-An earlier direction priced whether a spot-plus-futures hedge could survive
-a margin call before its offsetting leg became liquid. It required a
-tokenized-equity spot market on Bitget. A direct check of all 2,241 spot
-symbols found zero RWA-linked instruments — the entire tradeable RWA
-universe on this exchange is `USDT-FUTURES` perpetuals. Rather than
-re-scope the concept around a synthetic spot leg (which would have made the
-core mechanism fictional), it was dropped in favor of the perpetual-pair
-carry model this repo actually implements. The empirical check that killed
-an idea is more valuable than the idea, so it's documented here instead of
-erased.
+**Why it matters.** This single choice is what makes the capacity curve
+non-trivial. Carry accumulates linearly while cost stays fixed, so the
+same pair can be unviable at a 1-day hold and viable at 30. Charge cost
+per interval and every trade dies; charge it never and every trade lives.
+The 52 short-hold verdicts logged at 1 and 3 days all priced MIRAGE —
+that is this asymmetry visible in the output.
 
-## The web demo ports the pricing model's *output*, not its code
+---
 
-`web/index.html` does not reimplement `model.py` or `capacity.py` in
-JavaScript. `export_web.py` runs the real Python pipeline and exports a
-precomputed grid (18 pairs × 8 sizes × 7 holds) as static JSON; the page
-looks up the nearest grid point to a parsed query. This was a deliberate
-trade: a from-scratch JS reimplementation risks silently diverging from the
-validated model (different rounding, a transcription slip in the cost
-formula), and there was no time to build a parallel test suite proving two
-implementations agree. A precomputed, versioned export can't diverge from
-the model that produced it, at the cost of the page only being able to
-answer questions within the precomputed grid rather than arbitrary
-size/hold combinations. The one thing genuinely re-implemented client-side
-is the natural-language query parser (`llm.py`'s regex logic, ported
-line-for-line, including its two bug fixes — see below) — because parsing
-free text has no "wrong divergence" risk the way financial arithmetic does.
+## D-03 · The hedge ratio is fitted in-sample and never refitted
 
-## Two parser bugs, caught by testing the demo against real phrasing
+**Context.** `hedge_ratio()` takes an optional `upto` cutoff.
 
-The size and hold-period regexes in `llm.py` were each wrong in ways that
-only testing against actual example questions surfaced:
+**Decision.** Beta is fitted on in-sample data only and held fixed for the
+out-of-sample test and for every live query.
 
-- `"3-day trade"` doesn't match `\d+\s*day` — a hyphen isn't whitespace —
-  so it silently fell through to the 30-day default. Fixed by allowing
-  `[\s-]*` between the number and the unit.
-- A bare `\d+` size regex matched the `100` embedded in the ticker
-  `NDX100`, treating "trust the QQQ/NDX100 spread" as a $100 position.
-  Fixed by requiring a `$` prefix, a k/m suffix, or 4+ bare digits with no
-  adjacent letters before a number counts as a size.
+**Confirmation.** The leveraged products recovered their true mechanical
+multiples out-of-sample — TQQQ 2.89, SOXS −3.72, TSLL 1.99, SOXL ~3. A
+hedge ratio secretly overfit to the test window would not reproduce the
+instruments' actual leverage. This was the check that validated the
+pipeline, not a convenience.
 
-Both fixes are regression-tested in [`src/test_llm_parsing.py`](src/test_llm_parsing.py)
-against nine phrasings including the two failure cases, "an hour" (no digit
-at all), and a query with size/hold both unstated. CI runs it on every push.
+---
 
-## The self-scoring ledger logs before synthesis, not after
+## D-04 · The original hedge-survival concept was killed by a data check
 
-`verdict.py` calls `ledger.append()` immediately after pricing a query and
-**before** calling the LLM for the natural-language explanation. If a
-verdict were logged after synthesis, or if the evidence object were
-mutable after logging, a later observer couldn't be sure the logged
-prediction wasn't adjusted with hindsight. Logging first, then rendering,
-makes `score.py`'s eventual grading meaningful: it's checking a prediction
-that was fixed before the outcome existed, not after.
+**Context.** The project began as a margin-survival tool: could a
+spot-plus-futures hedge survive a margin call before its offsetting leg
+became liquid? It required a tokenized-equity spot market on Bitget.
+
+**Finding.** All 2,241 Bitget spot symbols were enumerated. **Zero** are
+RWA-linked. The entire tradeable RWA universe on this exchange is
+`USDT-FUTURES` perpetuals.
+
+**Decision.** The concept was dropped and replaced with the perpetual-pair
+carry model this repo implements.
+
+**Rejected.** Re-scoping around a synthetic or assumed spot leg. The
+mechanism being demonstrated would then have been fictional, which is the
+failure mode this project exists to detect in other people's numbers.
+
+---
+
+## D-05 · A funding-only Sharpe of 24.9 was the first sign something was wrong
+
+**Found by.** XAU/XAUT reporting a funding Sharpe near 25 while every
+instinct said a 7% gross yield on a gold pair is not a 25-Sharpe trade.
+
+**Cause.** See D-01 — the denominator was funding volatility, which for a
+persistent funding stream is tiny.
+
+**Consequence.** Fixing the denominator dropped it to 1.46, which still
+looked like the one real trade in the book. It took two further
+measurements (D-06, D-07) to establish that even 1.46 was an artifact.
+
+---
+
+## D-06 · Refreshing data invalidated the headline result, and that was kept
+
+**Context.** Bitget's funding endpoint serves only the most recent 100
+intervals. Refreshing rolls the window forward, so every refresh is an
+unplanned out-of-sample test.
+
+**Finding.** On the window ending 2026-09-16, XAU/XAUT was the one pair
+clearing Sharpe 0.5, at 1.44. On the window ending 09-21 — same pair, same
+model, nothing refitted — it retained 56% of its gross edge, consistency
+fell 68% → 57%, and Sharpe dropped to **0.21**. Residual vol was unchanged
+at ~2.7 bp/hr: the carry decayed, the risk did not. The rest of the book
+held at 99% median edge retention.
+
+**Decision.** The earlier funding window was recovered from git history
+into `data/funding_prev` and both windows ship in the repo, so
+`edge_decay.py` can be re-run by anyone. The README was rewritten around
+the decay rather than around the result it replaced.
+
+**Rejected.** Reporting the 1.44 figure with a footnote, or pinning the
+project to the older window. The pair that decayed hardest was the one the
+model had selected — that is the winner's curse, and it is a more useful
+finding than the trade it destroyed.
+
+---
+
+## D-07 · Effective sample size, not nominal, after autocorrelation
+
+**Context.** Every headline number rests on 100 funding intervals. The
+naive standard error assumes those are independent.
+
+**Finding.** They are not, and the dependence is concentrated exactly where
+it does the most damage. Lag-1 autocorrelation of net funding:
+
+| Pair | r₁ | n_eff |
+|---|---:|---:|
+| XAU/PAXG | +0.65 | 21 |
+| XAU/XAUT | +0.53 | 30 |
+| XAUT/PAXG | +0.50 | 33 |
+| every non-gold pair | ≈ 0 | 80–100 |
+
+Every gold pair is heavily autocorrelated; no equity-RWA pair is. Median
+r₁ across the book is +0.03.
+
+**Decision.** `intervals.py` adjusts to `n_eff = n·(1−r)/(1+r)` before
+computing any interval, and uses a **Wilson score interval** for
+consistency, which is a binomial proportion and misbehaves under a normal
+approximation near its bounds.
+
+**Consequence.** XAU/XAUT's Sharpe 95% CI is **[−0.85, +1.27]**. It never
+had the precision to support the 1.44 point estimate. The statistics
+predict the decay that D-06 observed — two independent lines of evidence
+reaching the same conclusion.
+
+**Rejected.** Reporting point estimates alone. With 5 weeks of funding
+history, a point estimate invites the reader to distinguish 0.21 from 0.51
+when the sample cannot.
+
+---
+
+## D-08 · The web demo ships the model's output, not a second implementation
+
+**Context.** The live demo needed to answer queries in the browser.
+
+**Decision.** `export_web.py` runs the real Python pipeline and exports a
+precomputed grid (pairs × 8 sizes × 7 holds) as static JSON. The page
+looks up the nearest grid point. No pricing arithmetic runs in JavaScript.
+
+**Why.** A from-scratch JS reimplementation can silently diverge — a
+different rounding rule, a transcribed cost formula — and there was no
+parallel test suite to prove two implementations agree. A versioned export
+cannot diverge from the model that produced it.
+
+**Cost of the decision.** The page can only answer questions inside the
+precomputed grid; arbitrary size/hold combinations snap to the nearest
+point, and the UI says so when it does.
+
+**Exception.** The natural-language parser *is* reimplemented client-side,
+ported line-for-line from `llm.py`. Parsing free text has no
+wrong-divergence risk of the kind financial arithmetic does.
+
+---
+
+## D-09 · Two parser bugs, found by testing against real phrasing
+
+**Found by.** Running the demo against the example questions rather than
+reading the regexes.
+
+**Bug 1.** `"3-day trade"` did not match `\d+\s*day` — a hyphen is not
+whitespace — so it silently fell through to the 30-day default. A wrong
+answer with no error.
+
+**Bug 2.** A bare `\d+` size pattern matched the `100` inside the ticker
+`NDX100`, so *"trust the QQQ/NDX100 spread"* was priced as a $100
+position.
+
+**Decision.** Hyphens allowed between number and unit; a size must carry a
+`$` prefix, a k/m suffix, or 4+ bare digits with no adjacent letters. Both
+are regression-tested in [`src/test_llm_parsing.py`](src/test_llm_parsing.py)
+across nine phrasings including "an hour" (no digit at all) and a query
+stating neither size nor hold. CI runs it on every push.
+
+**Rejected.** Fixing them inline without a test. Both were silent
+wrong-answer bugs, which is the class most worth pinning down.
+
+---
+
+## D-10 · The ledger is written before the model speaks
+
+**Decision.** `verdict.py` calls `ledger.append()` immediately after
+pricing and **before** invoking the LLM for its explanation.
+
+**Why.** `score.py` grades logged verdicts against realised prices once
+their holding periods elapse. That grade only means something if the
+prediction was fixed before the outcome existed. Logging after synthesis,
+or leaving the evidence object mutable, would leave no way for a reader to
+rule out hindsight.
+
+**Consequence.** 52 short-hold verdicts (1 and 3 days) were logged
+deliberately so self-scoring could mature inside the project's own
+timeline — every verdict logged during the build had used the 30-day
+default and none could have been graded before submission.
+
+---
+
+## D-11 · The adverse-selection result was withheld rather than published thin
+
+**Context.** `adverse_selection.py` asks whether order-book depth
+withdraws exactly when the price gap widens.
+
+**Finding.** At the committed snapshot the recorder had 8 usable snapshots
+per symbol, from a single ~2-hour window, after the network path to
+`api.bitget.com` dropped. Correlations on that sample ranged from −0.66 to
++0.92 across pairs.
+
+**Decision.** The evidence file reports `n` and states plainly that a
+correlation on 8 points is noise, not a finding. `src/run_recorder.sh` now
+waits for network, launches the recorder, and relaunches it on failure, so
+the sample accumulates unattended.
+
+**Rejected.** Publishing the −0.66 as evidence of adversarial liquidity
+withdrawal. It is the result the project would most like to be true, which
+is exactly why it needed the larger sample before being claimed.
+
+---
+
+## D-12 · An earlier open-vs-closed cost comparison is published as confounded
+
+**Context.** Two order-book snapshots existed: one during US regular hours
+and one with the market shut.
+
+**Finding.** Closed-market cost came out *lower* (0.93× median), the
+opposite of the assumption stated in `LIMITATIONS.md`. But the two
+snapshots were taken **4.5 days apart**, so the comparison mixes regime
+with everything else that moved in between.
+
+**Decision.** `depth_regime.py` ships with the result and a printed caveat
+that it is directional only. `cost_by_regime.py` was written to do it
+properly, using the recorder's continuous series so regimes are compared
+within one process on one cadence.
+
+**Rejected.** Reporting 0.93× as a measured closed-market discount. A
+surprising result from a confounded comparison is the one most likely to
+be wrong.

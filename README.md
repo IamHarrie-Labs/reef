@@ -7,14 +7,14 @@
 [![CI](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml)
 [![Pairs priced: 25](https://img.shields.io/badge/pairs_priced-25-555555)](evidence/)
 [![Clearing Sharpe 0.5: 0](https://img.shields.io/badge/clearing_Sharpe_0.5-0_of_25-8b2f27)](#the-headline-result)
-[![Verdicts logged: 73](https://img.shields.io/badge/verdicts_logged-73-555555)](data/ledger.jsonl)
+[![Verdicts logged: 76](https://img.shields.io/badge/verdicts_logged-76-555555)](data/ledger.jsonl)
 [![Parser tests: 9 passing](https://img.shields.io/badge/parser_tests-9_passing-555555)](src/test_llm_parsing.py)
 
 Bitget lists **321 perpetual contracts flagged `isRwa: YES`** — tokenized US equities, ETFs, indices and leveraged products, trading 24/7 against underlyings that close for two days a week. A funding-yield screen shows a wall of attractive numbers. Reef prices each one against real execution cost and residual risk, and tells you which survive.
 
 Built for Bitget AI Base Camp Hackathon S2 · Track 3, AI Trading Desk · Open Theme.
 
-**[Live demo](https://claude.ai/code/artifact/6c4715c5-1b92-40f2-a7dd-2246c66afb1f)** · [Verify it yourself](#verify-it-yourself-in-60-seconds) · [The finding](#the-finding-the-one-edge-that-cleared-the-bar-decayed) · [Evidence](evidence/) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md)
+**[Live demo](https://claude.ai/code/artifact/6c4715c5-1b92-40f2-a7dd-2246c66afb1f)** · [Verify it yourself](#verify-it-yourself-in-60-seconds) · [The finding](#the-finding-the-one-edge-that-cleared-the-bar-decayed) · [Evidence](evidence/) · [Architecture](ARCHITECTURE.md) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md)
 
 </div>
 
@@ -31,6 +31,7 @@ python src/test_llm_parsing.py   # 9 parser regression tests, ~1s
 python src/screen.py             # naive yield ranking vs fully-priced ranking
 python src/edge_decay.py         # the winner's-curse result, both funding windows
 python src/mirage_index.py       # all 25 pairs scored
+python src/intervals.py          # 95% CIs, Wilson intervals, autocorrelation
 ```
 
 Ask it something in plain English:
@@ -47,6 +48,7 @@ Every verdict prints the complete evidence object first — **every number the e
 - [What Reef is](#what-reef-is)
 - [The headline result](#the-headline-result)
 - [The finding: the one edge that cleared the bar decayed](#the-finding-the-one-edge-that-cleared-the-bar-decayed)
+  - [Why it decayed: the effective sample was a third of the nominal one](#why-it-decayed-the-effective-sample-was-a-third-of-the-nominal-one)
 - [Who this is for](#who-this-is-for)
 - [Explore without running anything](#explore-without-running-anything)
 - [Regime dependence](#regime-dependence)
@@ -84,9 +86,11 @@ A pricing engine that takes a plain-English question about an RWA perpetual pair
 
 ## The headline result
 
-**0 of 25 pairs clear Sharpe 0.5.**
+**0 of 25 pairs clear Sharpe 0.5 on their point estimate.** 5 of 25 cannot be ruled out at 95%.
 
-The best is SMH/SOXL at **0.21** — a 30.1% gross annualised funding yield, 16.1% net, and still not worth taking once 2,159bp of 30-day residual-spread risk is priced against it.
+The best is SMH/SOXL at **0.21**, 95% CI **[−0.15, +0.58]** — a 30.1% gross annualised funding yield, 16.1% net, and still not worth taking once 2,159bp of 30-day residual-spread risk is priced against it.
+
+"Nothing clears the bar" is the honest reading of this sample. "Nothing could ever clear it" is not — with ~5 weeks of funding history the intervals are wide, and [`src/intervals.py`](src/intervals.py) reports them rather than hiding behind point estimates.
 
 Every one of the 52 verdicts logged at 1- and 3-day holds priced **MIRAGE**. That is the model's core asymmetry working rather than failing: execution cost is paid once, so a holding period too short for carry to accumulate past it can never be viable, however attractive the gross yield.
 
@@ -110,6 +114,25 @@ And critically — **the rest of the book held**. Median gross edge retained acr
 That is the winner's curse, measured live on this project's own headline result. The pair that looked best was the one most flattered by sampling noise, and it regressed. Reproduce it with [`src/edge_decay.py`](src/edge_decay.py) — both funding windows ship in the repo (`data/funding` and `data/funding_prev`, the latter recovered from git history).
 
 The windows overlap by about two weeks, so this is **not** a clean independent test. But a pair whose edge halves across a *partly overlapping* window was never carrying a stable edge.
+
+### Why it decayed: the effective sample was a third of the nominal one
+
+The decay was observed first and explained second. Funding intervals are autocorrelated — an 8h rate is not independent of the one before it — so the effective sample size is smaller than the 100 intervals the endpoint returns. Adjusting by lag-1 autocorrelation, `n_eff = n·(1−r)/(1+r)`:
+
+| Pair | lag-1 autocorr | n | **n_eff** | Sharpe 95% CI |
+|---|---:|---:|---:|---:|
+| XAU/XAUT | **+0.53** | 100 | **30** | **[−0.85, +1.27]** |
+| XAU/PAXG | **+0.65** | 100 | **21** | [−1.75, +1.12] |
+| XAUT/PAXG | **+0.50** | 100 | **33** | [−1.51, −0.62] |
+| SMH/SOXL | +0.01 | 100 | 98 | [−0.15, +0.58] |
+| QQQ/TQQQ | −0.09 | 100 | 100 | [−0.29, +0.55] |
+| SPY/VOO | +0.11 | 100 | 80 | [−0.55, −0.43] |
+
+**Every gold pair is heavily autocorrelated; no equity-RWA pair is** (median r₁ across the book: +0.03). XAU/XAUT's Sharpe interval spans −0.85 to +1.27 — it never had the precision to support the 1.44 point estimate it showed two days earlier.
+
+So the statistics predicted the decay before the second window confirmed it. Two independent lines of evidence, one conclusion: that Sharpe 1.44 was a small-sample artifact of persistent gold funding, not an edge.
+
+Reproduce with [`src/intervals.py`](src/intervals.py).
 
 ## Who this is for
 
@@ -193,8 +216,9 @@ Full detail in [`LIMITATIONS.md`](LIMITATIONS.md).
 - **The edge-decay windows overlap** by ~2 weeks. Directional evidence, not an independent test.
 - **Execution cost rests on one book snapshot per pair**, taken during US regular hours — the most liquid window. Closed-market cost is measured separately in `cost_by_regime.py` and is still accumulating.
 - **The adverse-selection question is open, not answered.** At the committed snapshot it had 8 data points. A correlation on 8 points is noise, and the evidence file says so rather than reporting a number.
-- **Self-scoring has produced no grades yet.** 73 verdicts are logged; the 52 short-hold ones mature 09-22 and 09-24. Until then the self-scoring claim is a mechanism, not a result.
-- **No confidence intervals** are reported on the headline Sharpe figures. With ~5 weeks of funding history they would be wide.
+- **Self-scoring has produced no grades yet.** 76 verdicts are logged; the 52 short-hold ones mature 09-22 and 09-24. Until then the self-scoring claim is a mechanism, not a result.
+- **The reported intervals are a lower bound on uncertainty.** [`intervals.py`](src/intervals.py) propagates uncertainty in the funding edge only; execution cost and residual volatility are held at their point estimates. The true intervals are wider than printed.
+- **Autocorrelation is corrected for at lag 1 only.** Higher-order structure would shrink the effective sample further, so `n_eff` is itself optimistic.
 
 ## Run it
 
@@ -204,6 +228,7 @@ python src/screen.py             # naive vs priced ranking
 python src/mirage_index.py       # full public index, 25 pairs
 python src/capacity.py           # capacity curve, all pairs
 python src/edge_decay.py         # winner's-curse result across funding windows
+python src/intervals.py          # confidence intervals on every headline number
 python src/funding_regime.py     # regime dependence
 python src/verdict.py "Is XAU/XAUT real for $50k over 2 weeks?"
 python src/demo.py               # full walkthrough
@@ -229,6 +254,7 @@ src/
   llm.py, verdict.py            NL parsing + synthesis, orchestration
   ledger.py, score.py, log_batch.py   self-scoring
   edge_decay.py                 out-of-sample edge persistence
+  intervals.py                  Wilson + autocorrelation-adjusted CIs
   funding_regime.py             regime dependence
   adverse_selection.py          gap-vs-depth (needs recorder data)
   cost_by_regime.py             execution cost by regime
@@ -239,5 +265,6 @@ src/
 web/index.html                  the live demo
 data/                           prices, funding (+ prior window), depth, timeseries
 evidence/                       committed, re-runnable pipeline output
+ARCHITECTURE.md                 the one rule, component map, verdict path
 DECISIONS.md, LIMITATIONS.md    why it is built this way, and what it is not
 ```
