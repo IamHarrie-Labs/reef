@@ -2,6 +2,14 @@
 
 Price divergence degrades 2.89x when the US market is closed. If funding does
 the same, entry timing matters and the carry trade has a best hour of the week.
+
+SUPERSEDED by `regime_test.py`. This script prints raw bp/interval figures
+with no significance test and mixes gold's 4h funding cadence with the 8h
+cadence of everything else in the same column - the same unit-mixing bug
+that produced the retracted "23x funding decline" claim (DECISIONS.md D-13).
+Kept only as the original exploratory script; `regime_test.py` is the
+number to cite - it normalizes to bp/day and reports a sign test + bootstrap
+CI instead of a bare ratio.
 """
 import sys, os, json, datetime as dt, statistics as st
 sys.path.insert(0, os.path.dirname(__file__))
