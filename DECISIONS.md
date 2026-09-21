@@ -379,3 +379,24 @@ wrong at the source. Rigour applied downstream of a bad constant produces
 confident, well-documented, wrong conclusions. The bug was caught by a
 consistency check built for a different purpose, not by re-examining the
 conclusions.
+
+## D-16: the LLM gets a Skill, not a license
+
+**Context.** The reference repos surveyed for this hackathon (Night Shift,
+Morrow) package their tools as things another agent — not just a human at a
+terminal — can pick up and use correctly. Reef's LLM layer (`llm.py`) was
+already scoped to explain evidence rather than compute it (D-08), but that
+scoping lived only in a prompt string, invisible to anyone who didn't read
+`llm.py`.
+
+**Decision.** Added `.claude/skills/reef-pricer/SKILL.md`, a Claude Skill
+that wraps `verdict.py`. It states the same rule D-08 enforces in code —
+every number in an answer must come from the evidence JSON, nothing
+invented, nothing rounded past what's printed — as an explicit,
+machine-readable constraint on whichever model picks the skill up, not just
+a comment for a human reader.
+
+**Rejected.** A thin CLI wrapper with no skill manifest. That would run the
+same script but drop the constraint the moment someone other than the
+original author (or a model without the surrounding context) invoked it.
+The manifest is the artifact that survives being copied out of this repo.
