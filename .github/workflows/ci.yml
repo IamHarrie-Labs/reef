@@ -1,0 +1,34 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Query parser regression tests
+        run: python src/test_llm_parsing.py
+
+      - name: Carry model + capacity curve run against cached data
+        run: python src/capacity.py
+
+      - name: Naive-vs-priced screen run against cached data
+        run: python src/screen.py
+
+      - name: Mirage index run against cached data
+        run: python src/mirage_index.py
+
+      - name: Web export regenerates without error
+        run: python src/export_web.py
+
+      - name: End-to-end demo walkthrough
+        run: python src/demo.py

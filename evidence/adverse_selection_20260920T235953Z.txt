@@ -1,0 +1,392 @@
+{
+  "pair": "SPYUSDT/VOOUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.664,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 0.5,
+      "mean_depth_usdt": 50074.0
+    }
+  }
+}
+{
+  "pair": "SPYUSDT/SP500USDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.918,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 1.6,
+      "mean_depth_usdt": 165867.0
+    }
+  }
+}
+{
+  "pair": "VOOUSDT/SP500USDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.539,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 1.5,
+      "mean_depth_usdt": 50074.0
+    }
+  }
+}
+{
+  "pair": "QQQUSDT/NDX100USDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.244,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 2.1,
+      "mean_depth_usdt": 182038.0
+    }
+  }
+}
+{
+  "pair": "QQQUSDT/TQQQUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.164,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 2.4,
+      "mean_depth_usdt": 50052.0
+    }
+  }
+}
+{
+  "pair": "QQQUSDT/SQQQUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.122,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 6.0,
+      "mean_depth_usdt": 57706.0
+    }
+  }
+}
+{
+  "pair": "TQQQUSDT/SQQQUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.139,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 7.9,
+      "mean_depth_usdt": 41288.0
+    }
+  }
+}
+{
+  "pair": "SOXXUSDT/SMHUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.026,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 4.3,
+      "mean_depth_usdt": 540.0
+    }
+  }
+}
+{
+  "pair": "SOXXUSDT/SOXLUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.549,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 15.8,
+      "mean_depth_usdt": 979.0
+    }
+  }
+}
+{
+  "pair": "SOXXUSDT/SOXSUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.306,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 19.9,
+      "mean_depth_usdt": 979.0
+    }
+  }
+}
+{
+  "pair": "SMHUSDT/SOXLUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.253,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 19.3,
+      "mean_depth_usdt": 598.0
+    }
+  }
+}
+{
+  "pair": "SMHUSDT/SOXSUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.245,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 16.5,
+      "mean_depth_usdt": 598.0
+    }
+  }
+}
+{
+  "pair": "SOXLUSDT/SOXSUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.727,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 34.8,
+      "mean_depth_usdt": 42909.0
+    }
+  }
+}
+{
+  "pair": "XAUUSDT/XAUTUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.029,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 1.2,
+      "mean_depth_usdt": 19743.0
+    }
+  }
+}
+{
+  "pair": "XAUUSDT/PAXGUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.357,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 1.1,
+      "mean_depth_usdt": 44925.0
+    }
+  }
+}
+{
+  "pair": "XAUTUSDT/PAXGUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.527,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 1.0,
+      "mean_depth_usdt": 18649.0
+    }
+  }
+}
+{
+  "pair": "TSLAUSDT/TSLLUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.971,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 4.3,
+      "mean_depth_usdt": 23133.0
+    }
+  }
+}
+{
+  "pair": "NVDAUSDT/NVDLUSDT",
+  "n": 9,
+  "status": "analysed",
+  "gap_depth_correlation": -0.042,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 9,
+      "mean_gap_bp": 1.3,
+      "mean_depth_usdt": 9264.0
+    }
+  }
+}
+{
+  "pair": "AAPLUSDT/AAPUUSDT",
+  "n": 9,
+  "status": "analysed",
+  "gap_depth_correlation": 0.709,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 9,
+      "mean_gap_bp": 2.1,
+      "mean_depth_usdt": 24379.0
+    }
+  }
+}
+{
+  "pair": "MSFTUSDT/MSFUUSDT",
+  "n": 9,
+  "status": "analysed",
+  "gap_depth_correlation": -0.306,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 9,
+      "mean_gap_bp": 11.2,
+      "mean_depth_usdt": 394.0
+    }
+  }
+}
+{
+  "pair": "AMZNUSDT/AMZUUSDT",
+  "n": 9,
+  "status": "analysed",
+  "gap_depth_correlation": 0.117,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 9,
+      "mean_gap_bp": 8.2,
+      "mean_depth_usdt": 36.0
+    }
+  }
+}
+{
+  "pair": "METAUSDT/METUUSDT",
+  "n": 9,
+  "status": "analysed",
+  "gap_depth_correlation": -0.066,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 9,
+      "mean_gap_bp": 5.7,
+      "mean_depth_usdt": 10395.0
+    }
+  }
+}
+{
+  "pair": "GOOGLUSDT/GGLLUSDT",
+  "n": 9,
+  "status": "analysed",
+  "gap_depth_correlation": -0.433,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 9,
+      "mean_gap_bp": 4.1,
+      "mean_depth_usdt": 348.0
+    }
+  }
+}
+{
+  "pair": "TENCENTUSDT/TENCENTHKDUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": -0.271,
+  "interpretation": "liquidity withdraws as the gap widens (adversarial)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 6.3,
+      "mean_depth_usdt": 5270.0
+    }
+  }
+}
+{
+  "pair": "XIAOMIUSDT/XIAOMIHKDUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.089,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 4.9,
+      "mean_depth_usdt": 41000.0
+    }
+  }
+}
+{
+  "pair": "ZHIPUUSDT/ZHIPUHKDUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.597,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 10.6,
+      "mean_depth_usdt": 18660.0
+    }
+  }
+}
+{
+  "pair": "MINIMAXUSDT/MINIMAXHKDUSDT",
+  "n": 9,
+  "status": "analysed",
+  "gap_depth_correlation": 0.039,
+  "interpretation": "depth roughly independent of gap size",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 9,
+      "mean_gap_bp": 13.9,
+      "mean_depth_usdt": 2415.0
+    }
+  }
+}
+{
+  "pair": "SHEINUSDT/SHEINHKDUSDT",
+  "n": 8,
+  "status": "analysed",
+  "gap_depth_correlation": 0.23,
+  "interpretation": "liquidity INCREASES with gap (unexpected - check data)",
+  "by_regime": {
+    "WEEKEND": {
+      "n": 8,
+      "mean_gap_bp": 5.4,
+      "mean_depth_usdt": 28834.0
+    }
+  }
+}
