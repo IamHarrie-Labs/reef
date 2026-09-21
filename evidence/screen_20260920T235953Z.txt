@@ -1,0 +1,18 @@
+What a naive yield screen shows you        vs   what survives the full model
+----------------------------------------------------------------------------------
+ # PAIR                 gross%   |  PAIR                  net%  Sharpe
+----------------------------------------------------------------------------------
+ 1 SMH/SOXL               17.7   |  XAU/XAUT               3.6    1.46
+ 2 SOXX/SOXL              15.0   |  SMH/SOXL               3.5    0.05
+ 3 QQQ/TQQQ               11.2   |  QQQ/NDX100             0.2    0.02
+ 4 QQQ/SQQQ                9.1   |  QQQ/TQQQ               0.1    0.01
+ 5 QQQ/NDX100              8.2   |  SOXX/SOXL             -1.7   -0.03
+ 6 GOOGL/GGLL              7.5   |  TQQQ/SQQQ             -1.7   -0.13
+ 7 TQQQ/SQQQ               7.0   |  GOOGL/GGLL            -9.0   -0.31
+ 8 XAU/XAUT                7.0   |  TSLA/TSLL            -10.4   -0.36
+
+Top naive pick, fully priced:
+  SMH/SOXL: 17.7% gross -> 3.5% net (cost 117bp, risk 2048bp, Sharpe 0.05, consistency 33%)
+
+Pairs with Sharpe > 0.5 at $25k / 30d: 1/18
+  XAU/XAUT  net 3.6%  Sharpe 1.46  consistency 68%
