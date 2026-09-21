@@ -18,9 +18,11 @@ def section(title):
     print("\n" + "=" * 78)
     print(title)
     print("=" * 78)
+    sys.stdout.flush()
 
 
 def run(script, *args):
+    sys.stdout.flush()
     subprocess.run([sys.executable, os.path.join(HERE, script), *args], check=False)
 
 

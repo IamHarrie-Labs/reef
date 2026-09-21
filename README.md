@@ -249,8 +249,7 @@ python src/mirage_index.py       # full public index, 25 pairs
 python src/capacity.py           # capacity curve, all pairs
 python src/edge_decay.py         # winner's-curse result across funding windows
 python src/intervals.py          # confidence intervals on every headline number
-python src/regime_test.py        # sign tests + bootstrap CIs on the regime claims
-python src/funding_regime.py     # regime dependence
+python src/regime_test.py        # sign tests + bootstrap CIs on the regime claims - cite this one
 python src/verdict.py "Is XAU/XAUT real for $50k over 2 weeks?"
 python src/demo.py               # full walkthrough
 
@@ -286,8 +285,8 @@ src/
   ledger.py, score.py, log_batch.py   self-scoring
   edge_decay.py                 out-of-sample edge persistence
   intervals.py                  Wilson + autocorrelation-adjusted CIs
-  regime_test.py                paired sign tests, bootstrap CIs on regime claims
-  funding_regime.py             regime dependence
+  regime_test.py                paired sign tests, bootstrap CIs on regime claims (canonical)
+  funding_regime.py             superseded exploratory script, kept for history - see its docstring
   adverse_selection.py          gap-vs-depth (needs recorder data)
   cost_by_regime.py             execution cost by regime
   depth_regime.py               open-vs-closed book comparison
