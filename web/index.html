@@ -14,6 +14,8 @@
     --accent-wash: rgba(169, 122, 52, 0.10);
     --real: #2E7D5C;
     --real-wash: rgba(46, 125, 92, 0.10);
+    --unproven: #A97A34;
+    --unproven-wash: rgba(169, 122, 52, 0.10);
     --mirage: #B23B32;
     --mirage-wash: rgba(178, 59, 50, 0.09);
     --shadow: 0 1px 2px rgba(21,24,29,0.05), 0 8px 24px -12px rgba(21,24,29,0.18);
@@ -33,6 +35,8 @@
       --accent-wash: rgba(217, 161, 92, 0.12);
       --real: #4FAE84;
       --real-wash: rgba(79, 174, 132, 0.13);
+      --unproven: #D9A15C;
+      --unproven-wash: rgba(217, 161, 92, 0.13);
       --mirage: #E07A6E;
       --mirage-wash: rgba(224, 122, 110, 0.12);
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.55);
@@ -52,6 +56,8 @@
     --accent-wash: rgba(217, 161, 92, 0.12);
     --real: #4FAE84;
     --real-wash: rgba(79, 174, 132, 0.13);
+    --unproven: #D9A15C;
+    --unproven-wash: rgba(217, 161, 92, 0.13);
     --mirage: #E07A6E;
     --mirage-wash: rgba(224, 122, 110, 0.12);
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.55);
@@ -130,6 +136,7 @@
     padding: 3px 14px 5px; border-radius: 8px; letter-spacing: 0.01em;
   }
   .verdict-stamp.real { background: var(--real-wash); color: var(--real); }
+  .verdict-stamp.unproven { background: var(--unproven-wash); color: var(--unproven); }
   .verdict-stamp.mirage { background: var(--mirage-wash); color: var(--mirage); }
   .verdict-sub { color: var(--muted); font-size: 13px; }
   .verdict-text { font-size: 14.5px; line-height: 1.6; max-width: 74ch; margin-bottom: 12px; }
@@ -186,6 +193,7 @@
     padding: 3px 9px; border-radius: 999px;
   }
   .pill.real { background: var(--real-wash); color: var(--real); }
+  .pill.unproven { background: var(--unproven-wash); color: var(--unproven); }
   .pill.mirage { background: var(--mirage-wash); color: var(--mirage); }
   .unpriced { color: var(--faint); font-style: italic; font-size: 12.5px; }
 
@@ -247,7 +255,7 @@
           <thead>
             <tr>
               <th>#</th><th>Pair</th><th>Score</th><th>Verdict</th>
-              <th>Gross %</th><th>Net %</th><th>Sharpe</th><th>Cost bp</th><th>Consist.</th>
+              <th>Gross %</th><th>Net %</th><th>Sharpe</th><th>95% CI</th><th>History</th>
             </tr>
           </thead>
           <tbody id="idxBody"></tbody>
@@ -276,10 +284,13 @@
           <code>residual spread risk</code> (scales as &radic;t, beta-hedged), and
           <code>execution cost</code> &mdash; a live order-book walk, paid once, entry and exit.
           A funding-only Sharpe overstates these trades by roughly an order of magnitude;
-          risk here is the residual spread, not funding volatility.
+          risk here is the residual spread, not funding volatility. <strong>UNPROVEN</strong>
+          means a pair clears Sharpe 0.5 on its point estimate but its 95% interval still
+          includes zero &mdash; not evidence of an edge on this sample.
           <h3>Limits</h3>
-          Single book snapshot from US regular hours (most liquid window); ~33 days of funding
-          history; hourly closes, not executable prices; no borrow cost modelled.
+          Single book snapshot from US regular hours (most liquid window); funding history is
+          100 intervals, which is 33 days for 8h-settling contracts but only 16.5 days for
+          gold's 4h contracts; hourly closes, not executable prices; no borrow cost modelled.
           Weekend books are being recorded live now &mdash; they cannot be backfilled.
           <h3>Self-scoring</h3>
           Every verdict this tool gives is logged with a timestamp before the outcome is known,
@@ -337,19 +348,22 @@
       var tr = el("tr");
       tr.dataset.pair = p.pair;
       var scorePct = Math.max(0, Math.min(100, p.mirage_score));
-      var color = p.verdict === "REAL" ? "var(--real)" : "var(--mirage)";
+      var vClass = p.verdict.toLowerCase();
+      var color = "var(--" + vClass + ")";
+      var cell = p.grid["25000"]["30"];
+      var ci = (cell && cell.ci_lo != null) ? "[" + fmt.n1(cell.ci_lo) + ", " + fmt.n1(cell.ci_hi) + "]" : "&mdash;";
       tr.innerHTML =
         '<td class="rank">' + (n++) + '</td>' +
         '<td class="pair-name">' + p.pair + '</td>' +
         '<td class="num"><div class="score-bar"><span>' + p.mirage_score +
           '</span><span class="score-track"><span class="score-fill" style="width:' + scorePct +
           '%;background:' + color + '"></span></span></div></td>' +
-        '<td><span class="pill ' + p.verdict.toLowerCase() + '">' + p.verdict + '</span></td>' +
+        '<td><span class="pill ' + vClass + '">' + p.verdict + '</span></td>' +
         '<td class="num">' + fmt.pct(p.edge.annual_pct) + '</td>' +
-        '<td class="num">' + fmt.pct(p.grid["25000"]["30"] ? p.grid["25000"]["30"].annual_pct : null) + '</td>' +
-        '<td class="num">' + fmt.n1(p.grid["25000"]["30"] ? p.grid["25000"]["30"].sharpe : null) + '</td>' +
-        '<td class="num">' + fmt.n1(p.grid["25000"]["30"] ? p.grid["25000"]["30"].cost_bp : null) + '</td>' +
-        '<td class="num">' + Math.round(p.edge.consistency_pct) + '%</td>';
+        '<td class="num">' + fmt.pct(cell ? cell.annual_pct : null) + '</td>' +
+        '<td class="num">' + fmt.n1(cell ? cell.sharpe : null) + '</td>' +
+        '<td class="num tabular">' + ci + '</td>' +
+        '<td class="num">' + (p.history_days != null ? p.history_days + "d" : "&mdash;") + '</td>';
       tr.addEventListener("click", function () { selectPair(p.pair, false); });
       body.appendChild(tr);
     });
@@ -371,11 +385,12 @@
     var p = findPair(name);
     if (!p) return;
     document.getElementById("curvePair").textContent = p.pair;
+    var vLabel = { REAL: "REAL", UNPROVEN: "UNPROVEN", MIRAGE: "MIRAGE" }[p.verdict] || p.verdict;
+    var vNote = { REAL: "clears Sharpe 0.5 with a 95% interval excluding zero",
+                  UNPROVEN: "clears 0.5 on point estimate only - the 95% interval includes zero",
+                  MIRAGE: "gross " + fmt.pct(p.edge.annual_pct) + " doesn't survive cost + risk" }[p.verdict] || "";
     document.getElementById("curveMeta").innerHTML =
-      p.verdict === "REAL"
-        ? "priced <b style='color:var(--real)'>REAL</b> at $25k / 30d"
-        : "priced <b style='color:var(--mirage)'>MIRAGE</b> at $25k / 30d - gross " +
-          fmt.pct(p.edge.annual_pct) + " doesn't survive cost + risk";
+      "priced <b style='color:var(--" + p.verdict.toLowerCase() + ")'>" + vLabel + "</b> at $25k / 30d - " + vNote;
     drawCurve(p);
   }
 
@@ -444,11 +459,11 @@
         "stroke-width": 1.5, "stroke-dasharray": "3,3" }));
     }
     svg.appendChild(make("path", { d: path(mine), fill: "none",
-      stroke: pair.verdict === "REAL" ? "var(--real)" : "var(--mirage)", "stroke-width": 2.25 }));
+      stroke: "var(--" + pair.verdict.toLowerCase() + ")", "stroke-width": 2.25 }));
     mine.forEach(function (v, i) {
       if (v == null) return;
       svg.appendChild(make("circle", { cx: x(i), cy: y(v), r: 2.5,
-        fill: pair.verdict === "REAL" ? "var(--real)" : "var(--mirage)" }));
+        fill: "var(--" + pair.verdict.toLowerCase() + ")" }));
     });
   }
 
@@ -532,7 +547,11 @@
     lines.push("At $" + ev.size.toLocaleString() + " held " + ev.hold_days + " days: cost " +
       fmt.n1(ev.cell.cost_bp) + "bp, residual risk " + fmt.n0(ev.cell.risk_bp) + "bp, net " +
       fmt.n1(ev.cell.net_bp) + "bp (" + fmt.pct(ev.cell.annual_pct) + " net annualised), Sharpe " +
-      fmt.n1(ev.cell.sharpe) + ".");
+      fmt.n1(ev.cell.sharpe) + " (95% CI [" + fmt.n1(ev.cell.ci_lo) + ", " + fmt.n1(ev.cell.ci_hi) + "]).");
+    var vNote = { REAL: "clears the bar with an interval excluding zero.",
+                  UNPROVEN: "clears the bar on point estimate only — the interval includes zero.",
+                  MIRAGE: "does not clear the bar." }[ev.cell.verdict] || "";
+    lines.push("Verdict: " + ev.cell.verdict + " — " + vNote);
     return lines.join(" ");
   }
 
@@ -579,9 +598,11 @@
     document.getElementById("q").value = text;
 
     var ev = buildEvidence(pair, parsed.size, parsed.hold);
-    var real = ev.cell && ev.cell.sharpe > 0.5;
-    stamp.textContent = real ? "REAL" : "MIRAGE";
-    stamp.className = "verdict-stamp " + (real ? "real" : "mirage");
+    // verdict is precomputed server-side (export_web.py) and read here, never
+    // recomputed in the browser - see DECISIONS.md D-08.
+    var verdict = ev.cell ? ev.cell.verdict : "MIRAGE";
+    stamp.textContent = verdict;
+    stamp.className = "verdict-stamp " + verdict.toLowerCase();
     sub.textContent = ev.pair + " · priced at $" + ev.size.toLocaleString() + " / " + ev.hold_days +
       "d" + (ev.size !== ev.requested_size || ev.hold_days !== ev.requested_hold_days
         ? " (nearest to your $" + ev.requested_size.toLocaleString() + " / " + ev.requested_hold_days + "d)" : "");
@@ -600,9 +621,13 @@
 
     var prompt = "You explain a priced pair-trade verdict to a retail trader. " +
       "Use ONLY the numbers in this JSON evidence object - never compute, round differently, " +
-      "or introduce a figure not present here. If a field is null, say it's unavailable. " +
+      "or introduce a figure not present here. The evidence object's cell.verdict field is " +
+      "the verdict (REAL, UNPROVEN or MIRAGE) - restate it exactly, do not infer your own " +
+      "from the Sharpe number. UNPROVEN means the point estimate clears the bar but the " +
+      "95% interval (cell.ci_lo to cell.ci_hi) still includes zero - say so explicitly if " +
+      "that's the case, it is not the same as REAL. If a field is null, say it's unavailable. " +
       "Write 3-5 plain sentences: what the gross yield looked like, what happened once cost " +
-      "and risk were priced in, and the one-line verdict (REAL or MIRAGE).\n\nEvidence:\n" +
+      "and risk were priced in, and the verdict with its 95% interval.\n\nEvidence:\n" +
       JSON.stringify(ev, null, 2);
 
     sampleNs(prompt, { modelTier: "quick", cache: false }).then(function (res) {

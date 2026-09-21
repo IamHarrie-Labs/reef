@@ -1,0 +1,40 @@
+
+REEF INDEX - $25,000 / 30-day hold
+Is the yield real, once cost and risk are priced in?
+REAL = clears Sharpe 0.5 and its 95% interval excludes zero.
+UNPROVEN = clears 0.5 on the point estimate only; the interval includes zero.
+
+  # PAIR               SCORE   VERDICT  gross%   net%  Sharpe           95% CI  cost bp   hist
+------------------------------------------------------------------------------------------------
+  1 XAU/XAUT             100  UNPROVEN     7.7    4.4    1.75   [-0.38, +3.87]     27.5  16.5d
+  2 XAU/PAXG              77  UNPROVEN     5.4    1.9    0.78   [-2.09, +3.66]     28.6  16.5d
+  3 SMH/SOXL              57    MIRAGE    30.1   16.1    0.21   [-0.15, +0.58]    115.0  33.0d
+  4 SOXX/SOXL             56    MIRAGE    26.8   10.1    0.18   [-0.28, +0.64]    137.2  33.0d
+  5 QQQ/TQQQ              55    MIRAGE    13.3    2.6    0.13   [-0.29, +0.55]     87.6  33.0d
+  6 ZHIPU/ZHIPUHKD        55    MIRAGE    18.5    6.7    0.15   [-0.07, +0.36]     96.8  33.0d
+  7 SOXL/SOXS             50    MIRAGE     6.3    0.0    0.00   [-0.01, +0.01]     51.1  33.0d
+  8 QQQ/NDX100            46    MIRAGE     6.8   -1.3   -0.12   [-0.43, +0.19]     66.2  33.0d
+  9 TQQQ/SQQQ             46    MIRAGE     7.0   -1.7   -0.11   [-0.29, +0.07]     71.5  33.0d
+ 10 MINIMAX/MINIMAXHKD    39    MIRAGE     3.3  -14.2   -0.31   [-0.44, -0.18]    143.8  33.0d
+ 11 XIAOMI/XIAOMIHKD      38    MIRAGE     6.2   -9.5   -0.33   [-0.46, -0.20]    129.3  33.0d
+ 12 TSLA/TSLL             37    MIRAGE     3.8  -10.4   -0.37   [-0.46, -0.29]    117.2  33.0d
+ 13 QQQ/SQQQ              35    MIRAGE     5.9   -9.6   -0.42   [-0.69, -0.14]    127.2  33.0d
+ 14 SPY/VOO               33    MIRAGE     1.2   -8.1   -0.49   [-0.55, -0.43]     75.9  33.0d
+ 15 NVDA/NVDL             32    MIRAGE     3.7  -14.3   -0.52   [-0.62, -0.43]    147.8  33.0d
+ 16 GOOGL/GGLL            32    MIRAGE     1.9  -14.8   -0.52   [-0.71, -0.32]    136.6  33.0d
+ 17 XAUT/PAXG             29    MIRAGE     2.4   -1.5   -0.59   [-1.49, +0.31]     31.9  16.5d
+ 18 AAPL/AAPU             29    MIRAGE     3.6  -18.7   -0.61   [-0.68, -0.54]    183.1  33.0d
+ 19 AMZN/AMZU             26    MIRAGE     4.4  -19.0   -0.68   [-0.75, -0.62]    192.7  33.0d
+ 20 SOXX/SMH              23    MIRAGE     1.4  -15.8   -0.78   [-0.84, -0.72]    141.9  33.0d
+ 21 SPY/SP500             22    MIRAGE     0.9   -6.6   -0.80   [-0.93, -0.67]     61.6  33.0d
+ 22 META/METU             21    MIRAGE     4.7  -32.5   -0.83   [-0.93, -0.73]    306.1  33.0d
+ 23 TENCENT/TENCENTHKD    21    MIRAGE     2.2  -15.2   -0.82   [-0.91, -0.73]    143.4  33.0d
+ 24 VOO/SP500             15    MIRAGE     0.1  -11.1   -1.01   [-1.02, -1.00]     92.1  33.0d
+ 25 MSFT/MSFU             12    MIRAGE     0.2  -32.9   -1.07   [-1.12, -1.03]    271.8  33.0d
+  - SOXX/SOXS                                               book_too_thin
+  - SMH/SOXS                                                book_too_thin
+  - SHEIN/SHEINHKD                                          book_too_thin
+
+0 REAL, 2 UNPROVEN, 23 MIRAGE, of 25 priced pairs.
+Every pair that clears the bar does so on an interval that includes zero.
+None is evidence of an edge on this sample.

@@ -77,18 +77,64 @@ def net_series(funding, a, b, beta):
     return net
 
 
+def sharpe_interval(r, ra, funding, hold):
+    """95% Sharpe interval for one priced pair, funding-edge uncertainty only.
+
+    `r` is capacity.analyse_pair() output, `ra` is capacity.risk_adjusted().
+    Returns dict(lo, hi, n, n_eff, r1) or None. Shared by the CLI below,
+    mirage_index.py and export_web.py so every surface computes it the
+    same way.
+    """
+    a, b = r["a"], r["b"]
+    net = net_series(funding, a, b, r["beta"])
+    if not net or not ra:
+        return None
+    n = len(net)
+    n_eff, r1 = effective_n(net)
+    se = st.pstdev(net) / math.sqrt(n_eff) if n_eff > 0 else float("nan")
+    ipd = r["edge"]["intervals_per_day"]
+    ann = math.sqrt(365 / hold)
+
+    def sharpe_for(edge):
+        gross = edge * ipd * hold
+        return ((gross - ra["cost_bp"]) / ra["risk_bp"] * ann) if ra["risk_bp"] > 0 else float("nan")
+
+    mean_bp = st.mean(net)
+    return {"lo": sharpe_for(mean_bp - Z * se), "hi": sharpe_for(mean_bp + Z * se),
+            "n": n, "n_eff": n_eff, "r1": r1}
+
+
+def verdict_for(sharpe, ci, bar=0.5):
+    """REAL only when the point estimate clears the bar AND the interval
+    excludes zero. A point estimate that clears the bar on an interval
+    spanning zero is UNPROVEN - it is not evidence of an edge."""
+    if sharpe is None or sharpe != sharpe or sharpe <= bar:
+        return "MIRAGE"
+    if ci is None or ci["lo"] <= 0:
+        return "UNPROVEN"
+    return "REAL"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hold", type=float, default=30)
     ap.add_argument("--size", type=float, default=25_000)
+    ap.add_argument("--archive", action="store_true",
+                    help="use the accumulated funding archive instead of the latest window")
     args = ap.parse_args()
 
-    prices, funding, books = model.load_prices(), model.load_funding(), model.load_books()
+    src = "archive" if args.archive else "window"
+    prices, books = model.load_prices(), model.load_books()
+    funding = model.load_funding(source=src)
+    if not funding:
+        print("No funding data for source=%s. Run: python src/funding_archive.py" % src)
+        return
     CL = json.load(open(os.path.join(model.DATA, "clusters.json")))
     pairs = [(sy[i], sy[j]) for c, sy in CL.items() if c != "CONTROL"
              for i in range(len(sy)) for j in range(i + 1, len(sy))]
 
-    print(f"95% confidence intervals, ${args.size:,.0f} / {args.hold:.0f}-day hold")
+    print(f"95% confidence intervals, ${args.size:,.0f} / {args.hold:.0f}-day hold, "
+          f"funding source: {src}")
     print("Uncertainty from the funding edge only; cost and residual vol held "
           "at point estimates,\nso these intervals are a LOWER BOUND on true "
           "uncertainty.\n")
@@ -120,7 +166,7 @@ def main():
         ann = math.sqrt(365 / args.hold)
 
         def sharpe_for(edge_per_interval):
-            gross = edge_per_interval * model.INTERVALS_PER_DAY * args.hold
+            gross = edge_per_interval * r["edge"]["intervals_per_day"] * args.hold
             return ((gross - cost_bp) / risk_bp * ann) if risk_bp > 0 else float("nan")
 
         lo_s = sharpe_for(mean_bp - Z * se)

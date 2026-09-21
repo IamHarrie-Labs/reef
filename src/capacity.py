@@ -26,7 +26,7 @@ def analyse_pair(prices, funding, books, a, b, split=None):
     for size in SIZES:
         cost = model.round_trip_cost(books, a, b, size, beta)
         curve.append((size, cost))
-    return {"pair": f"{a.replace('USDT','')}/{b.replace('USDT','')}",
+    return {"pair": f"{a.replace('USDT','')}/{b.replace('USDT','')}", "a": a, "b": b,
             "beta": beta, "edge": edge, "resid_vol_hr": rvol_h,
             "n_fit": n_fit, "n_resid": n_res, "curve": curve}
 

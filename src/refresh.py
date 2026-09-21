@@ -17,7 +17,7 @@ import datetime as dt
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(__file__))
-import model
+import model, funding_archive
 
 BASE = "https://api.bitget.com/api/v2/mix/market"
 PT = "USDT-FUTURES"
@@ -107,7 +107,7 @@ def refresh_funding():
     os.makedirs(d, exist_ok=True)
     syms = symbols()
     print(f"[funding] fetching {len(syms)} symbols...")
-    ok = 0
+    ok, archived = 0, 0
     for sym in syms:
         rows = _get(f"{BASE}/history-fund-rate?symbol={sym}&productType={PT}&pageSize=100")
         if not rows:
@@ -115,9 +115,12 @@ def refresh_funding():
             continue
         json.dump({"code": "00000", "data": rows},
                   open(os.path.join(d, f"{sym}.json"), "w"))
+        archived += funding_archive.absorb(sym, rows)
         ok += 1
         time.sleep(0.1)
     print(f"[funding] {ok}/{len(syms)} written -> {d}")
+    print(f"[funding] +{archived} new intervals archived -> data/funding_archive "
+          f"(history the endpoint will stop serving)")
 
 
 # -------------------------------------------------------------- depth --

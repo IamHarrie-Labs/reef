@@ -1,4 +1,4 @@
-"""Reef: one public score per RWA pair - what fraction of the
+"""Reef index: one public score per RWA pair - what fraction of the
 visible yield survives execution cost and residual risk.
 
     python src/mirage_index.py            # ranked table, all pairs
@@ -10,7 +10,7 @@ Sharpe, net bp, and cost bp are always printed alongside it.
 """
 import json, os, sys, argparse
 sys.path.insert(0, os.path.dirname(__file__))
-import model, capacity
+import model, capacity, intervals
 
 
 def build(size=25_000, hold_days=30):
@@ -30,15 +30,21 @@ def build(size=25_000, hold_days=30):
             rows.append({"pair": r["pair"], "status": "book_too_thin"})
             continue
         score = max(0, min(100, round(50 + ra["sharpe"] * 35)))
+        ci = intervals.sharpe_interval(r, ra, funding, hold_days)
         rows.append({
             "pair": r["pair"], "status": "priced", "mirage_score": score,
+            "ci_lo": round(ci["lo"], 2) if ci else None,
+            "ci_hi": round(ci["hi"], 2) if ci else None,
+            "n_eff": round(ci["n_eff"], 1) if ci else None,
+            "funding_interval_h": round(r["edge"]["funding_interval_h"]),
+            "history_days": round(r["edge"]["history_days"], 1),
             "gross_annual_pct": round(r["edge"]["annual_pct"], 1),
             "net_annual_pct": round(ra["annual_pct"], 1),
             "sharpe": round(ra["sharpe"], 2),
             "net_bp": round(ra["net_bp"], 1), "cost_bp": round(ra["cost_bp"], 1),
             "risk_bp": round(ra["risk_bp"], 0),
             "consistency_pct": round(r["edge"]["consistency_pct"], 0),
-            "verdict": "REAL" if ra["sharpe"] > 0.5 else "MIRAGE",
+            "verdict": intervals.verdict_for(ra["sharpe"], ci),
             "n_funding_intervals": r["edge"]["n_intervals"],
         })
     rows.sort(key=lambda x: -(x.get("mirage_score", -1)))
@@ -48,25 +54,31 @@ def build(size=25_000, hold_days=30):
 
 
 def render(idx):
-    print(f"\nMIRAGE INDEX - ${idx['size']:,.0f} / {idx['hold_days']:.0f}-day hold")
-    print("Is the yield real, once cost and risk are priced in?\n")
-    print(f"{'#':>3} {'PAIR':20s} {'SCORE':>6s} {'VERDICT':>8s} {'gross%':>8s} {'net%':>7s} "
-          f"{'Sharpe':>7s} {'cost bp':>8s} {'consist':>8s}")
-    print("-" * 82)
+    print(f"\nREEF INDEX - ${idx['size']:,.0f} / {idx['hold_days']:.0f}-day hold")
+    print("Is the yield real, once cost and risk are priced in?")
+    print("REAL = clears Sharpe 0.5 and its 95% interval excludes zero.")
+    print("UNPROVEN = clears 0.5 on the point estimate only; the interval includes zero.\n")
+    print(f"{'#':>3} {'PAIR':18s} {'SCORE':>5s} {'VERDICT':>9s} {'gross%':>7s} {'net%':>6s} "
+          f"{'Sharpe':>7s} {'95% CI':>16s} {'cost bp':>8s} {'hist':>6s}")
+    print("-" * 96)
     n = 1
     for r in idx["rows"]:
         if r["status"] != "priced":
-            print(f"{'-':>3} {r['pair']:20s} {r['status']:>50s}")
+            print(f"{'-':>3} {r['pair']:18s} {r['status']:>50s}")
             continue
-        print(f"{n:>3} {r['pair']:20s} {r['mirage_score']:>6d} {r['verdict']:>8s} "
-              f"{r['gross_annual_pct']:8.1f} {r['net_annual_pct']:7.1f} {r['sharpe']:7.2f} "
-              f"{r['cost_bp']:8.1f} {r['consistency_pct']:7.0f}%")
+        ci = (f"[{r['ci_lo']:+.2f}, {r['ci_hi']:+.2f}]"
+              if r.get("ci_lo") is not None else "-")
+        print(f"{n:>3} {r['pair']:18s} {r['mirage_score']:>5d} {r['verdict']:>9s} "
+              f"{r['gross_annual_pct']:7.1f} {r['net_annual_pct']:6.1f} {r['sharpe']:7.2f} "
+              f"{ci:>16s} {r['cost_bp']:8.1f} {r['history_days']:5.1f}d")
         n += 1
     priced = [r for r in idx["rows"] if r["status"] == "priced"]
-    real = [r for r in priced if r["verdict"] == "REAL"]
-    print(f"\n{len(real)}/{len(priced)} pairs priced REAL. "
-          f"{len(priced)-len(real)}/{len(priced)} are MIRAGE - visible yield, "
-          f"doesn't survive cost+risk at this size/hold.")
+    count = lambda v: sum(1 for r in priced if r["verdict"] == v)
+    print(f"\n{count('REAL')} REAL, {count('UNPROVEN')} UNPROVEN, "
+          f"{count('MIRAGE')} MIRAGE, of {len(priced)} priced pairs.")
+    if count("UNPROVEN") and not count("REAL"):
+        print("Every pair that clears the bar does so on an interval that includes "
+              "zero.\nNone is evidence of an edge on this sample.")
 
 
 if __name__ == "__main__":

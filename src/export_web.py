@@ -4,7 +4,7 @@ the real (Python) pipeline so the browser never re-derives anything.
 """
 import json, os, sys, datetime as dt
 sys.path.insert(0, os.path.dirname(__file__))
-import model, capacity, mirage_index
+import model, capacity, mirage_index, intervals
 
 prices, funding, books = model.load_prices(), model.load_funding(), model.load_books()
 CL = json.load(open(os.path.join(model.DATA, "clusters.json")))
@@ -25,10 +25,15 @@ for a, b in pairs:
         row = {}
         for hold in capacity.HOLDS:
             ra = capacity.risk_adjusted(r, size, hold)
+            ci = intervals.sharpe_interval(r, ra, funding, hold) if ra else None
             row[str(hold)] = None if not ra else {
                 "annual_pct": round(ra["annual_pct"], 2), "net_bp": round(ra["net_bp"], 1),
                 "cost_bp": round(ra["cost_bp"], 1), "risk_bp": round(ra["risk_bp"], 0),
                 "sharpe": round(ra["sharpe"], 3),
+                # interval and verdict computed here, never in the browser (D-08)
+                "ci_lo": round(ci["lo"], 3) if ci else None,
+                "ci_hi": round(ci["hi"], 3) if ci else None,
+                "verdict": intervals.verdict_for(ra["sharpe"], ci),
             }
         grid[str(size)] = row
     sc = score_by_pair.get(name)
@@ -39,6 +44,11 @@ for a, b in pairs:
         "n_fit": r["n_fit"], "n_resid": r["n_resid"],
         "mirage_score": sc["mirage_score"] if sc else None,
         "verdict": sc["verdict"] if sc else None,
+        "ci_lo": sc.get("ci_lo") if sc else None,
+        "ci_hi": sc.get("ci_hi") if sc else None,
+        "n_eff": sc.get("n_eff") if sc else None,
+        "history_days": sc.get("history_days") if sc else None,
+        "funding_interval_h": sc.get("funding_interval_h") if sc else None,
         "grid": grid,
     })
 

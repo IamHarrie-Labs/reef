@@ -1,0 +1,30 @@
+Regime significance tests - paired over pairs, 4000 bootstrap resamples
+==============================================================================
+
+CLAIM 1  Funding edge is lower on weekends than during US hours
+------------------------------------------------------------------------------
+  pairs (n)                     : 28
+  mean RTH / mean WEEKEND       : 0.8428 / 0.0359 bp/interval
+  claim direction               : RTH higher
+  sign test                     : 20/28 pairs agree, exact two-sided p = 0.036
+  difference RTH - WEEKEND      : +0.8069  95% CI [+0.4243, +1.2284]
+  ratio RTH / WEEKEND           : 23.48x  95% CI [-137.07x, 171.32x]
+  verdict                       : SUPPORTED - difference CI excludes zero and sign test is significant
+  warning                       : denominator is near zero, so the ratio is
+                                  unstable and should not be quoted as an effect size.
+                                  Report the difference instead.
+
+CLAIM 2  Tracking error / vol is higher on weekends than during US hours
+------------------------------------------------------------------------------
+  pairs (n)                     : 28
+  mean RTH / mean WEEKEND       : 0.6004 / 1.5502 (ratio)
+  claim direction               : WEEKEND higher
+  sign test                     : 25/28 pairs agree, exact two-sided p = 2.7e-05
+  difference RTH - WEEKEND      : -0.9498  95% CI [-1.2821, -0.6158]
+  ratio RTH / WEEKEND           : 0.39x  95% CI [0.32x, 0.48x]
+  verdict                       : SUPPORTED - difference CI excludes zero and sign test is significant
+
+==============================================================================
+How to quote these:
+  Funding edge: difference +0.807 (95% CI [+0.424, +1.228]); 20/28 pairs, p=0.036. Do not quote the ratio.
+  Tracking error: 2.58x weekend vs RTH; 25/28 pairs, p=2.7e-05.
