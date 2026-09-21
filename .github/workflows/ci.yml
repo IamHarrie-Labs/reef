@@ -30,8 +30,14 @@ jobs:
       - name: Confidence intervals compute
         run: python src/intervals.py
 
+      - name: Regime significance tests
+        run: python src/regime_test.py
+
       - name: Edge decay across funding windows
         run: python src/edge_decay.py
+
+      - name: Funding archive absorbs and reports coverage
+        run: python src/funding_archive.py
 
       - name: Web export regenerates without error
         run: python src/export_web.py

@@ -1,0 +1,36 @@
+Funding edge decay, same pairs and same model, two windows
+
+  EARLIER : 2026-08-14 -> 2026-09-16
+  CURRENT : 2026-08-19 -> 2026-09-21
+
+PAIR                  gross% then  gross% now  retained  consist then    now  Sharpe then     now
+------------------------------------------------------------------------------------------------
+SMH/SOXL                     17.1        30.1      176%           33%    34%         0.04    0.21
+SOXX/SOXL                    15.0        26.8      179%           32%    33%        -0.03    0.18
+XAU/XAUT                     13.9         7.7       56%           68%    57%         4.21    1.75
+QQQ/TQQQ                     10.3        13.3      129%           28%    33%        -0.02    0.13
+QQQ/SQQQ                      9.1         5.9       65%           42%    45%        -0.28   -0.42
+QQQ/NDX100                    8.3         6.8       82%           39%    37%         0.02   -0.12
+GOOGL/GGLL                    7.5         1.9       25%           29%    28%        -0.32   -0.52
+TQQQ/SQQQ                     7.0         7.0      100%           30%    33%        -0.11   -0.11
+META/METU                     6.1         4.7       77%           19%    16%        -0.80   -0.83
+AAPL/AAPU                     4.4         3.6       81%           27%    23%        -0.58   -0.61
+AMZN/AMZU                     4.1         4.4      108%           33%    37%        -0.70   -0.68
+TSLA/TSLL                     3.9         3.8       99%           23%    25%        -0.37   -0.37
+NVDA/NVDL                     3.6         3.7      103%           17%    22%        -0.53   -0.52
+SPY/SP500                     3.5         0.9       27%           14%    10%        -0.49   -0.80
+SOXX/SMH                      1.1         1.4      133%            5%     6%        -0.80   -0.78
+SPY/VOO                       1.0         1.2      111%            9%    10%        -0.50   -0.49
+VOO/SP500                     0.7         0.1        9%            5%     2%        -0.96   -1.01
+MSFT/MSFU                     0.0         0.2      723%            7%     9%        -1.08   -1.07
+
+================================================================================================
+Pairs priced on both windows      : 18
+Cleared Sharpe 0.5 in EARLIER     : 1
+Cleared Sharpe 0.5 in CURRENT     : 1
+Median gross edge retained        : 99%
+Pairs that kept >80% of the edge  : 12/18
+
+The windows overlap by roughly two weeks, so these are not independent samples.
+A pair whose edge nearly vanished across a partly-overlapping window was
+never carrying a stable edge to begin with.

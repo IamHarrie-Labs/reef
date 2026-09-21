@@ -1,8 +1,13 @@
 # Decisions
 
 Material engineering decisions taken during the build, and why. Several
-were forced by something that actually broke, and two reversed a headline
+were forced by something that actually broke, and three changed a headline
 result.
+
+> **Read D-15 first.** A funding-cadence bug understated gold's carry by
+> half until late in the build. D-05, D-06 and D-07 record the reasoning as
+> it happened, including numbers that D-15 later corrected; each carries a
+> note where that applies.
 
 ---
 
@@ -89,8 +94,10 @@ instinct said a 7% gross yield on a gold pair is not a 25-Sharpe trade.
 persistent funding stream is tiny.
 
 **Consequence.** Fixing the denominator dropped it to 1.46, which still
-looked like the one real trade in the book. It took two further
-measurements (D-06, D-07) to establish that even 1.46 was an artifact.
+looked like the one real trade in the book.
+
+> *Corrected by D-15.* 1.46 was itself computed with gold's funding
+> cadence wrong. Corrected, the same window gives 4.21.
 
 ---
 
@@ -100,22 +107,26 @@ measurements (D-06, D-07) to establish that even 1.46 was an artifact.
 intervals. Refreshing rolls the window forward, so every refresh is an
 unplanned out-of-sample test.
 
-**Finding.** On the window ending 2026-09-16, XAU/XAUT was the one pair
-clearing Sharpe 0.5, at 1.44. On the window ending 09-21 — same pair, same
-model, nothing refitted — it retained 56% of its gross edge, consistency
-fell 68% → 57%, and Sharpe dropped to **0.21**. Residual vol was unchanged
-at ~2.7 bp/hr: the carry decayed, the risk did not. The rest of the book
-held at 99% median edge retention.
+**Finding.** On the window ending 09-21 — same pair, same model, nothing
+refitted — XAU/XAUT retained 56% of its gross edge and consistency fell
+68% → 57%. Residual vol was unchanged at ~2.7 bp/hr: the carry decayed, the
+risk did not. The rest of the book held at 99% median edge retention.
+
+> *Corrected by D-15.* As first recorded, Sharpe fell 1.44 → **0.21**,
+> dropping XAU/XAUT below the bar and leaving 0 of 25 pairs clearing it.
+> Both figures carried the cadence bug. Corrected, it falls **4.21 → 1.75**:
+> a large decay, but it still clears 0.5. The 56% retention figure is a
+> ratio and is unaffected. "The one edge that cleared the bar decayed below
+> it" was an artifact; "the top-ranked pair decayed hardest" is not.
 
 **Decision.** The earlier funding window was recovered from git history
 into `data/funding_prev` and both windows ship in the repo, so
 `edge_decay.py` can be re-run by anyone. The README was rewritten around
 the decay rather than around the result it replaced.
 
-**Rejected.** Reporting the 1.44 figure with a footnote, or pinning the
-project to the older window. The pair that decayed hardest was the one the
-model had selected — that is the winner's curse, and it is a more useful
-finding than the trade it destroyed.
+**Rejected.** Pinning the project to the older window. The pair that
+decayed hardest was the one the model had ranked first — the shape of the
+winner's curse, and more useful than the point estimate it undercut.
 
 ---
 
@@ -137,15 +148,22 @@ it does the most damage. Lag-1 autocorrelation of net funding:
 Every gold pair is heavily autocorrelated; no equity-RWA pair is. Median
 r₁ across the book is +0.03.
 
+> *Qualified by D-15.* Gold settles every 4 hours, so its r₁ is measured
+> at a 4h lag while the equities' is at 8h — not a like-for-like
+> comparison. At a matched 8h lag gold is +0.32 to +0.41 and equity pairs
+> range from −0.09 to +0.20. Gold is more persistent, by much less than
+> this table suggests. The `n_eff` values remain correct: they describe the
+> samples as they exist.
+
 **Decision.** `intervals.py` adjusts to `n_eff = n·(1−r)/(1+r)` before
 computing any interval, and uses a **Wilson score interval** for
 consistency, which is a binomial proportion and misbehaves under a normal
 approximation near its bounds.
 
-**Consequence.** XAU/XAUT's Sharpe 95% CI is **[−0.85, +1.27]**. It never
-had the precision to support the 1.44 point estimate. The statistics
-predict the decay that D-06 observed — two independent lines of evidence
-reaching the same conclusion.
+**Consequence.** XAU/XAUT's Sharpe 95% CI is **[−0.38, +3.87]** (corrected
+per D-15). Its point estimate clears the bar; its interval includes zero.
+The pairs at the top of the ranking are the ones with the least
+information behind them, which is why the top one decayed hardest in D-06.
 
 **Rejected.** Reporting point estimates alone. With 5 weeks of funding
 history, a point estimate invites the reader to distinguish 0.21 from 0.51
@@ -257,3 +275,107 @@ within one process on one cadence.
 **Rejected.** Reporting 0.93× as a measured closed-market discount. A
 surprising result from a confounded comparison is the one most likely to
 be wrong.
+
+---
+
+## D-13 · The "23× funding decline" was retracted after testing it
+
+**Context.** The README reported that funding edge falls from 0.843 bp/interval
+during US hours to 0.036 on weekends — "a 23× decline". It was a ratio of two
+means, never tested.
+
+**Finding.** `regime_test.py` runs a paired comparison across 28 pairs. The
+*effect* is real: the difference is **+0.81 bp/interval, 95% CI [+0.42,
++1.23]**, 20 of 28 pairs agree, exact sign-test p = 0.036. But the *ratio*'s
+bootstrap 95% interval is **−137× to +171×**. The weekend mean sits near zero,
+so resampling a handful of pairs swings the denominator across zero and the
+ratio across infinity. "23×" was never an effect size; it was a division by
+a number close to nothing.
+
+**Decision.** The README now reports the difference with its interval, and the
+retraction is stated inline where the old number used to be — not silently
+replaced. `regime_test.py` prints an explicit warning whenever a ratio's
+denominator is within 25% of zero relative to its numerator.
+
+**Rejected.** Keeping "23×" because the direction was right. A correct
+direction attached to a meaningless magnitude still misleads, and "23×" is
+exactly the kind of number that gets repeated.
+
+---
+
+## D-14 · A cited number had no reproducing script, and was also stale
+
+**Found by.** Writing `regime_test.py` and searching for the code behind the
+README's "tracking error rises 2.89×, 26 of 27 pairs".
+
+**Cause.** It came from an exploration script that was never committed, run
+on the original 83-day price history. The README's opening section claims
+every number regenerates from committed data. For this one it did not.
+
+**Decision.** The analysis was ported into `regime_test.py` and re-run on the
+current 117-day history. It now reads **2.58×, 95% CI ~2.1–3.1×, 25 of 28
+pairs, p = 2.7 × 10⁻⁵** — the strongest result in the project, and slightly
+smaller than the stale figure. The out-of-sample discipline from D-03 is
+applied: beta fitted on the first 60% of each pair's history, the ratio
+measured on the remaining 40%.
+
+**Rejected.** Leaving the old figure because it was close. A number the repo
+cannot reproduce contradicts the repo's central claim about itself,
+regardless of how close it happens to be.
+
+---
+
+## D-15 · Gold settles funding every 4 hours; the model assumed 8 for everything
+
+**Found by.** Building the funding archive (`funding_archive.py`). Its
+coverage report flags gaps between an archive's first and last timestamp,
+assuming an 8-hour cadence. Three symbols showed **negative** gaps — more
+intervals than an 8-hour cadence could fit in their span. All three were
+gold: XAU, XAUT, PAXG.
+
+**Cause.** `model.py` hardcoded `INTERVALS_PER_DAY = 3`. Timestamp spacing
+in the funding data, and the exchange's own contract spec (`fundInterval`),
+both confirm gold settles every **4h** while the other 36 contracts settle
+every 8h. Every gold figure converting per-interval funding to per-day or
+annualised terms was **understated by exactly half**. Gold's 100-interval
+history also spans 16.5 days, not the ~5 weeks previously stated.
+
+**What it changed.**
+
+| | Under the bug | Corrected |
+|---|---:|---:|
+| XAU/XAUT Sharpe, current window | 0.21 | **1.75** |
+| XAU/XAUT Sharpe, earlier window | 1.44 | **4.21** |
+| XAU/PAXG Sharpe | −0.31 | **0.78** |
+| Pairs clearing Sharpe 0.5 | 0 of 25 | **2 of 25** |
+| Funding regime test | mixed 4h and 8h units | normalised to bp/day |
+
+**Decision.** Cadence is derived per pair from the median spacing of its
+own funding timestamps (`model.intervals_per_day`), so it needs no network
+and matches the data actually being priced. The edge dict now carries
+`intervals_per_day`, `funding_interval_h` and `history_days`, and
+`intervals.py` and `regime_test.py` use the pair's own cadence.
+
+**What it did not change.** The 56% edge retention in D-06 is a ratio and
+survives. The regime test's sign test is per-pair and scale-invariant, so
+its 20/28 and p = 0.036 are unchanged; the difference moves from a
+mixed-unit figure to **+2.57 bp/day [+1.38, +3.86]**. The tracking-error
+result (D-14) never touched funding.
+
+**Not rewritten.** 52 short-hold verdicts in `data/ledger.jsonl` were
+logged before the fix, and their gold evidence carries the understated
+carry. The ledger is append-only by design (D-10) — editing frozen
+predictions to match later knowledge is exactly what it exists to prevent.
+Their verdict labels are unaffected: at a 1–3 day hold, even corrected gold
+carry is far below its ~25bp round-trip cost, so they remain MIRAGE.
+
+**Rejected.** Hardcoding `4` for gold. The next contract Bitget lists on a
+different cadence would reintroduce the same bug silently. Deriving it from
+the data cannot drift from the data.
+
+**The lesson.** Four earlier decisions in this file — D-05, D-06, D-07 and
+the headline "0 of 25" — were reasoned carefully from numbers that were
+wrong at the source. Rigour applied downstream of a bad constant produces
+confident, well-documented, wrong conclusions. The bug was caught by a
+consistency check built for a different purpose, not by re-examining the
+conclusions.

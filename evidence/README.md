@@ -9,10 +9,13 @@ Each file is timestamped at generation (`_20260920T235953Z` = 2026-09-20
 
 | File | Command | What it proves |
 |---|---|---|
-| `screen_*.txt` | `python src/screen.py` | The naive-vs-priced ranking inversion — SMH/SOXL (17.7% gross) prices to Sharpe 0.05; XAU/XAUT (7.0% gross) is the one survivor |
-| `mirage_index_*.txt` | `python src/mirage_index.py` | Full 18-pair public index: score, verdict, cost, consistency |
+| `screen_*.txt` | `python src/screen.py` | Naive gross-yield ranking vs fully-priced ranking |
+| `intervals_*.txt` | `python src/intervals.py` | 95% CIs, Wilson intervals and autocorrelation-adjusted effective sample for every pair |
+| `regime_test_*.txt` | `python src/regime_test.py` | Sign tests and bootstrap CIs on both regime claims |
+| `edge_decay_*.txt` | `python src/edge_decay.py` | Edge persistence across two funding windows |
+| `mirage_index_*.txt` | `python src/mirage_index.py` | Full public index for every priced pair: score, verdict, cost, consistency |
 | `capacity_full_*.txt` | `python src/capacity.py` | Full size × hold capacity grid for the top 3 ranked pairs |
-| `funding_regime_*.txt` | `python src/funding_regime.py` | Funding edge by regime — 7× weaker on weekends than US market hours |
+| `funding_regime_*.txt` | `python src/funding_regime.py` | Funding edge by regime, descriptive (tested in `regime_test_*.txt`) |
 | `adverse_selection_*.txt` | `python src/adverse_selection.py` | Gap-vs-depth correlation from the live recorder — **see caveat below** |
 
 ## Regenerating
@@ -48,3 +51,12 @@ several days of multi-regime data — including full weekend and US-hours
 windows — well before this evidence is next regenerated. A future snapshot
 of this file with `n` in the hundreds, spanning multiple regimes, is the one
 to trust.
+
+## Superseded snapshots
+
+Files stamped **before `20260921T065300Z`** were generated while `model.py`
+assumed every contract settles funding every 8 hours. Bitget's gold
+contracts settle every 4, so gold figures in those files understate carry
+by half — including an earlier "0 of 25 pairs clear the bar" result. They
+are kept rather than deleted so the correction is auditable; see
+`DECISIONS.md` D-15. Use the latest timestamp (recorded in `evidence/.latest`).

@@ -1,8 +1,13 @@
 """Carry model for same-underlying RWA perpetual pairs.
 
 A pair trade is long one leg, short the other, beta-hedged. Its P&L has three
-parts: funding collected each 8h interval, mean reversion of the residual
-spread, and execution cost paid once on entry and once on exit.
+parts: funding collected each interval, mean reversion of the residual spread,
+and execution cost paid once on entry and once on exit.
+
+Funding cadence is NOT uniform. Most RWA contracts settle every 8h, but the
+gold contracts (XAU, XAUT, PAXG) settle every 4h. The cadence is derived from
+each pair's own funding timestamps rather than assumed - an earlier version
+hardcoded 8h for every pair and understated gold's carry by half.
 
 The first two scale with holding period. The third does not. That asymmetry is
 the whole model: a trade that loses money round-tripped every 6 hours can make
@@ -11,7 +16,7 @@ money held for a month, and the capacity curve is where those two facts meet.
 import json, math, os, statistics as st
 
 DATA = os.path.join(os.path.dirname(__file__), "..", "data")
-INTERVALS_PER_DAY = 3          # 8h funding
+INTERVALS_PER_DAY = 3          # fallback only - 8h; real cadence is derived per pair
 TAKER_BP = 6.0                 # per leg, per side
 
 
@@ -24,10 +29,22 @@ def load_prices():
     return {s: {int(k): v for k, v in m.items()} for s, m in _load("prices.json").items()}
 
 
-def load_funding():
+def load_funding(source="window"):
+    """Funding history in bp per interval, {symbol: {ts: bp}}.
+
+    source="window"  - the latest 100 intervals the endpoint serves. Default,
+                       so headline numbers stay comparable across refreshes.
+    source="archive" - every interval ever captured, accumulated across
+                       refreshes by funding_archive.py. Longer than any
+                       single window the endpoint can return.
+    """
+    d = os.path.join(DATA, "funding_archive" if source == "archive" else "funding")
     out = {}
-    d = os.path.join(DATA, "funding")
+    if not os.path.isdir(d):
+        return out
     for fn in os.listdir(d):
+        if not fn.endswith(".json"):
+            continue
         with open(os.path.join(d, fn), encoding="utf-8") as f:
             rows = json.load(f).get("data") or []
         out[fn[:-5]] = {int(r["fundingTime"]): float(r["fundingRate"]) * 1e4 for r in rows}
@@ -82,6 +99,22 @@ def residual_vol(prices, a, b, beta, after=None):
     return (st.pstdev(res) if len(res) > 2 else 0.0), len(res)
 
 
+def intervals_per_day(timestamps):
+    """Funding settlements per day, from the median spacing of timestamps.
+
+    Median rather than mean so a single missing interval doesn't shift it.
+    Falls back to 8h only when there's too little data to measure.
+    """
+    ts = sorted(timestamps)
+    if len(ts) < 3:
+        return INTERVALS_PER_DAY
+    gaps = sorted(ts[i] - ts[i - 1] for i in range(1, len(ts)))
+    median_h = gaps[len(gaps) // 2] / 3_600_000
+    if median_h <= 0:
+        return INTERVALS_PER_DAY
+    return 24 / median_h
+
+
 def funding_edge(funding, a, b, beta):
     """Net funding per interval for the better direction, in bp of leg-A notional.
 
@@ -102,16 +135,20 @@ def funding_edge(funding, a, b, beta):
         mean = -mean
     sd = st.pstdev(net) if len(net) > 2 else 0.0
     consistency = 100 * sum(1 for x in net if x > 0) / len(net)
+    ipd = intervals_per_day(ks)
     return {
         "bp_per_interval": mean,
-        "bp_per_day": mean * INTERVALS_PER_DAY,
-        "annual_pct": mean * INTERVALS_PER_DAY * 365 / 100,
+        "intervals_per_day": ipd,
+        "funding_interval_h": 24 / ipd,
+        "bp_per_day": mean * ipd,
+        "annual_pct": mean * ipd * 365 / 100,
         "sd": sd,
         "consistency_pct": consistency,
         "direction": direction,
         "n_intervals": len(ks),
+        "history_days": (ks[-1] - ks[0]) / 86_400_000,
         # funding Sharpe: per-interval mean/sd scaled to a year
-        "sharpe": (mean / sd * math.sqrt(INTERVALS_PER_DAY * 365)) if sd > 0 else float("nan"),
+        "sharpe": (mean / sd * math.sqrt(ipd * 365)) if sd > 0 else float("nan"),
     }
 
 

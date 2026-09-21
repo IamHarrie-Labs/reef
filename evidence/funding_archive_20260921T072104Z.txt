@@ -1,0 +1,51 @@
+absorbed data/funding_prev    39 symbols, +0 new intervals
+absorbed data/funding         39 symbols, +0 new intervals
+
+SYMBOL              intervals  vs window         from           to  gaps
+------------------------------------------------------------------------
+AAPLUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+AAPUUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+AMZNUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+AMZUUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+BTCUSDT                   100      1.00x   2026-08-19   2026-09-21     0
+GGLLUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+GOOGLUSDT                 114      1.14x   2026-08-14   2026-09-21     0
+METAUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+METUUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+MINIMAXHKDUSDT            100      1.00x   2026-08-19   2026-09-21     0
+MINIMAXUSDT               100      1.00x   2026-08-19   2026-09-21     0
+MSFTUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+MSFUUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+NDX100USDT                114      1.14x   2026-08-14   2026-09-21     0
+NVDAUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+NVDLUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+PAXGUSDT                  100      1.00x   2026-09-04   2026-09-21   -50
+QQQUSDT                   114      1.14x   2026-08-14   2026-09-21     0
+SHEINHKDUSDT               60      0.60x   2026-09-01   2026-09-21     0
+SHEINUSDT                  74      0.74x   2026-08-27   2026-09-21     0
+SMHUSDT                   114      1.14x   2026-08-14   2026-09-21     0
+SOXLUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+SOXSUSDT                  100      1.00x   2026-08-19   2026-09-21     0
+SOXXUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+SP500USDT                 114      1.14x   2026-08-14   2026-09-21     0
+SPYUSDT                   114      1.14x   2026-08-14   2026-09-21     0
+SQQQUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+TENCENTHKDUSDT            100      1.00x   2026-08-19   2026-09-21     0
+TENCENTUSDT               100      1.00x   2026-08-19   2026-09-21     0
+TQQQUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+TSLAUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+TSLLUSDT                  114      1.14x   2026-08-14   2026-09-21     0
+VOOUSDT                   114      1.14x   2026-08-14   2026-09-21     0
+XAUTUSDT                  127      1.27x   2026-08-31   2026-09-21   -63
+XAUUSDT                   127      1.27x   2026-08-31   2026-09-21   -63
+XIAOMIHKDUSDT             100      1.00x   2026-08-19   2026-09-21     0
+XIAOMIUSDT                100      1.00x   2026-08-19   2026-09-21     0
+ZHIPUHKDUSDT              100      1.00x   2026-08-19   2026-09-21     0
+ZHIPUUSDT                 100      1.00x   2026-08-19   2026-09-21     0
+
+39 symbols. Median 114 intervals (1.14x a single endpoint window).
+Gaps are intervals missing between the archive's first and last timestamp -
+usually a refresh that didn't run long enough ago to catch them.
+
+The archive grows by one interval every 8 hours while refreshes run. Every
+metric in this project can read it with model.load_funding(source='archive').
