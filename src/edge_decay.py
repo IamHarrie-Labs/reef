@@ -17,6 +17,7 @@ re-selected - the pairs, the hedge ratios, and the model are identical
 across both runs. Only the funding window moved.
 """
 import json, os, sys, statistics as st
+print("EXPLORATORY LEGACY ANALYSIS: not validated performance; shared pairs and overlapping windows are dependent.")
 import datetime as dt
 sys.path.insert(0, os.path.dirname(__file__))
 import model, capacity

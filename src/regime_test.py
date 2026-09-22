@@ -25,6 +25,7 @@ existed only as an exploration script outside version control, which meant
 the README cited a number nothing in the repository could reproduce.
 """
 import json, math, os, random, sys, statistics as st
+print("EXPLORATORY LEGACY ANALYSIS: not validated performance; shared pairs and overlapping windows are dependent.")
 import datetime as dt
 sys.path.insert(0, os.path.dirname(__file__))
 import model
@@ -148,7 +149,7 @@ def funding_by_regime(prices, funding):
         net = {}
         for k in ks:
             net.setdefault(regime(k), []).append(
-                (funding[b][k] * beta - funding[a][k]) * ipd)
+                (beta * funding[a][k] - funding[b][k]) * ipd)
         allv = [v for l in net.values() for v in l]
         sign = 1 if st.mean(allv) > 0 else -1
         if len(net.get("RTH", [])) < 3 or len(net.get("WEEKEND", [])) < 3:
@@ -229,3 +230,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# Exploratory legacy regime analysis; not independent out-of-sample validation.

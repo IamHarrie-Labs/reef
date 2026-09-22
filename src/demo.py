@@ -23,7 +23,7 @@ def section(title):
 
 def run(script, *args):
     sys.stdout.flush()
-    subprocess.run([sys.executable, os.path.join(HERE, script), *args], check=False)
+    subprocess.run([sys.executable, os.path.join(HERE, script), *args], check=True)
 
 
 def main():
@@ -47,8 +47,8 @@ def main():
 
     section("4/4 - SELF-SCORING & ADVERSE SELECTION (live-collected, in progress)")
     print("Every verdict above was just logged with a timestamp, before you read")
-    print("this line. score.py will grade them against realised prices once each")
-    print("holding period elapses - nothing here can be tuned after the fact.\n")
+    print("this line. score.py requires recorded fills, fees, funding and settlement marks once each")
+    print("holding period elapses. The local log is not tamper-proof.\n")
     run("score.py")
     print()
     n_files = len([f for f in os.listdir(os.path.join(HERE, "..", "data", "timeseries"))

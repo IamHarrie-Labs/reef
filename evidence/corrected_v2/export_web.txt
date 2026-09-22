@@ -1,0 +1,4 @@
+wrote C:\Users\Harrie\Desktop\My builds\BItget AI\src\..\data\web_export.json  (241,213 bytes, 27 pairs)
+
+C:\Users\Harrie\Desktop\My builds\BItget AI\src\export_web.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_utc": dt.datetime.utcnow().strftime("%Y-%m-%d %H:%MZ"),

@@ -12,6 +12,7 @@ number to cite - it normalizes to bp/day and reports a sign test + bootstrap
 CI instead of a bare ratio.
 """
 import sys, os, json, datetime as dt, statistics as st
+print("EXPLORATORY LEGACY ANALYSIS: not validated performance; shared pairs and overlapping windows are dependent.")
 sys.path.insert(0, os.path.dirname(__file__))
 import model, capacity
 
@@ -36,7 +37,7 @@ for a, b in pairs:
     if len(ks) < 40: continue
     net = {}
     for k in ks:
-        net.setdefault(regime(k), []).append(funding[b][k] * beta - funding[a][k])
+        net.setdefault(regime(k), []).append(beta * funding[a][k] - funding[b][k])
     sign = 1 if st.mean([v for l in net.values() for v in l]) > 0 else -1
     cells = []
     for rg in ("RTH", "OVERNIGHT", "WEEKEND"):
@@ -52,3 +53,5 @@ for rg in ("RTH", "OVERNIGHT", "WEEKEND"):
     v = agg[rg]
     print(f"  {rg:10s} mean {st.mean(v):7.3f}  median {st.median(v):7.3f}  "
           f"vs RTH {st.mean(v)/base:5.2f}x   (n={len(v)} pairs)")
+
+# Exploratory legacy regime analysis; not independent out-of-sample validation.

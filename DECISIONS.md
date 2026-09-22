@@ -400,3 +400,24 @@ a comment for a human reader.
 same script but drop the constraint the moment someone other than the
 original author (or a model without the surrounding context) invoked it.
 The manifest is the artifact that survives being copied out of this repo.
+
+
+## D-16 — Accounting repair v2 (2026-09-21)
+
+Previous results are superseded. The original residual (B-beta*A) was combined
+with the opposite notional weighting in funding and costs. All components now
+use signed A=-sign*beta*N and B=sign*N, with dollar-weighted costs per N.
+Negative beta allows same-side positions. Unequal funding schedules are summed
+separately on complete days; direction is frozen before the funding holdout.
+The product path now applies chronological beta training by default.
+
+CLI requests use exact notionals; the static browser discloses grid snapping.
+Labels are shared and conditional. Source timestamps are distinct from report
+creation time. Financial tests cover these mechanisms; pricing outputs and web
+exports have been regenerated. The corrected $25k/30d screen has 27 priced
+pairs: 0 SUPPORTED, 2 UNPROVEN, 25 UNFAVOURABLE under stated assumptions.
+
+Outcome scoring no longer grades candle residuals as profits. It requires real
+fills, fees, complete settlement histories and settlement marks, and excludes
+legacy rows. These requirements leave existing research-only records ungraded.
+The prior README and evidence are preserved in evidence/superseded_v1.

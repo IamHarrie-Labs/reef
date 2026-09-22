@@ -1,17 +1,10 @@
-"""Carry model for same-underlying RWA perpetual pairs.
+"""Signed-notional carry estimates, in basis points of B-leg reference N.
 
-A pair trade is long one leg, short the other, beta-hedged. Its P&L has three
-parts: funding collected each interval, mean reversion of the residual spread,
-and execution cost paid once on entry and once on exit.
-
-Funding cadence is NOT uniform. Most RWA contracts settle every 8h, but the
-gold contracts (XAU, XAUT, PAXG) settle every 4h. The cadence is derived from
-each pair's own funding timestamps rather than assumed - an earlier version
-hardcoded 8h for every pair and understated gold's carry by half.
-
-The first two scale with holding period. The third does not. That asymmetry is
-the whole model: a trade that loses money round-tripped every 6 hours can make
-money held for a month, and the capacity curve is where those two facts meet.
+Base portfolio: A=-beta*N, B=N; direction multiplies both signed weights.
+Inverse relationships may require same-side positions. Expected income is
+historical held-out funding, not a forecast of spread convergence. Residual
+price volatility is a separate risk approximation. Book walks are snapshots.
+Funding schedules are inferred per instrument and aggregated on complete days.
 """
 import json, math, os, statistics as st
 
@@ -62,6 +55,7 @@ def load_books():
         out[fn[:-5]] = {
             "asks": [(float(p), float(q)) for p, q in b["asks"]],
             "bids": [(float(p), float(q)) for p, q in b["bids"]],
+            "timestamp": b.get("ts"),
         }
     return out
 
@@ -115,41 +109,52 @@ def intervals_per_day(timestamps):
     return 24 / median_h
 
 
-def funding_edge(funding, a, b, beta):
-    """Net funding per interval for the better direction, in bp of leg-A notional.
+def funding_days(funding, a, b, beta):
+    """Complete UTC days; sum each leg independently (including unequal cadences).
 
-    Positive funding means longs pay shorts. Long A / short B therefore nets
-    (fundingB * beta - fundingA). We evaluate both directions and return the
-    profitable one along with how often its sign held.
+    Base signed notionals per $1 reference: A=-beta, B=+1.
+    Missing settlements invalidate a day rather than silently becoming zero.
     """
-    if a not in funding or b not in funding:
+    if not funding.get(a) or not funding.get(b):
+        return []
+    day = 86_400_000
+    start = max(min(funding[a]), min(funding[b])) // day + 1
+    end = min(max(funding[a]), max(funding[b])) // day
+    expected = {x: round(intervals_per_day(funding[x])) for x in (a, b)}
+    rows = []
+    for d in range(start, end):
+        vals = {x: [v for t, v in funding[x].items() if d*day <= t < (d+1)*day] for x in (a,b)}
+        if any(len(vals[x]) != expected[x] for x in (a,b)):
+            continue
+        rows.append((d*day, beta*sum(vals[a])-sum(vals[b])))
+    return rows
+
+
+def funding_edge(funding, a, b, beta):
+    """Choose direction on first 60% of complete days; evaluate remaining days.
+
+    This is a historical funding holdout estimate, not realised trading P&L.
+    """
+    rows = funding_days(funding, a, b, beta)
+    cut = int(len(rows)*0.6)
+    if cut < 3 or len(rows)-cut < 3:
         return None
-    ks = sorted(set(funding[a]) & set(funding[b]))
-    if len(ks) < 30:
-        return None
-    net = [funding[b][k] * beta - funding[a][k] for k in ks]
+    sign = 1 if st.mean(v for _,v in rows[:cut]) >= 0 else -1
+    net = [sign*v for _,v in rows[cut:]]
     mean = st.mean(net)
-    direction = "long A / short B" if mean > 0 else "short A / long B"
-    if mean < 0:
-        net = [-x for x in net]
-        mean = -mean
-    sd = st.pstdev(net) if len(net) > 2 else 0.0
-    consistency = 100 * sum(1 for x in net if x > 0) / len(net)
-    ipd = intervals_per_day(ks)
-    return {
-        "bp_per_interval": mean,
-        "intervals_per_day": ipd,
-        "funding_interval_h": 24 / ipd,
-        "bp_per_day": mean * ipd,
-        "annual_pct": mean * ipd * 365 / 100,
-        "sd": sd,
-        "consistency_pct": consistency,
-        "direction": direction,
-        "n_intervals": len(ks),
-        "history_days": (ks[-1] - ks[0]) / 86_400_000,
-        # funding Sharpe: per-interval mean/sd scaled to a year
-        "sharpe": (mean / sd * math.sqrt(ipd * 365)) if sd > 0 else float("nan"),
-    }
+    weights = {"a": -sign*beta, "b": sign}
+    side = lambda w: "long" if w > 0 else "short" if w < 0 else "flat"
+    return {"bp_per_interval": mean, "intervals_per_day": 1,
+            "funding_interval_h": 24, "bp_per_day": mean,
+            "annual_pct": mean*365/100, "sd": st.pstdev(net),
+            "consistency_pct": 100*sum(v>0 for v in net)/len(net),
+            "direction": f"{side(weights['a'])} A / {side(weights['b'])} B",
+            "direction_sign": sign, "weights": weights,
+            "n_intervals": len(net), "history_days": len(net),
+            "sample_unit": "complete UTC day", "validation_series": net,
+            "direction_train_end": rows[cut-1][0],
+            "validation_start": rows[cut][0], "validation_end": rows[-1][0],
+            "settlements_per_day": {x: intervals_per_day(funding[x]) for x in (a,b)}}
 
 
 def walk_book(book, notional, side):
@@ -171,21 +176,31 @@ def walk_book(book, notional, side):
 
 
 def round_trip_cost(books, a, b, notional, beta):
-    """Entry + exit cost for the pair, in bp of leg-A notional. Paid once."""
-    if a not in books or b not in books:
-        return None
-    nb = notional * abs(beta)
-    legs = [walk_book(books[a], notional, "buy"), walk_book(books[a], notional, "sell"),
-            walk_book(books[b], nb, "sell"),      walk_book(books[b], nb, "buy")]
-    if any(x is None for x in legs):
-        return None
-    slip = sum(legs)
-    fees = TAKER_BP * 2 * (1 + abs(beta))     # both legs, both sides
-    return slip + fees
+    """Snapshot round trip in bp of reference notional N (B=N, A=|beta|N).
+
+    Both exits reuse today's book as an explicit scenario assumption.
+    """
+    if not math.isfinite(notional) or notional <= 0 or not math.isfinite(beta):
+        raise ValueError("Notional must be positive and beta finite")
+    dollars = 0.0
+    for symbol, weight in ((a, abs(beta)), (b, 1.0)):
+        if weight == 0:
+            continue
+        if symbol not in books:
+            return None
+        leg_notional = notional*weight
+        for side in ("buy", "sell"):
+            slip = walk_book(books[symbol], leg_notional, side)
+            if slip is None:
+                return None
+            dollars += leg_notional*(slip+TAKER_BP)/1e4
+    return dollars/notional*1e4
 
 
 def net_carry(edge, cost_bp, hold_days):
     """Net bp and annualized % for holding `hold_days`, cost amortized once."""
+    if not math.isfinite(hold_days) or hold_days <= 0:
+        raise ValueError("Holding days must be positive and finite")
     gross = edge["bp_per_day"] * hold_days
     net = gross - cost_bp
     return {

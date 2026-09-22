@@ -1,0 +1,41 @@
+
+REEF INDEX - $25,000 / 30-day hold
+Is the yield real, once cost and risk are priced in?
+SUPPORTED = clears Sharpe 0.5 and its 95% interval excludes zero.
+UNPROVEN = clears 0.5 on the point estimate only; the interval includes zero.
+
+  # PAIR               SCORE   VERDICT  gross%   net%  Sharpe           95% CI  cost bp   hist
+------------------------------------------------------------------------------------------------
+  1 XAU/XAUT             100  UNPROVEN     7.2    3.9    1.58   [-1.78, +4.93]     27.5   7.0d
+  2 XAU/PAXG              80  UNPROVEN     5.3    1.9    0.85   [-3.69, +5.39]     28.6   7.0d
+  3 ZHIPU/ZHIPUHKD        62 UNFAVOURABLE    20.9    9.7    0.35   [-0.19, +0.88]     91.3  13.0d
+  4 QQQ/SQQQ              60 UNFAVOURABLE    14.6    3.2    0.28   [-0.42, +0.98]     93.3  13.0d
+  5 QQQ/TQQQ              51 UNFAVOURABLE    10.0    0.3    0.04   [-0.73, +0.81]     79.3  13.0d
+  6 NVDA/NVDL             41 UNFAVOURABLE    11.3   -5.9   -0.25   [-0.81, +0.31]    141.3  13.0d
+  7 XIAOMI/XIAOMIHKD      41 UNFAVOURABLE     8.5   -5.5   -0.26   [-0.64, +0.12]    115.0  13.0d
+  8 SOXL/SOXS             38 UNFAVOURABLE     0.3   -6.0   -0.35   [-0.57, -0.14]     51.6  13.0d
+  9 GOOGL/GGLL            37 UNFAVOURABLE     6.4  -10.2   -0.38   [-1.14, +0.38]    137.1  13.0d
+ 10 SPY/VOO               35 UNFAVOURABLE     1.7   -7.7   -0.42   [-0.50, -0.34]     77.4  13.0d
+ 11 TQQQ/SQQQ             34 UNFAVOURABLE     4.6   -4.1   -0.45   [-0.78, -0.12]     71.7  13.0d
+ 12 MINIMAX/MINIMAXHKD    33 UNFAVOURABLE     2.3  -14.3   -0.49   [-0.80, -0.18]    136.4  13.0d
+ 13 TSLA/TSLL             31 UNFAVOURABLE     2.4  -13.0   -0.53   [-0.63, -0.43]    126.8  13.0d
+ 14 SMH/SOXL              30 UNFAVOURABLE     5.9  -29.1   -0.57   [-0.97, -0.18]    287.4  13.0d
+ 15 TENCENT/TENCENTHKD    28 UNFAVOURABLE     5.4   -9.6   -0.62   [-1.04, -0.20]    122.8  13.0d
+ 16 AAPL/AAPU             26 UNFAVOURABLE     2.4  -20.4   -0.68   [-0.83, -0.53]    187.8  13.0d
+ 17 XAUT/PAXG             24 UNFAVOURABLE     2.1   -1.8   -0.75   [-2.18, +0.69]     32.0   7.0d
+ 18 VOO/SP500             22 UNFAVOURABLE    -0.6   -8.9   -0.79   [-0.89, -0.69]     67.9  13.0d
+ 19 QQQ/NDX100            21 UNFAVOURABLE     1.6   -6.5   -0.84   [-1.89, +0.22]     66.8  13.0d
+ 20 SPY/SP500             19 UNFAVOURABLE     1.2   -6.4   -0.88   [-1.17, -0.59]     62.8  13.0d
+ 21 AMZN/AMZU             19 UNFAVOURABLE     4.1  -19.8   -0.89   [-1.07, -0.71]    196.3  13.0d
+ 22 SOXX/SMH              17 UNFAVOURABLE     0.8  -14.6   -0.93   [-1.02, -0.85]    127.0  13.0d
+ 23 SMH/SOXS              16 UNFAVOURABLE    -6.1  -54.7   -0.97   [-1.32, -0.61]    399.2  13.0d
+ 24 MSFT/MSFU             14 UNFAVOURABLE     1.0  -32.7   -1.02   [-1.10, -0.95]    276.5  13.0d
+ 25 META/METU             13 UNFAVOURABLE    -0.4  -41.5   -1.05   [-1.07, -1.04]    338.3  13.0d
+ 26 SOXX/SOXL             11 UNFAVOURABLE     2.8  -35.4   -1.11   [-1.63, -0.59]    314.2  13.0d
+ 27 SOXX/SOXS              6 UNFAVOURABLE    -2.1  -55.9   -1.25   [-1.60, -0.89]    441.8  13.0d
+  - SHEIN/SHEINHKD                                     no_funding_history
+
+0 SUPPORTED, 2 UNPROVEN, 25 UNFAVOURABLE, of 27 priced pairs.
+Every pair that clears the bar does so on an interval that includes zero.
+None is evidence of an edge on this sample.
+

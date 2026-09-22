@@ -30,7 +30,7 @@ for a, b in pairs:
 naive = sorted(rows, key=lambda x: -x["gross"])
 full = sorted(rows, key=lambda x: -x["sharpe"])
 
-print("What a naive yield screen shows you        vs   what survives the full model")
+print("Historical holdout estimates per B-leg reference notional (not realised Sharpe)")
 print("-" * 82)
 print(f"{'#':>2} {'PAIR':18s} {'gross%':>8s}   |  {'PAIR':18s} {'net%':>7s} {'Sharpe':>7s}")
 print("-" * 82)

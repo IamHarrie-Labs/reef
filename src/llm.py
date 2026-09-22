@@ -2,7 +2,7 @@
 
 Everything upstream (model.py, capacity.py) is arithmetic: OLS beta, book-walk
 VWAP, funding differentials. The LLM's job starts only after that arithmetic
-is done. It does two things, both explicitly scoped so it cannot introduce a
+is done. It does two things, both explicitly scoped to reduce the chance of introducing a
 number that isn't already in the evidence dict:
 
   1. Parse a free-text question into a structured request (pair, size, hold).
@@ -19,6 +19,7 @@ import json, os, re, urllib.request
 
 QWEN_BASE = os.environ.get("BITGET_QWEN_BASE_URL", "https://hackathon.bitgetops.com/v1")
 QWEN_MODEL = os.environ.get("BITGET_QWEN_MODEL", "qwen3.8-max")
+QWEN_TIMEOUT = int(os.environ.get("BITGET_QWEN_TIMEOUT", "75"))
 
 
 def _load_dotenv():
@@ -57,7 +58,7 @@ def _chat(system, user, max_tokens=600):
         f"{QWEN_BASE}/chat/completions", data=body,
         headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"},
     )
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.urlopen(req, timeout=QWEN_TIMEOUT) as r:
         d = json.load(r)
     return d["choices"][0]["message"]["content"]
 
@@ -70,7 +71,8 @@ _KNOWN = None
 def _known_symbols():
     global _KNOWN
     if _KNOWN is None:
-        cl = json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "clusters.json")))
+        with open(os.path.join(os.path.dirname(__file__), "..", "data", "clusters.json"), encoding="utf-8") as handle:
+            cl = json.load(handle)
         _KNOWN = sorted({s[:-4] for c, sy in cl.items() if c != "CONTROL" for s in sy})
     return _KNOWN
 
@@ -135,6 +137,11 @@ def _parse_query_llm(text):
     out = _chat(sys_p, text, max_tokens=150)
     d = json.loads(re.search(r"\{.*\}", out, re.S).group())
     a = d.get("a"); b = d.get("b")
+    if a not in _known_symbols() or (b is not None and b not in _known_symbols()):
+        raise ValueError("Unsupported instrument")
+    import math
+    if any(not math.isfinite(float(d.get(k) or default)) or float(d.get(k) or default) <= 0 for k, default in (("size",25000),("hold_days",30))):
+        raise ValueError("Invalid size or holding period")
     return {"a": (a + "USDT") if a else None, "b": (b + "USDT") if b else None,
             "size": float(d.get("size") or 25_000), "hold_days": float(d.get("hold_days") or 30),
             "raw": text, "parsed_by": "llm"}
@@ -143,7 +150,7 @@ def _parse_query_llm(text):
 # -------------------------------------------------------------- synthesis --
 
 def synthesize(evidence):
-    """evidence -> natural-language verdict. Never invents a number: the
+    """evidence -> natural-language verdict. Checks numeric tokens against evidence; the
     system prompt restricts the model to fields present in `evidence`."""
     if available():
         try:
@@ -160,7 +167,13 @@ def _synthesize_llm(evidence):
              "If a field is null, say it is unavailable rather than guessing. "
              "Write 4-6 sentences: what the gross yield looked like, what happened once cost and risk "
              "were priced in, and the one-line verdict. Plain language, no hedging filler.")
-    return _chat(sys_p, json.dumps(evidence, indent=2), max_tokens=400)
+    text = _chat(sys_p, json.dumps(evidence, indent=2), max_tokens=400)
+    # Model prose is supplementary; reject new numerical tokens and conflicting labels.
+    allowed = set(re.findall(r"-?\d+(?:\.\d+)?", json.dumps(evidence)))
+    stated = set(re.findall(r"-?\d+(?:\.\d+)?", text.replace(",", "")))
+    if not stated <= allowed or any(v in text.upper() and v != evidence.get("verdict") for v in ("SUPPORTED", "UNPROVEN", "UNFAVOURABLE")):
+        raise ValueError("Explanation did not pass evidence validation")
+    return _synthesize_template(evidence) + "\n\nAI commentary (not a validated financial claim):\n" + text
 
 
 def _synthesize_template(e):
@@ -169,17 +182,15 @@ def _synthesize_template(e):
     edge, ra = e["edge"], e["risk_adjusted"]
     lines = [
         f"{e['pair']} shows {edge['annual_pct']:.1f}% gross annualised funding edge "
-        f"({edge['consistency_pct']:.0f}% same-sign over {edge['n_intervals']} intervals), "
+        f"({edge['consistency_pct']:.0f}% same-sign over {edge['n_intervals']} complete days), "
         f"direction: {edge['direction']}.",
         f"At ${e['size']:,.0f} held {e['hold_days']:.0f} days: round-trip cost {ra['cost_bp']:.1f}bp, "
         f"residual-spread risk {ra['risk_bp']:.0f}bp, net {ra['net_bp']:.1f}bp "
         f"({ra['annual_pct']:.1f}% net annualised), Sharpe {ra['sharpe']:.2f}.",
         f"Breakeven holding period: {e['breakeven_days']:.1f} days.",
     ]
-    verdict = ("REAL - priced edge survives cost and risk at this size/hold."
-               if ra["sharpe"] > 0.5 else
-               "MIRAGE - gross yield is real but cost and residual risk consume it at this size/hold.")
-    lines.append(f"Verdict: {verdict}")
+    lines.append(f"Verdict: {e['verdict']} under the stated assumptions.")
+    lines.append("Historical estimate per B-leg reference notional; not realised performance or collateral ROI.")
     return "\n".join(lines) + (
         "\n\n[template renderer - no LLM key configured; set BITGET_QWEN_API_KEY or ANTHROPIC_API_KEY]"
         if not available() else "")

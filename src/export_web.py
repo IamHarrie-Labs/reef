@@ -2,9 +2,9 @@
 artifact's query box and index table are allowed to show, precomputed by
 the real (Python) pipeline so the browser never re-derives anything.
 """
-import json, os, sys, datetime as dt
+import json, os, sys, datetime as dt, math
 sys.path.insert(0, os.path.dirname(__file__))
-import model, capacity, mirage_index, intervals
+import model, capacity, mirage_index, intervals, ledger, score
 
 prices, funding, books = model.load_prices(), model.load_funding(), model.load_books()
 CL = json.load(open(os.path.join(model.DATA, "clusters.json")))
@@ -28,7 +28,9 @@ for a, b in pairs:
             ci = intervals.sharpe_interval(r, ra, funding, hold) if ra else None
             row[str(hold)] = None if not ra else {
                 "annual_pct": round(ra["annual_pct"], 2), "net_bp": round(ra["net_bp"], 1),
+                "gross_bp": round(ra["gross_bp"], 1),
                 "cost_bp": round(ra["cost_bp"], 1), "risk_bp": round(ra["risk_bp"], 0),
+                "breakeven_days": round(ra["breakeven_days"], 1) if math.isfinite(ra["breakeven_days"]) else None,
                 "sharpe": round(ra["sharpe"], 3),
                 # interval and verdict computed here, never in the browser (D-08)
                 "ci_lo": round(ci["lo"], 3) if ci else None,
@@ -38,7 +40,11 @@ for a, b in pairs:
         grid[str(size)] = row
     sc = score_by_pair.get(name)
     out_pairs.append({
-        "pair": name, "a": a, "b": b, "beta": round(r["beta"], 3),
+        "pair": name, "a": a, "b": b, "beta": r["beta"],
+        "price_train_end": r["split"],
+        "source_timestamps": {"prices": {x:max(prices[x]) for x in (a,b)},
+                              "funding": {x:max(funding[x]) for x in (a,b)},
+                              "books": {x:books[x].get("timestamp") for x in (a,b)}},
         "edge": {k: (round(v, 3) if isinstance(v, float) else v) for k, v in r["edge"].items()},
         "resid_vol_bp_per_hr": round(r["resid_vol_hr"], 2),
         "n_fit": r["n_fit"], "n_resid": r["n_resid"],
@@ -49,18 +55,46 @@ for a, b in pairs:
         "n_eff": sc.get("n_eff") if sc else None,
         "history_days": sc.get("history_days") if sc else None,
         "funding_interval_h": sc.get("funding_interval_h") if sc else None,
+        "max_viable_by_hold": {str(h): capacity.max_viable(r, h) for h in capacity.HOLDS},
         "grid": grid,
     })
 
 out_pairs.sort(key=lambda p: -(p["mirage_score"] or -1))
 
+ledger_rows = [r for r in ledger.read_all() if r.get("evidence", {}).get("model_version") == "2.0"]
+funding_archive = model.load_funding("archive")
+verification_rows = []
+latest_by_pair = {}
+for row in ledger_rows:
+    key = row.get("evidence", {}).get("pair")
+    if key in latest_by_pair:
+        del latest_by_pair[key]
+    latest_by_pair[key] = row
+for row in list(latest_by_pair.values())[-12:]:
+    graded = score.grade_row(row, funding=funding_archive)
+    ev = row.get("evidence", {})
+    verification_rows.append({
+        "recorded_ts": row.get("ts"), "question": row.get("question"),
+        "pair": ev.get("pair"), "hold_days": ev.get("hold_days"),
+        "predicted_net_bp": ev.get("risk_adjusted", {}).get("net_bp"),
+        "status": graded.get("status"), "matures_ms": graded.get("matures_ms"),
+        "actual_net_bp": graded.get("net_bp"),
+    })
+
 payload = {
-    "generated_utc": dt.datetime.utcnow().strftime("%Y-%m-%d %H:%MZ"),
+    "model_version": "2.0",
+    "return_basis": "B-leg reference notional, not collateral ROI",
+    "estimate_type": "historical funding holdout plus snapshot costs; not realised Sharpe",
+    "generated_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%MZ"),
     "sizes": capacity.SIZES, "holds": capacity.HOLDS,
     "n_pairs_priced": len(out_pairs),
     "n_pairs_no_funding": len(pairs) - len(out_pairs),
+    "verification_ledger": verification_rows,
     "pairs": out_pairs,
 }
 outpath = os.path.join(model.DATA, "web_export.json")
 json.dump(payload, open(outpath, "w"), indent=None, separators=(",", ":"))
 print(f"wrote {outpath}  ({os.path.getsize(outpath):,} bytes, {len(out_pairs)} pairs)")
+
+from pathlib import Path
+Path("web/web_export.json").write_text(json.dumps(payload), encoding="utf-8")
