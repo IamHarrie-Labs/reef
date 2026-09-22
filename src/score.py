@@ -1,75 +1,67 @@
-"""Grade every verdict this tool has ever given against what prices did next.
+"""Score recorded executions only. Never substitute residual returns for net P&L.
 
-Each ledger row is a prediction written down BEFORE the outcome, with a
-timestamp and the evidence it was based on. This reads price history for
-the period after each verdict and checks whether net carry over the stated
-hold_days actually came in positive when the verdict said REAL (or negative
-when it said MIRAGE).
-
-Needs price history to extend past a verdict's timestamp by hold_days. Early
-in the project's life most verdicts won't have matured yet - that's reported
-honestly as "pending", not skipped silently.
+execution evidence requires per-leg signed qty, entry_price, exit_price,
+entry_ts, exit_ts, fees_usdt, and settlement_marks {timestamp: mark_price}.
+No fills means insufficient data, not a fabricated hit rate.
 """
-import json, os, sys, math, datetime as dt
-sys.path.insert(0, os.path.dirname(__file__))
+import datetime as dt
+import math
 import model, ledger
 
 
-def actual_net_bp(prices, a, b, beta, t0, hold_days):
-    """Realised beta-hedged return from t0 to t0+hold_days, in bp, using
-    whatever cached price history covers that window."""
-    t1 = t0 + int(hold_days * 86_400_000)
-    ka = sorted(k for k in prices.get(a, {}) if t0 <= k <= t1)
-    kb = sorted(k for k in prices.get(b, {}) if t0 <= k <= t1)
-    if len(ka) < 2 or len(kb) < 2:
-        return None, "insufficient_price_history_for_window"
-    ra = math.log(prices[a][ka[-1]] / prices[a][ka[0]])
-    rb = math.log(prices[b][kb[-1]] / prices[b][kb[0]])
-    return (rb - beta * ra) * 1e4, None
+def grade_row(row, prices=None, funding=None, now_ms=None):
+    ev = row.get('evidence', {})
+    result = {'pair': ev.get('pair'), 'status': 'not_priced'}
+    if 'error' in ev or 'risk_adjusted' not in ev:
+        return result
+    if ev.get('model_version') != '2.0':
+        return {**result, 'status': 'superseded_model'}
+    end = row['ts'] + int(ev['hold_days']*86_400_000)
+    now = now_ms if now_ms is not None else int(dt.datetime.now(dt.timezone.utc).timestamp()*1000)
+    if now < end:
+        return {**result, 'status': 'pending', 'matures_ms': end}
+    execution = row.get('execution')
+    if not execution or funding is None:
+        return {**result, 'status': 'insufficient_execution_or_funding_data'}
+    price_pnl = fees = carry = 0.0
+    for name, key in zip(ev['pair'].split('/'), ('a','b')):
+        symbol = name+'USDT'
+        leg = execution.get(symbol, {})
+        required = ('qty','entry_price','exit_price','entry_ts','exit_ts','fees_usdt','settlement_marks')
+        if any(k not in leg for k in required):
+            return {**result, 'status': 'insufficient_execution_data'}
+        q, entry, exit = leg['qty'], leg['entry_price'], leg['exit_price']
+        if not all(math.isfinite(v) for v in (q,entry,exit,leg['fees_usdt'])) or min(entry,exit)<=0 or leg['fees_usdt']<0:
+            return {**result, 'status': 'invalid_execution_data'}
+        weight = ev['edge']['weights'][key]
+        if not math.isclose(q*entry, ev['size']*weight, rel_tol=1e-6, abs_tol=1e-6):
+            return {**result, 'status': 'execution_does_not_match_frozen_position'}
+        if leg['entry_ts'] != row['ts'] or leg['exit_ts'] != end:
+            return {**result, 'status': 'incomplete_execution_window'}
+        rates = funding.get(symbol, {})
+        if len(rates)<3 or min(rates)>row['ts'] or max(rates)<end:
+            return {**result, 'status': 'insufficient_funding_coverage'}
+        cadence = round(86_400_000/model.intervals_per_day(rates))
+        ts = sorted(rates)
+        if any(y-x != cadence for x,y in zip(ts,ts[1:]) if y>row['ts'] and x<end):
+            return {**result, 'status': 'funding_gap'}
+        for t, bp in rates.items():
+            if row['ts'] < t <= end:
+                mark = leg['settlement_marks'].get(str(t))
+                if mark is None or not math.isfinite(mark) or mark<=0:
+                    return {**result, 'status': 'missing_settlement_mark'}
+                carry -= q*mark*bp/1e4
+        price_pnl += q*(exit-entry)
+        fees += leg['fees_usdt']
+    net = price_pnl+carry-fees
+    return {**result, 'status': 'graded', 'price_pnl_usdt': price_pnl,
+            'funding_usdt': carry, 'fees_usdt': fees, 'net_usdt': net,
+            'net_bp': net/ev['size']*1e4, 'predicted_net_bp': ev['risk_adjusted']['net_bp'],
+            'note': 'One realised return does not validate an expected Sharpe or confidence interval.'}
 
 
-def grade_row(row, prices):
-    ev = row.get("evidence", {})
-    if "pair" not in ev or "error" in ev:
-        return {"question": row["question"], "status": "not_priced"}
-    a_name, b_name = ev["pair"].split("/")
-    a, b = a_name + "USDT", b_name + "USDT"
-    t0 = row["ts"]
-    hold = ev["hold_days"]
-    now = int(dt.datetime.utcnow().timestamp() * 1000)
-    if t0 + hold * 86_400_000 > now:
-        return {"question": row["question"], "pair": ev["pair"], "status": "pending",
-                "matures": dt.datetime.utcfromtimestamp((t0 + hold * 86_400_000) / 1000).isoformat()}
-    realised_bp, err = actual_net_bp(prices, a, b, ev["beta"], t0, hold)
-    if err:
-        return {"question": row["question"], "pair": ev["pair"], "status": err}
-    predicted = row["evidence"]["risk_adjusted"]
-    called_real = predicted["sharpe"] > 0.5
-    was_real = realised_bp > 0
-    return {
-        "question": row["question"], "pair": ev["pair"], "status": "graded",
-        "called": "REAL" if called_real else "MIRAGE",
-        "predicted_net_bp": round(predicted["net_bp"], 1),
-        "realised_residual_bp": round(realised_bp, 1),
-        "correct": called_real == was_real,
-    }
-
-
-if __name__ == "__main__":
-    rows = ledger.read_all()
-    if not rows:
-        print("No verdicts logged yet. Run src/verdict.py at least once first.")
-        sys.exit(0)
-    prices = model.load_prices()
-    results = [grade_row(r, prices) for r in rows]
-    print(f"{len(rows)} verdicts logged.\n")
-    for r in results:
-        print(json.dumps(r, indent=2))
-    graded = [r for r in results if r["status"] == "graded"]
-    if graded:
-        correct = sum(1 for r in graded if r["correct"])
-        print(f"\n{correct}/{len(graded)} graded verdicts correct "
-              f"({100*correct/len(graded):.0f}% hit rate).")
-    pending = sum(1 for r in results if r["status"] == "pending")
-    if pending:
-        print(f"{pending} verdict(s) still pending (holding period not yet elapsed).")
+if __name__ == '__main__':
+    import json
+    funding = model.load_funding('archive')
+    for row in ledger.read_all():
+        print(json.dumps(grade_row(row, funding=funding)))

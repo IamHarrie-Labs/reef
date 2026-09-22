@@ -56,7 +56,7 @@ def build(size=25_000, hold_days=30):
 def render(idx):
     print(f"\nREEF INDEX - ${idx['size']:,.0f} / {idx['hold_days']:.0f}-day hold")
     print("Is the yield real, once cost and risk are priced in?")
-    print("REAL = clears Sharpe 0.5 and its 95% interval excludes zero.")
+    print("SUPPORTED = clears Sharpe 0.5 and its 95% interval excludes zero.")
     print("UNPROVEN = clears 0.5 on the point estimate only; the interval includes zero.\n")
     print(f"{'#':>3} {'PAIR':18s} {'SCORE':>5s} {'VERDICT':>9s} {'gross%':>7s} {'net%':>6s} "
           f"{'Sharpe':>7s} {'95% CI':>16s} {'cost bp':>8s} {'hist':>6s}")
@@ -74,9 +74,9 @@ def render(idx):
         n += 1
     priced = [r for r in idx["rows"] if r["status"] == "priced"]
     count = lambda v: sum(1 for r in priced if r["verdict"] == v)
-    print(f"\n{count('REAL')} REAL, {count('UNPROVEN')} UNPROVEN, "
-          f"{count('MIRAGE')} MIRAGE, of {len(priced)} priced pairs.")
-    if count("UNPROVEN") and not count("REAL"):
+    print(f"\n{count('SUPPORTED')} SUPPORTED, {count('UNPROVEN')} UNPROVEN, "
+          f"{count('UNFAVOURABLE')} UNFAVOURABLE, of {len(priced)} priced pairs.")
+    if count("UNPROVEN") and not count("SUPPORTED"):
         print("Every pair that clears the bar does so on an interval that includes "
               "zero.\nNone is evidence of an edge on this sample.")
 

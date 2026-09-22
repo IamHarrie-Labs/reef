@@ -21,7 +21,7 @@ Three things are done properly rather than by default:
 
 3. The Sharpe interval propagates uncertainty in the **funding edge only**.
    Residual volatility and execution cost are held at their point
-   estimates. That makes every interval here a *lower bound* on the true
+   estimates. That makes every interval here a partial estimate of the
    uncertainty - the real intervals are wider than what's printed.
 """
 import argparse, json, math, os, sys, statistics as st
@@ -66,15 +66,8 @@ def effective_n(xs):
 
 def net_series(funding, a, b, beta):
     """Per-interval net funding for the profitable direction, in bp."""
-    if a not in funding or b not in funding:
-        return None
-    ks = sorted(set(funding[a]) & set(funding[b]))
-    if len(ks) < 30:
-        return None
-    net = [funding[b][k] * beta - funding[a][k] for k in ks]
-    if st.mean(net) < 0:
-        net = [-x for x in net]
-    return net
+    edge = model.funding_edge(funding, a, b, beta)
+    return edge["validation_series"] if edge else None
 
 
 def sharpe_interval(r, ra, funding, hold):
@@ -105,14 +98,14 @@ def sharpe_interval(r, ra, funding, hold):
 
 
 def verdict_for(sharpe, ci, bar=0.5):
-    """REAL only when the point estimate clears the bar AND the interval
+    """SUPPORTED only when the point estimate clears the bar AND the interval
     excludes zero. A point estimate that clears the bar on an interval
     spanning zero is UNPROVEN - it is not evidence of an edge."""
     if sharpe is None or sharpe != sharpe or sharpe <= bar:
-        return "MIRAGE"
+        return "UNFAVOURABLE"
     if ci is None or ci["lo"] <= 0:
         return "UNPROVEN"
-    return "REAL"
+    return "SUPPORTED"
 
 
 def main():
@@ -136,7 +129,7 @@ def main():
     print(f"95% confidence intervals, ${args.size:,.0f} / {args.hold:.0f}-day hold, "
           f"funding source: {src}")
     print("Uncertainty from the funding edge only; cost and residual vol held "
-          "at point estimates,\nso these intervals are a LOWER BOUND on true "
+          "at point estimates,\nthese approximate intervals omit other sources of "
           "uncertainty.\n")
     print(f"{'PAIR':18s} {'Sharpe':>7s} {'95% CI':>18s} {'consist':>8s} "
           f"{'Wilson 95%':>16s} {'n':>5s} {'n_eff':>7s} {'r1':>6s}")

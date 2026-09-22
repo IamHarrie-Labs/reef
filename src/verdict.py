@@ -11,13 +11,17 @@ import json, os, sys, time, datetime as dt
 sys.path.insert(0, os.path.dirname(__file__))
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8")
-import model, capacity, llm, ledger
+import model, capacity, llm, ledger, intervals
 
 
 def resolve_pair(a_hint, b_hint, clusters):
     """If the user named one ticker, find its cluster-mate automatically."""
     if a_hint and b_hint:
-        return a_hint, b_hint
+        for c, syms in clusters.items():
+            if c != "CONTROL" and a_hint != b_hint and a_hint in syms and b_hint in syms:
+                ordered = [x for x in syms if x in (a_hint,b_hint)]
+                return ordered[0], ordered[1]
+        return None, None
     if not a_hint:
         return None, None
     for c, syms in clusters.items():
@@ -31,7 +35,8 @@ def resolve_pair(a_hint, b_hint, clusters):
 
 def answer(question):
     q = llm.parse_query(question)
-    CL = json.load(open(os.path.join(model.DATA, "clusters.json")))
+    with open(os.path.join(model.DATA, "clusters.json"), encoding="utf-8") as handle:
+        CL = json.load(handle)
     a, b = resolve_pair(q["a"], q["b"], CL)
 
     if not a or not b:
@@ -50,8 +55,7 @@ def answer(question):
         return ev, llm.synthesize(ev)
 
     size, hold = q["size"], q["hold_days"]
-    ra = capacity.risk_adjusted(r, size if size in capacity.SIZES else
-                                 min(capacity.SIZES, key=lambda s: abs(s - size)), hold)
+    ra = capacity.risk_adjusted(r, size, hold)
     if not ra:
         ev = {"error": f"Book too thin to price {a}/{b} at ${size:,.0f}", "pair": r["pair"]}
         ledger.append({"ts": int(time.time() * 1000), "question": question, "query": q,
@@ -59,20 +63,25 @@ def answer(question):
         return ev, llm.synthesize(ev)
 
     evidence = {
-        "pair": r["pair"], "beta": round(r["beta"], 3), "size": size, "hold_days": hold,
+        "model_version": "2.0", "return_basis": r["return_basis"],
+        "verdict": intervals.verdict_for(ra["sharpe"], intervals.sharpe_interval(r, ra, funding, hold)),
+        "ci": intervals.sharpe_interval(r, ra, funding, hold),
+        "price_train_end": r["split"],
+        "pair": r["pair"], "beta": r["beta"], "size": size, "hold_days": hold,
         "edge": r["edge"], "residual_vol_bp_per_hr": round(r["resid_vol_hr"], 2),
         "risk_adjusted": ra,
-        "breakeven_days": model.net_carry(r["edge"], dict(r["curve"])[
-            min(capacity.SIZES, key=lambda s: abs(s - size))], hold)["breakeven_days"],
+        "breakeven_days": model.net_carry(r["edge"], ra["cost_bp"], hold)["breakeven_days"],
         "n_funding_intervals": r["edge"]["n_intervals"], "n_price_bars_fit": r["n_fit"],
-        "data_asof_utc": dt.datetime.utcnow().strftime("%Y-%m-%d %H:%MZ"),
+        "generated_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "source_timestamps": {"prices": {x: max(prices[x]) for x in (a,b)},
+                              "funding": {x: max(funding[x]) for x in (a,b)},
+                              "books": {x: books[x].get("timestamp") for x in (a,b)}},
         "parsed_by": q["parsed_by"],
     }
     ledger_row = {"ts": int(time.time() * 1000), "question": question, "query": q,
                   "evidence": evidence}
-    text = llm.synthesize(evidence)
-    ledger_row["verdict_text"] = text
     ledger.append(ledger_row)
+    text = llm.synthesize(evidence)
     return evidence, text
 
 

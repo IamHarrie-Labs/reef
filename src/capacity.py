@@ -17,9 +17,18 @@ HOLDS = [1, 3, 7, 14, 30, 60, 90]
 
 
 def analyse_pair(prices, funding, books, a, b, split=None):
+    times = sorted(set(prices.get(a, {})) & set(prices.get(b, {})))
+    if len(times) < 100:
+        return None
+    if split is None:
+        split = times[int(len(times)*0.6)-1]
+    # Beta training must finish before the funding evaluation window.
+    days = model.funding_days(funding, a, b, 1.0)
+    if days:
+        split = min(split, days[0][0]-1)
     beta, n_fit = model.hedge_ratio(prices, a, b, upto=split)
     edge = model.funding_edge(funding, a, b, beta)
-    if not edge:
+    if not edge or n_fit < 30:
         return None
     rvol_h, n_res = model.residual_vol(prices, a, b, beta, after=split)
     curve = []
@@ -28,12 +37,14 @@ def analyse_pair(prices, funding, books, a, b, split=None):
         curve.append((size, cost))
     return {"pair": f"{a.replace('USDT','')}/{b.replace('USDT','')}", "a": a, "b": b,
             "beta": beta, "edge": edge, "resid_vol_hr": rvol_h,
-            "n_fit": n_fit, "n_resid": n_res, "curve": curve}
+            "n_fit": n_fit, "n_resid": n_res, "curve": curve,
+            "split": split, "books": books, "model_version": "2.0",
+            "return_basis": "B-leg reference notional; not collateral ROI"}
 
 
 def risk_adjusted(r, size, hold_days):
     """Net return and a Sharpe that prices residual drift as the real risk."""
-    cost = dict(r["curve"]).get(size)
+    cost = model.round_trip_cost(r["books"], r["a"], r["b"], size, r["beta"])
     if cost is None:
         return None
     nc = model.net_carry(r["edge"], cost, hold_days)

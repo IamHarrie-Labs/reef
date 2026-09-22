@@ -1,0 +1,643 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reef</title>
+<style>
+  :root {
+    --bg: #F3F4F1;
+    --surface: #FFFFFF;
+    --surface-2: #EAEBE6;
+    --ink: #15181D;
+    --muted: #5C6570;
+    --faint: #8A929C;
+    --line: rgba(21, 24, 29, 0.11);
+    --line-strong: rgba(21, 24, 29, 0.20);
+    --accent: #A97A34;
+    --accent-ink: #7A5824;
+    --accent-wash: rgba(169, 122, 52, 0.10);
+    --real: #2E7D5C;
+    --real-wash: rgba(46, 125, 92, 0.10);
+    --unproven: #A97A34;
+    --unproven-wash: rgba(169, 122, 52, 0.10);
+    --mirage: #B23B32;
+    --mirage-wash: rgba(178, 59, 50, 0.09);
+    --shadow: 0 1px 2px rgba(21,24,29,0.05), 0 8px 24px -12px rgba(21,24,29,0.18);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #14161B;
+      --surface: #1B1E24;
+      --surface-2: #22262D;
+      --ink: #EDEFF2;
+      --muted: #9AA3B0;
+      --faint: #6C7684;
+      --line: rgba(237, 239, 242, 0.10);
+      --line-strong: rgba(237, 239, 242, 0.18);
+      --accent: #D9A15C;
+      --accent-ink: #F0C489;
+      --accent-wash: rgba(217, 161, 92, 0.12);
+      --real: #4FAE84;
+      --real-wash: rgba(79, 174, 132, 0.13);
+      --unproven: #D9A15C;
+      --unproven-wash: rgba(217, 161, 92, 0.13);
+      --mirage: #E07A6E;
+      --mirage-wash: rgba(224, 122, 110, 0.12);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161B;
+    --surface: #1B1E24;
+    --surface-2: #22262D;
+    --ink: #EDEFF2;
+    --muted: #9AA3B0;
+    --faint: #6C7684;
+    --line: rgba(237, 239, 242, 0.10);
+    --line-strong: rgba(237, 239, 242, 0.18);
+    --accent: #D9A15C;
+    --accent-ink: #F0C489;
+    --accent-wash: rgba(217, 161, 92, 0.12);
+    --real: #4FAE84;
+    --real-wash: rgba(79, 174, 132, 0.13);
+    --unproven: #D9A15C;
+    --unproven-wash: rgba(217, 161, 92, 0.13);
+    --mirage: #E07A6E;
+    --mirage-wash: rgba(224, 122, 110, 0.12);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.55);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .num, .tabular { font-family: "IBM Plex Mono", ui-monospace, "SF Mono", monospace; font-variant-numeric: tabular-nums; }
+  .display { font-family: "Fraunces", Georgia, serif; }
+
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 24px 64px; }
+
+  /* ---------- masthead ---------- */
+  header.mast {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+    padding-bottom: 20px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .mast-title { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .mast-title h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-optical-sizing: auto;
+    font-weight: 600; font-size: 30px; letter-spacing: -0.01em;
+    margin: 0; text-wrap: balance;
+  }
+  .mast-title .thesis { color: var(--muted); font-size: 14.5px; max-width: 46ch; }
+  .asof {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--faint);
+    white-space: nowrap; padding-top: 4px;
+  }
+  .asof b { color: var(--muted); font-weight: 600; }
+
+  /* ---------- query panel ---------- */
+  .query-panel {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px 22px; box-shadow: var(--shadow); margin-bottom: 28px;
+  }
+  .query-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); font-weight: 600; margin-bottom: 10px;
+  }
+  .query-row { display: flex; gap: 10px; }
+  .query-row input {
+    flex: 1; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 9px;
+    padding: 12px 14px; font-size: 15px; color: var(--ink); font-family: inherit;
+  }
+  .query-row input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+  .query-row button {
+    background: var(--ink); color: var(--bg); border: none; border-radius: 9px;
+    padding: 0 22px; font-size: 14.5px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .query-row button:hover { opacity: 0.88; }
+  .query-row button:disabled { opacity: 0.45; cursor: default; }
+  .examples { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .chip {
+    font-size: 12.5px; color: var(--muted); background: var(--surface-2);
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px;
+    cursor: pointer; font-family: inherit;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--line-strong); }
+
+  .verdict-out { margin-top: 18px; display: none; }
+  .verdict-out.show { display: block; }
+  .verdict-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .verdict-stamp {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 21px;
+    padding: 3px 14px 5px; border-radius: 8px; letter-spacing: 0.01em;
+  }
+  .verdict-stamp.supported { background: var(--real-wash); color: var(--real); }
+  .verdict-stamp.unproven { background: var(--unproven-wash); color: var(--unproven); }
+  .verdict-stamp.unfavourable { background: var(--mirage-wash); color: var(--mirage); }
+  .verdict-sub { color: var(--muted); font-size: 13px; }
+  .verdict-text { font-size: 14.5px; line-height: 1.6; max-width: 74ch; margin-bottom: 12px; }
+  .verdict-text .loading { color: var(--faint); font-style: italic; }
+  .evidence-toggle {
+    font-size: 12px; color: var(--faint); cursor: pointer; user-select: none;
+    display: inline-flex; align-items: center; gap: 5px; margin-bottom: 8px;
+  }
+  .evidence-toggle:hover { color: var(--muted); }
+  .evidence-box {
+    display: none; background: var(--bg); border: 1px solid var(--line); border-radius: 9px;
+    padding: 12px 14px; font-family: "IBM Plex Mono", monospace; font-size: 11.5px;
+    color: var(--muted); overflow-x: auto; white-space: pre;
+  }
+  .evidence-box.show { display: block; }
+
+  /* ---------- layout grid ---------- */
+  .grid { display: grid; grid-template-columns: 1fr 320px; gap: 22px; align-items: start; }
+  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+
+  section.panel {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .panel-head {
+    padding: 16px 20px 12px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  }
+  .panel-head h2 { font-size: 15.5px; font-weight: 600; margin: 0; }
+  .panel-head .stat { font-size: 12px; color: var(--muted); font-family: "IBM Plex Mono", monospace; }
+
+  /* ---------- index table ---------- */
+  table.idx { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.idx thead th {
+    text-align: right; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--faint); font-weight: 600; padding: 10px 14px; border-bottom: 1px solid var(--line);
+  }
+  table.idx thead th:nth-child(-n+2) { text-align: left; }
+  table.idx tbody td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: right; }
+  table.idx tbody td:nth-child(-n+2) { text-align: left; }
+  table.idx tbody tr { cursor: pointer; }
+  table.idx tbody tr:hover { background: var(--surface-2); }
+  table.idx tbody tr.sel { background: var(--accent-wash); }
+  table.idx tbody tr:last-child td { border-bottom: none; }
+  .rank { color: var(--faint); font-family: "IBM Plex Mono", monospace; }
+  .pair-name { font-weight: 600; }
+  .score-bar { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .score-track {
+    width: 46px; height: 5px; border-radius: 3px; background: var(--surface-2); overflow: hidden;
+  }
+  .score-fill { height: 100%; border-radius: 3px; }
+  .pill {
+    display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.03em;
+    padding: 3px 9px; border-radius: 999px;
+  }
+  .pill.real { background: var(--real-wash); color: var(--real); }
+  .pill.unproven { background: var(--unproven-wash); color: var(--unproven); }
+  .pill.mirage { background: var(--mirage-wash); color: var(--mirage); }
+  .unpriced { color: var(--faint); font-style: italic; font-size: 12.5px; }
+
+  /* ---------- side panel ---------- */
+  .side-inner { padding: 16px 20px 20px; }
+  .side-pair { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 19px; margin-bottom: 2px; }
+  .side-meta { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  svg.curve { width: 100%; height: auto; overflow: visible; }
+  .curve-legend { display: flex; gap: 16px; margin-top: 10px; font-size: 11.5px; color: var(--muted); }
+  .curve-legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+  .methodology { padding: 16px 20px 20px; font-size: 12.5px; color: var(--muted); line-height: 1.65; }
+  .methodology h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--faint); margin: 16px 0 6px; font-weight: 600; }
+  .methodology h3:first-child { margin-top: 0; }
+  .methodology code { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+
+  footer { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<div class="wrap">
+
+  <header class="mast">
+    <div class="mast-title">
+      <h1>Reef</h1>
+      <span class="thesis">Is this tokenized-equity RWA yield actually an opportunity - once execution cost and residual risk are priced in - or does it only look like one?</span>
+    </div>
+    <div class="asof" id="asof">report generated &mdash;</div>
+  </header>
+
+  <div class="query-panel">
+    <div class="query-label">Ask it a question</div>
+    <div class="query-row">
+      <input id="q" type="text" placeholder="e.g. Is the SMH/SOXL yield real for $25k over 30 days?" autocomplete="off">
+      <button id="ask">Ask</button>
+    </div>
+    <div class="examples" id="examples"></div>
+
+    <div class="verdict-out" id="verdictOut">
+      <div class="verdict-head">
+        <span class="verdict-stamp" id="vStamp">&mdash;</span>
+        <span class="verdict-sub" id="vSub"></span>
+      </div>
+      <div class="verdict-text" id="vText"></div>
+      <div class="evidence-toggle" id="evToggle">&#9656; every number this answer is allowed to use</div>
+      <div class="evidence-box" id="evBox"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>All priced pairs</h2>
+        <span class="stat" id="idxStat"></span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="idx">
+          <thead>
+            <tr>
+              <th>#</th><th>Pair</th><th>Rank score*</th><th>Verdict</th>
+              <th>Gross %</th><th>Net %</th><th>Est. Sharpe</th><th>95% CI</th><th>History</th>
+            </tr>
+          </thead>
+          <tbody id="idxBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div style="display:flex; flex-direction:column; gap:22px;">
+      <section class="panel">
+        <div class="panel-head"><h2>Capacity curve</h2><span class="stat">$25,000</span></div>
+        <div class="side-inner">
+          <div class="side-pair" id="curvePair">&mdash;</div>
+          <div class="side-meta" id="curveMeta">net annualised return vs. holding period</div>
+          <svg class="curve" viewBox="0 0 280 190" id="curveSvg"></svg>
+          <div class="curve-legend">
+            <span><span class="sw" style="background:var(--real)"></span>selected pair</span>
+            <span><span class="sw" style="background:var(--faint)"></span>naive top pick</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="methodology">
+          <h3>The model</h3>
+          Signed positions: A = -beta times reference notional; B = reference notional.
+          Returns are per B-leg reference amount, not collateral ROI. Direction is selected
+          on earlier funding data and assessed on later complete days. Costs are weighted in dollars.
+          <h3>Limits</h3>
+          Historical estimates, not realised trading performance. Book snapshots cannot guarantee
+          fills; exit costs assume the same book. Risk uses square-root-time scaling.
+          The rank score is a heuristic, not a probability. Confidence intervals cover funding uncertainty only. SUPPORTED is conditional support,
+          never a guarantee. UNFAVOURABLE does not prove no opportunity exists.
+          <h3>Self-scoring</h3>
+          The CLI records evidence before explanation. This static browser does not log queries.
+          Realised scoring requires actual fills, fees, settlements and mark prices;
+          missing data stays unscored. Legacy results are superseded.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer id="foot">Reef &middot; built for Bitget AI Base Camp Hackathon S2, AI Trading Desk / Open Theme &middot; pricing pipeline: OLS hedge ratio &middot; snapshot book walk &middot; funding differential, all deterministic Python, re-derivable from public Bitget endpoints.</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DATA_URL = "web_export.json";
+  var DATA = null;
+  var selectedPair = null;
+
+  var fmt = {
+    pct: function (x) { return (x == null) ? "&mdash;" : (x >= 0 ? "+" : "") + x.toFixed(1) + "%"; },
+    n1: function (x) { return (x == null) ? "&mdash;" : x.toFixed(1); },
+    n0: function (x) { return (x == null) ? "&mdash;" : Math.round(x); },
+  };
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+
+  // ---------------------------------------------------------- data load --
+  fetch(DATA_URL).then(function (r) { return r.json(); }).then(function (d) {
+    DATA = d;
+    document.getElementById("asof").innerHTML =
+      "<b>" + d.n_pairs_priced + "</b> pairs priced &middot; " + d.n_pairs_no_funding +
+      " lack funding history &middot; report generated <b>" + d.generated_utc + "</b>";
+    renderIndex();
+    renderExamples();
+    selectPair(DATA.pairs[0].pair, true);
+  }).catch(function (e) {
+    document.getElementById("idxBody").innerHTML =
+      '<tr><td colspan="9" class="unpriced">Could not load web_export.json &mdash; ' + e + "</td></tr>";
+  });
+
+  // -------------------------------------------------------------- index --
+  function renderIndex() {
+    var body = document.getElementById("idxBody");
+    body.innerHTML = "";
+    var n = 1;
+    DATA.pairs.forEach(function (p) {
+      var tr = el("tr");
+      tr.dataset.pair = p.pair;
+      var scorePct = Math.max(0, Math.min(100, p.mirage_score));
+      var vClass = p.verdict.toLowerCase();
+      var color = "var(--" + vClass + ")";
+      var cell = p.grid["25000"]["30"];
+      var ci = (cell && cell.ci_lo != null) ? "[" + fmt.n1(cell.ci_lo) + ", " + fmt.n1(cell.ci_hi) + "]" : "&mdash;";
+      tr.innerHTML =
+        '<td class="rank">' + (n++) + '</td>' +
+        '<td class="pair-name">' + p.pair + '</td>' +
+        '<td class="num"><div class="score-bar"><span>' + p.mirage_score +
+          '</span><span class="score-track"><span class="score-fill" style="width:' + scorePct +
+          '%;background:' + color + '"></span></span></div></td>' +
+        '<td><span class="pill ' + vClass + '">' + p.verdict + '</span></td>' +
+        '<td class="num">' + fmt.pct(p.edge.annual_pct) + '</td>' +
+        '<td class="num">' + fmt.pct(cell ? cell.annual_pct : null) + '</td>' +
+        '<td class="num">' + fmt.n1(cell ? cell.sharpe : null) + '</td>' +
+        '<td class="num tabular">' + ci + '</td>' +
+        '<td class="num">' + (p.history_days != null ? p.history_days + "d" : "&mdash;") + '</td>';
+      tr.addEventListener("click", function () { selectPair(p.pair, false); });
+      body.appendChild(tr);
+    });
+    document.getElementById("idxStat").textContent =
+      DATA.n_pairs_priced + " priced · $25,000 / 30d";
+  }
+
+  function findPair(name) {
+    for (var i = 0; i < DATA.pairs.length; i++) if (DATA.pairs[i].pair === name) return DATA.pairs[i];
+    return null;
+  }
+
+  // --------------------------------------------------------- curve chart --
+  function selectPair(name, silent) {
+    selectedPair = name;
+    Array.prototype.forEach.call(document.querySelectorAll("table.idx tbody tr"), function (tr) {
+      tr.classList.toggle("sel", tr.dataset.pair === name);
+    });
+    var p = findPair(name);
+    if (!p) return;
+    document.getElementById("curvePair").textContent = p.pair;
+    var vLabel = { SUPPORTED: "SUPPORTED", UNPROVEN: "UNPROVEN", UNFAVOURABLE: "UNFAVOURABLE" }[p.verdict] || p.verdict;
+    var vNote = { SUPPORTED: "clears Sharpe 0.5 with a 95% interval excluding zero",
+                  UNPROVEN: "clears 0.5 on point estimate only - the 95% interval includes zero",
+                  UNFAVOURABLE: "gross " + fmt.pct(p.edge.annual_pct) + " doesn't survive cost + risk" }[p.verdict] || "";
+    document.getElementById("curveMeta").innerHTML =
+      "priced <b style='color:var(--" + p.verdict.toLowerCase() + ")'>" + vLabel + "</b> at $25k / 30d - " + vNote;
+    drawCurve(p);
+  }
+
+  function drawCurve(pair) {
+    var svg = document.getElementById("curveSvg");
+    var W = 280, H = 190, ML = 34, MR = 8, MT = 10, MB = 26;
+    var plotW = W - ML - MR, plotH = H - MT - MB;
+    var holds = DATA.holds;
+    var series = function (p) {
+      return holds.map(function (h) {
+        var c = p.grid["25000"][String(h)];
+        return c ? c.annual_pct : null;
+      });
+    };
+    var mine = series(pair);
+    var naive = DATA.pairs.slice().sort(function (a, b) { return b.edge.annual_pct - a.edge.annual_pct; })[0];
+    var other = naive.pair === pair.pair ? null : series(naive);
+
+    var allVals = mine.concat(other || []).filter(function (v) { return v != null; });
+    var vMax = Math.max(10, Math.max.apply(null, allVals));
+    var vMin = Math.min(-10, Math.min.apply(null, allVals));
+    var pad = (vMax - vMin) * 0.1;
+    vMax += pad; vMin -= pad;
+
+    function x(i) { return ML + (i / (holds.length - 1)) * plotW; }
+    function y(v) { return MT + plotH - ((v - vMin) / (vMax - vMin)) * plotH; }
+
+    var svgns = "http://www.w3.org/2000/svg";
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+
+    function make(tag, attrs) {
+      var e = document.createElementNS(svgns, tag);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+
+    // zero line + gridline
+    var zeroY = y(0);
+    svg.appendChild(make("line", { x1: ML, x2: W - MR, y1: zeroY, y2: zeroY,
+      stroke: "var(--line-strong)", "stroke-width": 1 }));
+    [vMax, vMin].forEach(function (v) {
+      svg.appendChild(make("text", { x: 4, y: y(v) + 3, "font-size": 8.5, fill: "var(--faint)",
+        "font-family": "IBM Plex Mono, monospace" })).textContent = Math.round(v) + "%";
+    });
+
+    // x labels
+    holds.forEach(function (h, i) {
+      var t = make("text", { x: x(i), y: H - 8, "font-size": 8.5, fill: "var(--faint)",
+        "text-anchor": "middle", "font-family": "IBM Plex Mono, monospace" });
+      t.textContent = h + "d";
+      svg.appendChild(t);
+    });
+
+    function path(vals) {
+      var d = "";
+      vals.forEach(function (v, i) {
+        if (v == null) return;
+        d += (d ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1);
+      });
+      return d;
+    }
+
+    if (other) {
+      svg.appendChild(make("path", { d: path(other), fill: "none", stroke: "var(--faint)",
+        "stroke-width": 1.5, "stroke-dasharray": "3,3" }));
+    }
+    svg.appendChild(make("path", { d: path(mine), fill: "none",
+      stroke: "var(--" + pair.verdict.toLowerCase() + ")", "stroke-width": 2.25 }));
+    mine.forEach(function (v, i) {
+      if (v == null) return;
+      svg.appendChild(make("circle", { cx: x(i), cy: y(v), r: 2.5,
+        fill: "var(--" + pair.verdict.toLowerCase() + ")" }));
+    });
+  }
+
+  // ------------------------------------------------------------ examples --
+  function renderExamples() {
+    var box = document.getElementById("examples");
+    var top = DATA.pairs.slice(0, 3).map(function (p) { return p.pair; });
+    var qs = [
+      "Is the " + top[1] + " yield real for $25k over 30 days?",
+      top[0] + " at $100k for 2 weeks?",
+      "Can I trust " + top[2] + " for a quick 3-day trade?",
+    ];
+    qs.forEach(function (q) {
+      var c = el("span", "chip", q);
+      c.addEventListener("click", function () { document.getElementById("q").value = q; ask(); });
+      box.appendChild(c);
+    });
+  }
+
+  // --------------------------------------------------- query -> evidence --
+  var SIZE_RE = /\$\s?([\d,]+(?:\.\d+)?)\s*([kKmM])?|(?<![A-Za-z])([\d,]+(?:\.\d+)?)\s*([kKmM])\b|(?<![A-Za-z])(\d{4,})(?![A-Za-z\d])/;
+  var HOLD_RE = /(\d+)[\s-]*(day|d\b|week|wk|month)/i;
+  var HOLD_ART_RE = /\ban?\s+(day|week|wk|month)\b/i;
+
+  function parseQuery(text) {
+    var upper = text.toUpperCase();
+    var tickers = [];
+    DATA.pairs.forEach(function (p) {
+      [p.a.replace("USDT", ""), p.b.replace("USDT", "")].forEach(function (t) {
+        if (tickers.indexOf(t) === -1 && new RegExp("\\b" + t + "\\b").test(upper)) tickers.push(t);
+      });
+    });
+    var size = 25000;
+    var sm = SIZE_RE.exec(text);
+    if (sm) {
+      var val, suf;
+      if (sm[1] != null) { val = sm[1]; suf = sm[2]; }
+      else if (sm[3] != null) { val = sm[3]; suf = sm[4]; }
+      else { val = sm[5]; suf = null; }
+      var mult = { k: 1e3, K: 1e3, m: 1e6, M: 1e6 }[suf] || 1;
+      size = parseFloat(val.replace(/,/g, "")) * mult;
+    }
+    var hold = 30, hm = HOLD_RE.exec(text);
+    if (hm) {
+      var n = parseInt(hm[1], 10), unit = hm[2].toLowerCase();
+      hold = n * (/wk|week/.test(unit) ? 7 : /month/.test(unit) ? 30 : 1);
+    } else {
+      var ham = HOLD_ART_RE.exec(text);
+      if (ham) {
+        var u = ham[1].toLowerCase();
+        hold = /wk|week/.test(u) ? 7 : /month/.test(u) ? 30 : 1;
+      }
+    }
+    return { tickers: tickers, size: size, hold: hold };
+  }
+
+  function resolvePair(tickers) {
+    if (tickers.length >= 2) {
+      var name1 = tickers[0] + "/" + tickers[1], name2 = tickers[1] + "/" + tickers[0];
+      var hit = DATA.pairs.filter(function (p) { return p.pair === name1 || p.pair === name2; })[0];
+      if (hit) return hit;
+    }
+    if (tickers.length >= 1) {
+      var hit2 = DATA.pairs.filter(function (p) {
+        return p.a.replace("USDT", "") === tickers[0] || p.b.replace("USDT", "") === tickers[0];
+      })[0];
+      if (hit2) return hit2;
+    }
+    return null;
+  }
+
+  function nearest(arr, v) {
+    return arr.reduce(function (a, b) { return Math.abs(b - v) < Math.abs(a - v) ? b : a; });
+  }
+
+  function templateVerdict(ev) {
+    var lines = [];
+    lines.push(ev.pair + " shows " + fmt.pct(ev.edge.annual_pct) + " gross annualised funding edge (" +
+      Math.round(ev.edge.consistency_pct) + "% same-sign over " + ev.edge.n_intervals +
+      " complete days), direction: " + ev.edge.direction + ".");
+    lines.push("At $" + ev.size.toLocaleString() + " held " + ev.hold_days + " days: cost " +
+      fmt.n1(ev.cell.cost_bp) + "bp, residual risk " + fmt.n0(ev.cell.risk_bp) + "bp, net " +
+      fmt.n1(ev.cell.net_bp) + "bp (" + fmt.pct(ev.cell.annual_pct) + " net annualised), Sharpe " +
+      fmt.n1(ev.cell.sharpe) + " (95% CI [" + fmt.n1(ev.cell.ci_lo) + ", " + fmt.n1(ev.cell.ci_hi) + "]).");
+    var vNote = { SUPPORTED: "clears the bar with an interval excluding zero.",
+                  UNPROVEN: "clears the bar on point estimate only — the interval includes zero.",
+                  UNFAVOURABLE: "does not clear the bar." }[ev.cell.verdict] || "";
+    lines.push("Verdict: " + ev.cell.verdict + " — " + vNote);
+    return lines.join(" ");
+  }
+
+  function buildEvidence(pair, size, hold) {
+    var snapSize = nearest(DATA.sizes, size);
+    var snapHold = nearest(DATA.holds, hold);
+    var cell = pair.grid[String(snapSize)][String(snapHold)];
+    return {
+      pair: pair.pair, beta: pair.beta, size: snapSize, hold_days: snapHold,
+      requested_size: size, requested_hold_days: hold,
+      edge: pair.edge, resid_vol_bp_per_hr: pair.resid_vol_bp_per_hr, cell: cell,
+      n_fit: pair.n_fit, generated_at_utc: DATA.generated_utc,
+      source_timestamps: pair.source_timestamps, return_basis: DATA.return_basis,
+    };
+  }
+
+  // ---------------------------------------------------------------- ask --
+  var sampleNs = null;
+  (function initSample() {
+    if (!window.claude || !window.claude.use) return;
+    window.claude.use("sample").then(function (s) { sampleNs = s; }).catch(function () {});
+  })();
+
+  function ask() {
+    var text = document.getElementById("q").value.trim();
+    if (!text) return;
+    var parsed = parseQuery(text);
+    var pair = resolvePair(parsed.tickers);
+    var out = document.getElementById("verdictOut");
+    var stamp = document.getElementById("vStamp");
+    var sub = document.getElementById("vSub");
+    var vtext = document.getElementById("vText");
+    var evBox = document.getElementById("evBox");
+    out.classList.add("show");
+
+    if (!pair) {
+      stamp.textContent = "?"; stamp.className = "verdict-stamp";
+      sub.textContent = "couldn't resolve a tracked pair from that question";
+      vtext.textContent = "Try naming two tickers from the index below, e.g. “SMH vs SOXL”.";
+      evBox.classList.remove("show"); document.getElementById("evToggle").style.display = "none";
+      return;
+    }
+    document.getElementById("evToggle").style.display = "";
+    selectPair(pair.pair, false);
+    document.getElementById("q").value = text;
+
+    var ev = buildEvidence(pair, parsed.size, parsed.hold);
+    // verdict is precomputed server-side (export_web.py) and read here, never
+    // recomputed in the browser - see DECISIONS.md D-08.
+    var verdict = ev.cell ? ev.cell.verdict : "UNFAVOURABLE";
+    stamp.textContent = verdict;
+    stamp.className = "verdict-stamp " + verdict.toLowerCase();
+    sub.textContent = ev.pair + " · priced at $" + ev.size.toLocaleString() + " / " + ev.hold_days +
+      "d" + (ev.size !== ev.requested_size || ev.hold_days !== ev.requested_hold_days
+        ? " (nearest to your $" + ev.requested_size.toLocaleString() + " / " + ev.requested_hold_days + "d)" : "");
+    evBox.textContent = JSON.stringify(ev, null, 2);
+    evBox.classList.remove("show");
+    document.getElementById("evToggle").onclick = function () { evBox.classList.toggle("show"); };
+
+    vtext.innerHTML = '<span class="loading">' +
+      (sampleNs ? "asking Claude to explain this priced verdict…" : "rendering…") + "</span>";
+
+    if (!sampleNs) {
+      vtext.textContent = templateVerdict(ev) +
+        (ev.cell ? "" : " (book too thin to price at this size)");
+      return;
+    }
+
+    var prompt = "You explain a priced pair-trade verdict to a retail trader. " +
+      "Use ONLY the numbers in this JSON evidence object - never compute, round differently, " +
+      "or introduce a figure not present here. The evidence object's cell.verdict field is " +
+      "the verdict (SUPPORTED, UNPROVEN or UNFAVOURABLE) - restate it exactly, do not infer your own " +
+      "from the Sharpe number. UNPROVEN means the point estimate clears the bar but the " +
+      "95% interval (cell.ci_lo to cell.ci_hi) still includes zero - say so explicitly if " +
+      "that's the case, it is not the same as SUPPORTED. If a field is null, say it's unavailable. " +
+      "Write 3-5 plain sentences: what the gross yield looked like, what happened once cost " +
+      "and risk were priced in, and the verdict with its 95% interval.\n\nEvidence:\n" +
+      JSON.stringify(ev, null, 2);
+
+    sampleNs(prompt, { modelTier: "quick", cache: false }).then(function (res) {
+      vtext.textContent = templateVerdict(ev) + "\n\nAI commentary (unverified):\n" + res.text;
+    }).catch(function () {
+      vtext.textContent = templateVerdict(ev);
+    });
+  }
+
+  document.getElementById("ask").addEventListener("click", ask);
+  document.getElementById("q").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") ask();
+  });
+})();
+</script>

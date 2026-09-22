@@ -1,0 +1,20 @@
+Historical holdout estimates per B-leg reference notional (not realised Sharpe)
+----------------------------------------------------------------------------------
+ # PAIR                 gross%   |  PAIR                  net%  Sharpe
+----------------------------------------------------------------------------------
+ 1 ZHIPU/ZHIPUHKD         20.9   |  XAU/XAUT               3.9    1.58
+ 2 QQQ/SQQQ               14.6   |  XAU/PAXG               1.9    0.85
+ 3 NVDA/NVDL              11.3   |  ZHIPU/ZHIPUHKD         9.7    0.35
+ 4 QQQ/TQQQ               10.0   |  QQQ/SQQQ               3.2    0.28
+ 5 XIAOMI/XIAOMIHKD        8.5   |  QQQ/TQQQ               0.3    0.04
+ 6 XAU/XAUT                7.2   |  NVDA/NVDL             -5.9   -0.25
+ 7 GOOGL/GGLL              6.4   |  XIAOMI/XIAOMIHKD      -5.5   -0.26
+ 8 SMH/SOXL                5.9   |  SOXL/SOXS             -6.0   -0.35
+
+Top naive pick, fully priced:
+  ZHIPU/ZHIPUHKD: 20.9% gross -> 9.7% net (cost 91bp, risk 805bp, Sharpe 0.35, consistency 62%)
+
+Pairs with Sharpe > 0.5 at $25k / 30d: 2/27
+  XAU/XAUT  net 3.9%  Sharpe 1.58  consistency 86%
+  XAU/PAXG  net 1.9%  Sharpe 0.85  consistency 71%
+
