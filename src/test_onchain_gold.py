@@ -54,6 +54,31 @@ class Decoding(unittest.TestCase):
                 og.eth_call(XAU_ADDR, og.DECIMALS)
 
 
+class BitgetReference(unittest.TestCase):
+    def test_prefers_live_ticker_over_cached_close(self):
+        with patch.object(og, "bitget_live_ticker", return_value={"price": 1.0, "ts_ms": 1, "source": "live_ticker"}), \
+             patch.object(og, "bitget_last_close", return_value={"price": 2.0, "ts_ms": 2, "source": "hourly_candle"}):
+            self.assertEqual(og.bitget_reference("XAUUSDT")["source"], "live_ticker")
+
+    def test_falls_back_to_cached_close_when_ticker_unreachable(self):
+        with patch.object(og, "bitget_live_ticker", return_value=None), \
+             patch.object(og, "bitget_last_close", return_value={"price": 2.0, "ts_ms": 2, "source": "hourly_candle"}):
+            ref = og.bitget_reference("XAUUSDT")
+        self.assertEqual(ref["source"], "hourly_candle")
+
+    def test_live_ticker_decodes_mark_price(self):
+        with patch.object(og.refresh, "_get", return_value=[{"markPrice": "4257.85", "ts": "1700000000000"}]):
+            t = og.bitget_live_ticker("XAUUSDT")
+        self.assertEqual(t["price"], 4257.85)
+        self.assertEqual(t["ts_ms"], 1700000000000)
+
+    def test_live_ticker_none_when_fields_missing(self):
+        with patch.object(og.refresh, "_get", return_value=[{"markPrice": None, "ts": None}]):
+            self.assertIsNone(og.bitget_live_ticker("XAUUSDT"))
+        with patch.object(og.refresh, "_get", return_value=None):
+            self.assertIsNone(og.bitget_live_ticker("XAUUSDT"))
+
+
 class BasisMath(unittest.TestCase):
     def setUp(self):
         self.now = 1_700_000_000_000
@@ -67,7 +92,7 @@ class BasisMath(unittest.TestCase):
     def test_basis_matches_hand_calc(self):
         with patch.object(og, "read_feed", side_effect=lambda addr: self.fake_feeds()[
                           "XAU/USD" if addr == XAU_ADDR else "PAXG/USD"]), \
-             patch.object(og, "bitget_last_close", return_value={"price": 4257.85, "ts_ms": self.now}):
+             patch.object(og, "bitget_reference", return_value={"price": 4257.85, "ts_ms": self.now, "source": "hourly_candle"}):
             payload = og.build_payload(now_ms=self.now)
         row = next(r for r in payload["rows"] if r["symbol"] == "XAUUSDT")
         expected_bp = (4257.85 - 4275.82) / 4275.82 * 1e4
@@ -77,7 +102,7 @@ class BasisMath(unittest.TestCase):
     def test_stale_feed_is_flagged_not_hidden(self):
         with patch.object(og, "read_feed", side_effect=lambda addr: self.fake_feeds(
                           xau_age_s=og.STALE_AFTER_S + 60)["XAU/USD" if addr == XAU_ADDR else "PAXG/USD"]), \
-             patch.object(og, "bitget_last_close", return_value={"price": 4257.85, "ts_ms": self.now}):
+             patch.object(og, "bitget_reference", return_value={"price": 4257.85, "ts_ms": self.now, "source": "hourly_candle"}):
             payload = og.build_payload(now_ms=self.now)
         row = next(r for r in payload["rows"] if r["symbol"] == "XAUUSDT")
         self.assertEqual(row["status"], "stale")
@@ -86,7 +111,7 @@ class BasisMath(unittest.TestCase):
     def test_missing_bitget_price_reports_unavailable_not_zero(self):
         with patch.object(og, "read_feed", side_effect=lambda addr: self.fake_feeds()[
                           "XAU/USD" if addr == XAU_ADDR else "PAXG/USD"]), \
-             patch.object(og, "bitget_last_close", return_value=None):
+             patch.object(og, "bitget_reference", return_value=None):
             payload = og.build_payload(now_ms=self.now)
         self.assertTrue(all(r["status"] == "unavailable" for r in payload["rows"]))
         self.assertFalse(any("basis_bp" in r for r in payload["rows"]))
@@ -99,7 +124,7 @@ class BasisMath(unittest.TestCase):
         import tempfile, json
         with patch.object(og, "read_feed", side_effect=lambda addr: self.fake_feeds()[
                           "XAU/USD" if addr == XAU_ADDR else "PAXG/USD"]), \
-             patch.object(og, "bitget_last_close", return_value={"price": 4257.85, "ts_ms": self.now}):
+             patch.object(og, "bitget_reference", return_value={"price": 4257.85, "ts_ms": self.now, "source": "hourly_candle"}):
             with tempfile.TemporaryDirectory() as td:
                 out = os.path.join(td, "sub", "gold_basis.json")
                 with patch.object(og, "OUT", out):

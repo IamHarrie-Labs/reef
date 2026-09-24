@@ -31,9 +31,11 @@ jobs:
         run: |
           git config user.name "reef-desk"
           git config user.email "reef-desk@users.noreply.github.com"
-          git add data/ledger.jsonl data/shadow data/anchors data/verdict_history.jsonl \
-                  data/funding data/funding_archive data/depth data/prices.json \
-                  data/web_export.json web/web_export.json
+          # desk_cycle.py only ever writes under data/ and web/web_export.json - add
+          # everything there (-A, not a hand-maintained list) so a new output file,
+          # like data/onchain/, can never again be silently left unstaged and block
+          # the rebase below.
+          git add -A -- data web/web_export.json
           if git diff --cached --quiet; then echo "nothing changed"; exit 0; fi
           git commit -q -m "desk: cycle $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
           for i in 1 2 3; do

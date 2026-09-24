@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-24 19:11Z",
+ "generated_utc": "2026-09-24 19:18Z",
  "source": "Chainlink price feeds on Ethereum mainnet, read directly via eth_call",
  "rows": [
   {
@@ -8,9 +8,10 @@
    "status": "ok",
    "bitget_price": 4257.85,
    "bitget_ts_ms": 1790258400000,
+   "bitget_source": "hourly_candle",
    "onchain_price": 4275.82,
    "onchain_updated_ms": 1790275163000,
-   "onchain_age_s": 1928,
+   "onchain_age_s": 2327,
    "basis_bp": -42.0
   },
   {
@@ -19,9 +20,10 @@
    "status": "ok",
    "bitget_price": 4253.37,
    "bitget_ts_ms": 1790258400000,
+   "bitget_source": "hourly_candle",
    "onchain_price": 4275.82,
    "onchain_updated_ms": 1790275163000,
-   "onchain_age_s": 1928,
+   "onchain_age_s": 2327,
    "basis_bp": -52.5
   },
   {
@@ -30,9 +32,10 @@
    "status": "ok",
    "bitget_price": 4251.51,
    "bitget_ts_ms": 1790258400000,
+   "bitget_source": "hourly_candle",
    "onchain_price": 4270.3458799,
    "onchain_updated_ms": 1790266607000,
-   "onchain_age_s": 10484,
+   "onchain_age_s": 10883,
    "basis_bp": -44.1
   }
  ]
