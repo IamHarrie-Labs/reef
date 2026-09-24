@@ -521,6 +521,15 @@ character short and reverted). It reports the basis in bp between each
 Bitget gold contract and its on-chain reference, and the reference oracle's
 own age, every hour.
 
+Bitget's side of the basis prefers a live ticker read over the hourly-cached
+candle close used elsewhere in the pipeline, so both sides are read at close
+to the same moment; it falls back to the cached close, labelled as such on
+the page, when the desk cycle can't reach Bitget's ticker endpoint. In
+production on GitHub Actions the live ticker keeps the basis to single
+digits; run against this repo's own dev machine, which cannot reach Bitget
+directly, it fell back to an hourly-stale cache and read roughly ±40-50bp -
+a difference in measurement freshness, not in the contracts themselves.
+
 **What it caught immediately.** XAUT has no Chainlink feed of its own on
 mainnet. Rather than substitute a proxy silently, it's compared against the
 same `XAU/USD` feed as XAU, and that substitution is stated on the page, not

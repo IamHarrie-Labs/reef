@@ -24,7 +24,7 @@ Bitget "gold" contracts has decoupled from gold itself.
 import argparse, datetime as dt, json, os, sys, urllib.request, urllib.error
 
 sys.path.insert(0, os.path.dirname(__file__))
-import model
+import model, refresh
 
 # Chainlink's mainnet feed directory: https://reference-data-directory.vercel.app/feeds-mainnet.json
 # (also published at docs.chain.link/data-feeds/price-feeds/addresses). Not hand-typed.
@@ -79,12 +79,32 @@ def read_feed(addr):
     return {"price": answer / 10 ** decimals, "decimals": decimals, "updated_at_ms": updated_at * 1000}
 
 
+def bitget_live_ticker(symbol):
+    """Live mark price, same moment as the oracle read. None if unreachable -
+    the cached hourly close (bitget_last_close) is the fallback, not a retry
+    that could block the desk cycle on a slow endpoint."""
+    row = refresh._get(f"{refresh.BASE}/ticker?symbol={symbol}&productType={refresh.PT}")
+    if not row:
+        return None
+    row = row[0] if isinstance(row, list) else row
+    price = row.get("markPrice") or row.get("lastPr")
+    ts = row.get("ts")
+    if not price or not ts:
+        return None
+    return {"price": float(price), "ts_ms": int(ts), "source": "live_ticker"}
+
+
 def bitget_last_close(symbol):
+    """Most recent cached hourly candle close - up to ~1h behind the oracle read."""
     prices = model.load_prices().get(symbol, {})
     if not prices:
         return None
     t = max(prices)
-    return {"price": prices[t], "ts_ms": t}
+    return {"price": prices[t], "ts_ms": t, "source": "hourly_candle"}
+
+
+def bitget_reference(symbol):
+    return bitget_live_ticker(symbol) or bitget_last_close(symbol)
 
 
 def build_payload(now_ms=None):
@@ -99,7 +119,7 @@ def build_payload(now_ms=None):
     rows = []
     for symbol, feed_name in BITGET_TO_FEED.items():
         feed = feeds.get(feed_name)
-        bg = bitget_last_close(symbol)
+        bg = bitget_reference(symbol)
         if not feed or not bg:
             rows.append({"symbol": symbol, "reference_feed": feed_name, "status": "unavailable",
                         "error": feed_errors.get(feed_name, "no cached Bitget price")})
@@ -108,7 +128,7 @@ def build_payload(now_ms=None):
         basis_bp = (bg["price"] - feed["price"]) / feed["price"] * 1e4
         rows.append({
             "symbol": symbol, "reference_feed": feed_name, "status": "stale" if stale else "ok",
-            "bitget_price": bg["price"], "bitget_ts_ms": bg["ts_ms"],
+            "bitget_price": bg["price"], "bitget_ts_ms": bg["ts_ms"], "bitget_source": bg["source"],
             "onchain_price": feed["price"], "onchain_updated_ms": feed["updated_at_ms"],
             "onchain_age_s": round((now_ms - feed["updated_at_ms"]) / 1000),
             "basis_bp": round(basis_bp, 1),
