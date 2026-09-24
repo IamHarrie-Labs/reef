@@ -14,3 +14,21 @@ actual fills from candles. Historical records without v2 accounting are excluded
 
 Research utilities are exploratory, not an independent trading backtest.
 CI runs financial regression tests, parser tests and offline pipeline smoke checks.
+
+## The live desk (hourly)
+
+```
+.github/workflows/desk.yml ─► src/desk_cycle.py
+   refresh.py   funding (39 symbols) → funding_archive, order books, recent candles
+   shadow.py    exit matured holds against today's book · backfill settlement marks
+                · open new 1-day (every 8h) and 3-day (every 24h) holds, predictions
+                  frozen via verdict.build_evidence
+   export_web   re-price every pair, grade shadow executions (score.py), solve.py
+                requirements, verdict-change feed → web/web_export.json
+   anchor.py    Merkle root over ledger + executions → OpenTimestamps → Bitcoin
+   commit       "[skip ci]" push to main; the site reads the newest export directly
+```
+
+The browser picks whichever is newer: the export bundled at deploy time, or
+the live one on `main`. It never recomputes a number. `api/investigate.js`
+reads the same live snapshot, so Qwen explains exactly what the visitor sees.

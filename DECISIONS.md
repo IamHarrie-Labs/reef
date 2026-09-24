@@ -421,3 +421,84 @@ Outcome scoring no longer grades candle residuals as profits. It requires real
 fills, fees, complete settlement histories and settlement marks, and excludes
 legacy rows. These requirements leave existing research-only records ungraded.
 The prior README and evidence are preserved in evidence/superseded_v1.
+
+---
+
+## D-18 · A shadow desk, because the scorer could never grade anything
+
+**Context.** D-17 made `score.py` strict: it refuses to call a prediction
+right or wrong without signed fills, fees and the mark price at every
+funding settlement. That is correct, and it meant the ledger could never
+produce a single grade. Nothing recorded fills.
+
+**Decision.** `shadow.py` records hypothetical executions against the live
+exchange. Every 8 hours (1-day holds) and every 24 hours (3-day holds) it
+freezes a prediction through `verdict.build_evidence`, the same function a
+typed question uses, and walks the live book at that moment for an entry
+price. When the hold ends it exits against the book *at that time*. Later it
+backfills the exchange's mark price at each funding settlement inside the
+hold. Executions live in `data/shadow/executions.json`, joined to ledger
+rows by `<ts>:<pair>:<hold>`, so the ledger stays append-only.
+
+**What it tests.** The model assumes the exit book equals the entry book.
+The shadow desk doesn't, so realised execution cost against predicted
+execution cost is the first out-of-sample check of the cost model. Funding
+is checked the same way. Net P&L is also reported, but one hold's residual
+price move is noise and is labelled as such.
+
+**Accepted cost.** The hourly job cannot exit at the exact millisecond a
+hold ends, so `score.py` accepts an exit up to 3 hours late and records the
+real exit time. Later than that and the position is marked
+`missed_exit_window` and never graded. No outcome is ever backfilled.
+
+**Rejected.** Grading candle-to-candle residuals, the pre-D-17 method: it
+scores a quantity the model never predicted. Also rejected: Bitget's demo
+environment, which carries no RWA contracts (LIMITATIONS, D-04).
+
+---
+
+## D-19 · Anchor the record to Bitcoin rather than promise it is append-only
+
+**Context.** "Append-only by convention" was an honest admission and a weak
+guarantee. Anyone with repo access could edit a past prediction.
+
+**Decision.** `anchor.py` hashes every ledger row and every shadow
+execution (sha256 of canonical JSON) into a Merkle root each cycle. It then
+stamps the root with OpenTimestamps, which aggregates it into a Bitcoin
+transaction via public calendars: no wallet, no key, no fee. Pending proofs
+are upgraded on later cycles. `--verify` prints the Merkle path for one row.
+
+**What it proves.** A row under a confirmed root existed before that block.
+A shadow prediction anchored before its hold ended was not written with
+knowledge of its outcome.
+
+**What it does not prove.** That the row is right, or that nothing was
+withheld before the first anchor. Rows logged before anchoring began are
+proven only from their first anchor onward.
+
+**Rejected.** Posting roots to an EVM testnet. That needs a funded key in
+CI, testnet finality means little, and a verifier would need a specific
+explorer. OpenTimestamps proofs are checkable by anyone offline against
+Bitcoin headers.
+
+---
+
+## D-20 · Invert the verdict: what would have to be true
+
+**Context.** The honest headline is that no pair is supported. A tool that
+only says no reads as an audit, not a desk.
+
+**Decision.** `solve.py` holds cost, residual risk and today's
+measurement noise fixed and solves both SUPPORTED conditions for the carry
+needed. It also scans for the shortest hold (up to a year) and the largest
+tested size that clear both. It names the binding constraint: cost, risk, or
+evidence (the interval condition dominates).
+
+**A finding it surfaced.** Carry grows with the hold; residual risk grows
+with its square root. So the point Sharpe tends to a ceiling,
+`m·√(365/24)/σ_residual`, as the hold lengthens. For many pairs that ceiling
+is below 0.5: no holding period helps, and only more funding would. The
+desk says this explicitly rather than implying patience fixes everything.
+
+**Rejected.** Reporting only the break-even hold. It ignores risk and noise,
+and it would advertise holds under which the trade is still unsupported.
