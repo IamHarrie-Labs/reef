@@ -1,0 +1,43 @@
+name: live desk
+
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: live-desk
+  cancel-in-progress: false
+
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: OpenTimestamps client
+        run: pip install --quiet opentimestamps-client
+      - name: Refresh, shadow desk, export, anchor
+        run: python src/desk_cycle.py
+      - name: Publish the cycle
+        run: |
+          git config user.name "reef-desk"
+          git config user.email "reef-desk@users.noreply.github.com"
+          git add data/ledger.jsonl data/shadow data/anchors data/verdict_history.jsonl \
+                  data/funding data/funding_archive data/depth data/prices.json \
+                  data/web_export.json web/web_export.json
+          if git diff --cached --quiet; then echo "nothing changed"; exit 0; fi
+          git commit -q -m "desk: cycle $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase -q origin main && git push -q origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1

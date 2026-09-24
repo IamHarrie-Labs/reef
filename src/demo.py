@@ -33,7 +33,7 @@ def main():
 
     section("2/4 - REEF")
     print("One public score per pair: does the visible yield survive cost + risk?\n")
-    run("mirage_index.py")
+    run("reef_index.py")
 
     section("3/4 - ASK IT A QUESTION (the LLM interface)")
     questions = [

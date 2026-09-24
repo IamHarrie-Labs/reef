@@ -69,7 +69,7 @@ def fetch_candles(sym, max_pages=14):
     return sym, out
 
 
-def refresh_prices():
+def refresh_prices(max_pages=14):
     path = os.path.join(model.DATA, "prices.json")
     existing = {}
     if os.path.exists(path):
@@ -79,7 +79,7 @@ def refresh_prices():
     print(f"[prices] fetching {len(syms)} symbols...")
     merged, added = {}, 0
     with ThreadPoolExecutor(max_workers=6) as ex:
-        for sym, fresh in ex.map(lambda s: fetch_candles(s), syms):
+        for sym, fresh in ex.map(lambda s: fetch_candles(s, max_pages), syms):
             old = existing.get(sym, {})
             combined = dict(old)
             combined.update(fresh)
@@ -151,10 +151,11 @@ if __name__ == "__main__":
     ap.add_argument("--prices", action="store_true")
     ap.add_argument("--funding", action="store_true")
     ap.add_argument("--depth", action="store_true")
+    ap.add_argument("--recent", action="store_true", help="only the latest candle pages")
     a = ap.parse_args()
     everything = not (a.prices or a.funding or a.depth)
     if a.prices or everything:
-        refresh_prices()
+        refresh_prices(2 if a.recent else 14)
     if a.funding or everything:
         refresh_funding()
     if a.depth or everything:

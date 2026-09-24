@@ -1,8 +1,8 @@
 """Reef index: one public score per RWA pair - what fraction of the
 visible yield survives execution cost and residual risk.
 
-    python src/mirage_index.py            # ranked table, all pairs
-    python src/mirage_index.py --json      # machine-readable, for a page/UI
+    python src/reef_index.py            # ranked table, all pairs
+    python src/reef_index.py --json      # machine-readable, for a page/UI
 
 score = net Sharpe at $25k / 30d, clamped and mapped to 0-100 so it reads
 like a trust score without hiding a failure behind an average: the raw
@@ -32,7 +32,7 @@ def build(size=25_000, hold_days=30):
         score = max(0, min(100, round(50 + ra["sharpe"] * 35)))
         ci = intervals.sharpe_interval(r, ra, funding, hold_days)
         rows.append({
-            "pair": r["pair"], "status": "priced", "mirage_score": score,
+            "pair": r["pair"], "status": "priced", "reef_score": score,
             "ci_lo": round(ci["lo"], 2) if ci else None,
             "ci_hi": round(ci["hi"], 2) if ci else None,
             "n_eff": round(ci["n_eff"], 1) if ci else None,
@@ -47,7 +47,7 @@ def build(size=25_000, hold_days=30):
             "verdict": intervals.verdict_for(ra["sharpe"], ci),
             "n_funding_intervals": r["edge"]["n_intervals"],
         })
-    rows.sort(key=lambda x: -(x.get("mirage_score", -1)))
+    rows.sort(key=lambda x: -(x.get("reef_score", -1)))
     return {"size": size, "hold_days": hold_days,
             "data_asof": os.path.getmtime(os.path.join(model.DATA, "prices.json")),
             "rows": rows}
@@ -68,7 +68,7 @@ def render(idx):
             continue
         ci = (f"[{r['ci_lo']:+.2f}, {r['ci_hi']:+.2f}]"
               if r.get("ci_lo") is not None else "-")
-        print(f"{n:>3} {r['pair']:18s} {r['mirage_score']:>5d} {r['verdict']:>9s} "
+        print(f"{n:>3} {r['pair']:18s} {r['reef_score']:>5d} {r['verdict']:>9s} "
               f"{r['gross_annual_pct']:7.1f} {r['net_annual_pct']:6.1f} {r['sharpe']:7.2f} "
               f"{ci:>16s} {r['cost_bp']:8.1f} {r['history_days']:5.1f}d")
         n += 1

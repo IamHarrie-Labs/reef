@@ -62,10 +62,23 @@ def answer(question):
                         "evidence": ev, "verdict_text": None})
         return ev, llm.synthesize(ev)
 
-    evidence = {
+    evidence = build_evidence(r, ra, size, hold, prices, funding, books, q["parsed_by"])
+    ledger_row = {"ts": int(time.time() * 1000), "question": question, "query": q,
+                  "evidence": evidence}
+    ledger.append(ledger_row)
+    text = llm.synthesize(evidence)
+    return evidence, text
+
+
+def build_evidence(r, ra, size, hold, prices, funding, books, parsed_by):
+    """The frozen evidence object. Shared by user questions and the shadow desk
+    so a scheduled prediction is priced exactly like a typed one."""
+    a, b = r["a"], r["b"]
+    ci = intervals.sharpe_interval(r, ra, funding, hold)
+    return {
         "model_version": "2.0", "return_basis": r["return_basis"],
-        "verdict": intervals.verdict_for(ra["sharpe"], intervals.sharpe_interval(r, ra, funding, hold)),
-        "ci": intervals.sharpe_interval(r, ra, funding, hold),
+        "verdict": intervals.verdict_for(ra["sharpe"], ci),
+        "ci": ci,
         "price_train_end": r["split"],
         "pair": r["pair"], "beta": r["beta"], "size": size, "hold_days": hold,
         "edge": r["edge"], "residual_vol_bp_per_hr": round(r["resid_vol_hr"], 2),
@@ -76,13 +89,8 @@ def answer(question):
         "source_timestamps": {"prices": {x: max(prices[x]) for x in (a,b)},
                               "funding": {x: max(funding[x]) for x in (a,b)},
                               "books": {x: books[x].get("timestamp") for x in (a,b)}},
-        "parsed_by": q["parsed_by"],
+        "parsed_by": parsed_by,
     }
-    ledger_row = {"ts": int(time.time() * 1000), "question": question, "query": q,
-                  "evidence": evidence}
-    ledger.append(ledger_row)
-    text = llm.synthesize(evidence)
-    return evidence, text
 
 
 def main():
