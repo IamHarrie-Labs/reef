@@ -32,6 +32,13 @@
   best-effort; a delayed or skipped cycle shows as a later "updated" time.
 - solve.py (D-20) holds cost, residual risk and measurement noise fixed; a
   required carry is conditional on those, not a forecast that funding will rise.
+- The on-chain gold check (D-21) is a sanity check, not a trading signal. An
+  oracle and a Bitget perpetual clear through unrelated books and hours, so a
+  non-zero basis is normal; the check reports its magnitude, not a verdict.
+  XAUT has no Chainlink feed of its own on mainnet and is compared against
+  the general XAU/USD feed instead of a token-specific one. A stale oracle
+  (no update within 6h) is flagged, not hidden; an unreachable RPC reports
+  "unavailable", never a fabricated 0 bp.
 - RWA contracts and clusters are not guaranteed economically interchangeable.
   Correlation/beta does not verify instrument identity or legal exposure.
 - Legacy regime and decay utilities are exploratory. Shared legs invalidate an

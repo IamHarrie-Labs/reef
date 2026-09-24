@@ -24,6 +24,9 @@ jobs:
       - name: What-would-make-it-work solver
         run: python src/solve.py
 
+      - name: On-chain gold check, offline decode/math tests
+        run: python src/test_onchain_gold.py
+
       - name: Query parser regression tests
         run: python src/test_llm_parsing.py
 

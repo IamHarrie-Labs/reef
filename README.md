@@ -31,7 +31,9 @@ Reef asks whether that carry survives once you **walk the actual order book, pay
 
 4. **The AI explains; it never calculates.** Qwen parses questions and interprets frozen evidence through a private server route. Every number comes from the deterministic Python model. A Qwen reply containing any digit is rejected before display, and it must fill a fixed four-field schema: finding, binding constraint, what would change it, next check. ([`api/investigate.js`](api/investigate.js), [`llm.py`](src/llm.py))
 
-5. **It is a live desk, not a snapshot.** A GitHub Actions job runs every hour: it refreshes funding, books and candles, advances the shadow desk, re-prices every pair, anchors the record, and publishes. The site reads the newest export directly, and a feed shows which verdicts moved and why. ([`desk.yml`](.github/workflows/desk.yml))
+5. **It checks gold against gold, on-chain.** XAU, XAUT and PAXG all claim to track one ounce of gold. Every cycle Reef reads Chainlink's gold price feeds directly from Ethereum by contract call (`eth_call`, no key, no library) and compares them with Bitget's own price for each contract — a reference independent of Bitget and of Reef's own model. ([`onchain_gold.py`](src/onchain_gold.py))
+
+6. **It is a live desk, not a snapshot.** A GitHub Actions job runs every hour: it refreshes funding, books and candles, advances the shadow desk, checks the on-chain gold basis, re-prices every pair, anchors the record, and publishes. The site reads the newest export directly, and a feed shows which verdicts moved and why. ([`desk.yml`](.github/workflows/desk.yml))
 
 ## How a verdict is made
 
@@ -62,6 +64,7 @@ python src/test_accounting.py     # 20 accounting tests: signed weights, dollar 
 python src/test_shadow.py         # shadow desk and Bitcoin anchor, end to end
 python src/solve.py               # what would make each pair supported
 python src/reef_index.py          # every pair, verdict and 95% interval
+python src/onchain_gold.py        # gold contracts vs Chainlink, direct eth_call
 python src/verdict.py "Is SMH/SOXL worth \$25k over 30 days?"
 ```
 
@@ -95,6 +98,7 @@ Full list: [LIMITATIONS.md](LIMITATIONS.md). The two model bugs caught and corre
 src/model.py, capacity.py     signed-portfolio carry, cost and risk model
 src/solve.py                  what would make each pair supported
 src/shadow.py, score.py       forward test against live books; grading
+src/onchain_gold.py           gold perps vs Chainlink, read directly from Ethereum
 src/anchor.py                 Merkle root of the record, stamped to Bitcoin
 src/desk_cycle.py             one hourly cycle (run by .github/workflows/desk.yml)
 src/llm.py, verdict.py        question parsing, frozen evidence, explanation
