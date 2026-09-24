@@ -402,7 +402,7 @@ original author (or a model without the surrounding context) invoked it.
 The manifest is the artifact that survives being copied out of this repo.
 
 
-## D-16 — Accounting repair v2 (2026-09-21)
+## D-17 — Accounting repair v2 (2026-09-22)
 
 Previous results are superseded. The original residual (B-beta*A) was combined
 with the opposite notional weighting in funding and costs. All components now

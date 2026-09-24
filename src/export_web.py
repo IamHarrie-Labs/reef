@@ -26,6 +26,12 @@ for a, b in pairs:
         for hold in capacity.HOLDS:
             ra = capacity.risk_adjusted(r, size, hold)
             ci = intervals.sharpe_interval(r, ra, funding, hold) if ra else None
+            stresses = None if not ra else {
+                "half_funding": round(ra["gross_bp"] * 0.5 - ra["cost_bp"], 1),
+                "funding_reversal": round(-ra["gross_bp"] - ra["cost_bp"], 1),
+                "cost_plus_50": round(ra["gross_bp"] - ra["cost_bp"] * 1.5, 1),
+                "risk_plus_50_sharpe": round(ra["net_bp"] / (ra["risk_bp"] * 1.5) * math.sqrt(365 / hold), 3) if ra["risk_bp"] > 0 else None,
+            }
             row[str(hold)] = None if not ra else {
                 "annual_pct": round(ra["annual_pct"], 2), "net_bp": round(ra["net_bp"], 1),
                 "gross_bp": round(ra["gross_bp"], 1),
@@ -36,6 +42,7 @@ for a, b in pairs:
                 "ci_lo": round(ci["lo"], 3) if ci else None,
                 "ci_hi": round(ci["hi"], 3) if ci else None,
                 "verdict": intervals.verdict_for(ra["sharpe"], ci),
+                "stress": stresses,
             }
         grid[str(size)] = row
     sc = score_by_pair.get(name)

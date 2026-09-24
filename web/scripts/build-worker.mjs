@@ -1,5 +1,10 @@
-import {copyFileSync,mkdirSync} from 'node:fs';
+import {copyFileSync,cpSync,mkdirSync,rmSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('..',import.meta.url));
 mkdirSync(`${root}/dist/server`,{recursive:true});
 copyFileSync(`${root}/worker/index.js`,`${root}/dist/server/index.js`);
+const siteRoot=fileURLToPath(new URL('../..',import.meta.url));
+rmSync(`${siteRoot}/dist`,{recursive:true,force:true});
+mkdirSync(`${siteRoot}/dist/server`,{recursive:true});
+cpSync(`${root}/dist/client`,`${siteRoot}/dist/client`,{recursive:true});
+copyFileSync(`${root}/worker/index.js`,`${siteRoot}/dist/server/index.js`);

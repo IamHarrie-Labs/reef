@@ -59,7 +59,7 @@ def main():
                 skipped += 1
                 continue
             cell = ev.get("risk_adjusted") or {}
-            call = "REAL  " if cell.get("sharpe", 0) > 0.5 else "MIRAGE"
+            call = f"{ev.get('verdict', '?'):11s}"
             print(f"  {call} {ev['pair']:14s} {hold}d  "
                   f"net {cell.get('net_bp', 0):8.1f}bp  "
                   f"sharpe {cell.get('sharpe', 0):6.2f}")
