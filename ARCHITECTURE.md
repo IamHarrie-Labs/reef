@@ -23,9 +23,11 @@ CI runs financial regression tests, parser tests and offline pipeline smoke chec
    shadow.py    exit matured holds against today's book · backfill settlement marks
                 · open new 1-day (every 8h) and 3-day (every 24h) holds, predictions
                   frozen via verdict.build_evidence
-   export_web   re-price every pair, grade shadow executions (score.py), solve.py
-                requirements, verdict-change feed → web/web_export.json
+   onchain_gold read Chainlink XAU/USD and PAXG/USD via eth_call (no key/library)
+                · basis vs Bitget's own price for XAU, XAUT, PAXG
    anchor.py    Merkle root over ledger + executions → OpenTimestamps → Bitcoin
+   export_web   re-price every pair, grade shadow executions (score.py), solve.py
+                requirements, verdict-change feed, on-chain basis → web/web_export.json
    commit       "[skip ci]" push to main; the site reads the newest export directly
 ```
 

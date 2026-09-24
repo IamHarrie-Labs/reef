@@ -97,6 +97,12 @@ for row in ledger_rows:
     })
 verification_rows.sort(key=lambda x: (x["status"] != "graded", -(x["recorded_ts"] or 0)))
 
+onchain_gold = None
+onchain_path = os.path.join(model.DATA, "onchain", "gold_basis.json")
+if os.path.exists(onchain_path):
+    with open(onchain_path, encoding="utf-8") as f:
+        onchain_gold = json.load(f)
+
 anchor_index = []
 anchor_path = os.path.join(model.DATA, "anchors", "index.json")
 if os.path.exists(anchor_path):
@@ -149,6 +155,7 @@ payload = {
                "n_recorded": sum(1 for r in verification_rows if r["shadow"])},
     "anchors": anchors,
     "verdict_changes": changes_out,
+    "onchain_gold": onchain_gold,
     "pairs": out_pairs,
 }
 outpath = os.path.join(model.DATA, "web_export.json")

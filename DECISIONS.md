@@ -502,3 +502,39 @@ desk says this explicitly rather than implying patience fixes everything.
 
 **Rejected.** Reporting only the break-even hold. It ignores risk and noise,
 and it would advertise holds under which the trade is still unsupported.
+
+---
+
+## D-21 · Check gold against gold, on an independent chain
+
+**Context.** XAU, XAUT and PAXG all price the same claim: one contract or
+token equals one ounce of gold. Every number Reef had computed about them so
+far came from Bitget itself — the funding, the books, the cost. Nothing
+checked the claim against a source Bitget doesn't control.
+
+**Decision.** `onchain_gold.py` reads Chainlink's `XAU/USD` and `PAXG/USD`
+price feeds directly from Ethereum mainnet with a raw `eth_call` to each
+feed's `latestRoundData()` — no API key, no web3 library, three public RPC
+endpoints tried in order. Feed addresses come from Chainlink's own published
+mainnet directory, not typed from memory (the first attempt was: it was one
+character short and reverted). It reports the basis in bp between each
+Bitget gold contract and its on-chain reference, and the reference oracle's
+own age, every hour.
+
+**What it caught immediately.** XAUT has no Chainlink feed of its own on
+mainnet. Rather than substitute a proxy silently, it's compared against the
+same `XAU/USD` feed as XAU, and that substitution is stated on the page, not
+buried in a footnote.
+
+**What this is not.** A trading signal. An oracle and a Bitget perpetual
+clear through unrelated books, unrelated hours and unrelated latency; some
+basis is structural, not a mispricing. It's the same category of check as
+D-03's leveraged-product confirmation — an independent fact the model didn't
+generate, that its output can be measured against.
+
+**Rejected.** Posting the comparison itself on-chain. The point was reading
+an independent source, not writing one; adding a wallet and a fee for that
+would be pure sample-project ceremony (see D-19, which anchors the record
+itself, differently and with an actual reason). Also rejected: a DEX pool
+price for PAXG/XAUT. A Chainlink feed already aggregates multiple venues and
+is deliberately harder for one thin pool to move.
