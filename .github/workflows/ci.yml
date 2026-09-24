@@ -18,6 +18,12 @@ jobs:
       - name: Financial accounting regression tests
         run: python src/test_accounting.py
 
+      - name: Shadow desk and Bitcoin anchor, offline end to end
+        run: python src/test_shadow.py
+
+      - name: What-would-make-it-work solver
+        run: python src/solve.py
+
       - name: Query parser regression tests
         run: python src/test_llm_parsing.py
 
@@ -28,7 +34,7 @@ jobs:
         run: python src/screen.py
 
       - name: Mirage index run against cached data
-        run: python src/mirage_index.py
+        run: python src/reef_index.py
 
       - name: Confidence intervals compute
         run: python src/intervals.py

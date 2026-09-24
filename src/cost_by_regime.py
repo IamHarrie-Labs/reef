@@ -1,6 +1,6 @@
 """Execution cost by market regime, from the live recorder's book series.
 
-`depth_regime.py` compares two one-off snapshots and is confounded: the RTH
+`archive/depth_regime.py` compares two one-off snapshots and is confounded: the RTH
 baseline and the closed-market snapshot were taken days apart, so any
 difference mixes regime with whatever else moved in between. This script
 avoids that by using `recorder.py`'s continuous capture - every book comes

@@ -267,7 +267,7 @@ opposite of the assumption stated in `LIMITATIONS.md`. But the two
 snapshots were taken **4.5 days apart**, so the comparison mixes regime
 with everything else that moved in between.
 
-**Decision.** `depth_regime.py` ships with the result and a printed caveat
+**Decision.** `archive/depth_regime.py` ships with the result and a printed caveat
 that it is directional only. `cost_by_regime.py` was written to do it
 properly, using the recorder's continuous series so regimes are compared
 within one process on one cadence.

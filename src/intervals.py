@@ -75,7 +75,7 @@ def sharpe_interval(r, ra, funding, hold):
 
     `r` is capacity.analyse_pair() output, `ra` is capacity.risk_adjusted().
     Returns dict(lo, hi, n, n_eff, r1) or None. Shared by the CLI below,
-    mirage_index.py and export_web.py so every surface computes it the
+    reef_index.py and export_web.py so every surface computes it the
     same way.
     """
     a, b = r["a"], r["b"]

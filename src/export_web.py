@@ -4,14 +4,14 @@ the real (Python) pipeline so the browser never re-derives anything.
 """
 import json, os, sys, datetime as dt, math
 sys.path.insert(0, os.path.dirname(__file__))
-import model, capacity, mirage_index, intervals, ledger, score
+import model, capacity, reef_index, intervals, ledger, score, solve
 
 prices, funding, books = model.load_prices(), model.load_funding(), model.load_books()
 CL = json.load(open(os.path.join(model.DATA, "clusters.json")))
 pairs = [(sy[i], sy[j]) for c, sy in CL.items() if c != "CONTROL"
          for i in range(len(sy)) for j in range(i + 1, len(sy))]
 
-idx = mirage_index.build()
+idx = reef_index.build()
 score_by_pair = {r["pair"]: r for r in idx["rows"] if r["status"] == "priced"}
 
 out_pairs = []
@@ -21,6 +21,7 @@ for a, b in pairs:
         continue
     name = r["pair"]
     grid = {}
+    se = solve._noise(r, funding)
     for size in capacity.SIZES:
         row = {}
         for hold in capacity.HOLDS:
@@ -43,6 +44,7 @@ for a, b in pairs:
                 "ci_hi": round(ci["hi"], 3) if ci else None,
                 "verdict": intervals.verdict_for(ra["sharpe"], ci),
                 "stress": stresses,
+                "requires": solve.requirements(r, ra, hold, funding, se=se),
             }
         grid[str(size)] = row
     sc = score_by_pair.get(name)
@@ -55,7 +57,7 @@ for a, b in pairs:
         "edge": {k: (round(v, 3) if isinstance(v, float) else v) for k, v in r["edge"].items()},
         "resid_vol_bp_per_hr": round(r["resid_vol_hr"], 2),
         "n_fit": r["n_fit"], "n_resid": r["n_resid"],
-        "mirage_score": sc["mirage_score"] if sc else None,
+        "reef_score": sc["reef_score"] if sc else None,
         "verdict": sc["verdict"] if sc else None,
         "ci_lo": sc.get("ci_lo") if sc else None,
         "ci_hi": sc.get("ci_hi") if sc else None,
@@ -63,30 +65,76 @@ for a, b in pairs:
         "history_days": sc.get("history_days") if sc else None,
         "funding_interval_h": sc.get("funding_interval_h") if sc else None,
         "max_viable_by_hold": {str(h): capacity.max_viable(r, h) for h in capacity.HOLDS},
+        "max_supported_by_hold": {str(h): solve.max_supported_size(r, h, funding, se=se) for h in capacity.HOLDS},
         "grid": grid,
     })
 
-out_pairs.sort(key=lambda p: -(p["mirage_score"] or -1))
+out_pairs.sort(key=lambda p: -(p["reef_score"] or -1))
+
 
 ledger_rows = [r for r in ledger.read_all() if r.get("evidence", {}).get("model_version") == "2.0"]
 funding_archive = model.load_funding("archive")
-verification_rows = []
-latest_by_pair = {}
+executions = score.load_executions()
+now_ms = int(dt.datetime.now(dt.timezone.utc).timestamp() * 1000)
+graded, pending, verification_rows = [], 0, []
 for row in ledger_rows:
-    key = row.get("evidence", {}).get("pair")
-    if key in latest_by_pair:
-        del latest_by_pair[key]
-    latest_by_pair[key] = row
-for row in list(latest_by_pair.values())[-12:]:
-    graded = score.grade_row(row, funding=funding_archive)
+    g = score.grade_row(row, funding=funding_archive, executions=executions, now_ms=now_ms)
     ev = row.get("evidence", {})
+    if g.get("status") == "graded":
+        graded.append(g)
+    elif g.get("status") == "pending":
+        pending += 1
     verification_rows.append({
         "recorded_ts": row.get("ts"), "question": row.get("question"),
-        "pair": ev.get("pair"), "hold_days": ev.get("hold_days"),
+        "pair": ev.get("pair"), "hold_days": ev.get("hold_days"), "shadow": bool(row.get("shadow")),
+        "verdict": ev.get("verdict"),
         "predicted_net_bp": ev.get("risk_adjusted", {}).get("net_bp"),
-        "status": graded.get("status"), "matures_ms": graded.get("matures_ms"),
-        "actual_net_bp": graded.get("net_bp"),
+        "predicted_cost_bp": ev.get("risk_adjusted", {}).get("cost_bp"),
+        "status": g.get("status"), "matures_ms": g.get("matures_ms"),
+        "actual_net_bp": g.get("net_bp"), "realised_cost_bp": g.get("realised_cost_bp"),
+        "realised_funding_bp": g.get("realised_funding_bp"),
+        "key": score.execution_key(row.get("ts"), ev.get("pair"), ev.get("hold_days")),
     })
+verification_rows.sort(key=lambda x: (x["status"] != "graded", -(x["recorded_ts"] or 0)))
+
+anchor_index = []
+anchor_path = os.path.join(model.DATA, "anchors", "index.json")
+if os.path.exists(anchor_path):
+    with open(anchor_path, encoding="utf-8") as f:
+        anchor_index = json.load(f)
+confirmed = [a for a in anchor_index if a.get("bitcoin_block")]
+anchors = {
+    "n_anchors": len(anchor_index),
+    "latest": anchor_index[-1] if anchor_index else None,
+    "latest_confirmed": confirmed[-1] if confirmed else None,
+    "repo_path": "data/anchors",
+}
+
+# verdict-change feed at the headline scenario ($25k / 30d), append-only history
+HIST = os.path.join(model.DATA, "verdict_history.jsonl")
+current = {p["pair"]: (p["grid"]["25000"]["30"] or {}).get("verdict") for p in out_pairs}
+last = {}
+if os.path.exists(HIST):
+    with open(HIST, encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                h = json.loads(line)
+                last[h["pair"]] = h
+changes_out = []
+with open(HIST, "a", encoding="utf-8") as f:
+    for p in out_pairs:
+        v = current[p["pair"]]
+        prev = last.get(p["pair"])
+        if prev is None or prev["verdict"] != v:
+            rec = {"ts": now_ms, "pair": p["pair"], "verdict": v,
+                   "previous": prev["verdict"] if prev else None,
+                   "bp_per_day": p["edge"]["bp_per_day"],
+                   "previous_bp_per_day": prev.get("bp_per_day") if prev else None}
+            f.write(json.dumps(rec) + "\n")
+            last[p["pair"]] = rec
+with open(HIST, encoding="utf-8") as f:
+    changes_out = [json.loads(l) for l in f if l.strip()]
+changes_out = [c for c in changes_out if c.get("previous")][-20:]
 
 payload = {
     "model_version": "2.0",
@@ -96,7 +144,11 @@ payload = {
     "sizes": capacity.SIZES, "holds": capacity.HOLDS,
     "n_pairs_priced": len(out_pairs),
     "n_pairs_no_funding": len(pairs) - len(out_pairs),
-    "verification_ledger": verification_rows,
+    "verification_ledger": verification_rows[:60],
+    "shadow": {"summary": score.summarise(graded), "n_graded": len(graded), "n_pending": pending,
+               "n_recorded": sum(1 for r in verification_rows if r["shadow"])},
+    "anchors": anchors,
+    "verdict_changes": changes_out,
     "pairs": out_pairs,
 }
 outpath = os.path.join(model.DATA, "web_export.json")
@@ -104,4 +156,4 @@ json.dump(payload, open(outpath, "w"), indent=None, separators=(",", ":"))
 print(f"wrote {outpath}  ({os.path.getsize(outpath):,} bytes, {len(out_pairs)} pairs)")
 
 from pathlib import Path
-Path("web/web_export.json").write_text(json.dumps(payload), encoding="utf-8")
+Path("web/web_export.json").write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")

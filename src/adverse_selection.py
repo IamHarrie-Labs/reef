@@ -1,7 +1,7 @@
 """Does the book thin exactly when the gap widens?
 
 price divergence is 2.89x worse when the US market is closed (see
-funding_regime.py for the funding-side mirror of this). The open question
+archive/funding_regime.py for the funding-side mirror of this). The open question
 this script answers: is that because liquidity actually withdraws at the
 same moment, or is the divergence just noise in a normal book?
 

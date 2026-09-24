@@ -1,11 +1,19 @@
 const fs=require('node:fs');
 const path=require('node:path');
 
-const snapshot=JSON.parse(fs.readFileSync(path.join(process.cwd(),'web','web_export.json'),'utf8'));
+const bundled=JSON.parse(fs.readFileSync(path.join(process.cwd(),'web','web_export.json'),'utf8'));
+const LIVE='https://raw.githubusercontent.com/IamHarrie-Labs/reef/main/web/web_export.json';
+let cache={at:0,data:null};
+// The desk page reads the hourly live export; explain the same snapshot the visitor is looking at.
+async function currentSnapshot(){
+  if(cache.data&&Date.now()-cache.at<300000)return cache.data;
+  try{const r=await fetch(LIVE,{signal:AbortSignal.timeout(4000)});if(r.ok){const d=await r.json();if(d.model_version==='2.0'&&Array.isArray(d.pairs)&&String(d.generated_utc)>=String(bundled.generated_utc)){cache={at:Date.now(),data:d};return d}}}catch{}
+  return bundled;
+}
 const requests=new Map();
-const allowedSizes=new Set(snapshot.sizes.map(String));
-const allowedHolds=new Set(snapshot.holds.map(String));
 function clientKey(req){return String(req.headers['x-forwarded-for']||req.socket?.remoteAddress||'unknown').split(',')[0].trim()}
+// Best-effort, per-instance limit: serverless instances do not share this map, so it
+// slows casual abuse of the Qwen key rather than enforcing a global quota.
 function limited(req){const key=clientKey(req),now=Date.now(),recent=(requests.get(key)||[]).filter(t=>now-t<60000);recent.push(now);requests.set(key,recent);return recent.length>12}
 function safeJson(text){return JSON.parse(String(text||'').trim().replace(/^```json\s*/i,'').replace(/```$/,'').trim())}
 function fallback(e){return {finding:e.verdict==='UNPROVEN'?'The carry survives estimated costs, but the uncertainty range still includes a losing outcome.':e.verdict==='SUPPORTED'?'The tested carry survives costs and the stated evidence threshold.':'The apparent carry does not survive the tested costs and residual risk.',binding_constraint:e.ci?.[0]<=0?'The uncertainty range is the binding constraint.':e.net_bp<=0?'Execution cost is the binding constraint.':'Residual spread risk remains the binding constraint.',invalidation:'A material change in funding, liquidity, or spread behaviour could change this result.',next_check:'Refresh the funding window and executable depth before relying on the result.'}}
@@ -16,7 +24,8 @@ module.exports=async function handler(req,res){
   if(limited(req))return res.status(429).json({error:'Too many investigations. Wait a moment and try again.'});
   let body;try{body=typeof req.body==='string'?JSON.parse(req.body):req.body}catch{return res.status(400).json({error:'The request could not be read.'})}
   if(!body||typeof body.question!=='string'||body.question.length<3||body.question.length>500)return res.status(400).json({error:'Ask a question between three and five hundred characters.'});
-  if(typeof body.pair!=='string'||!allowedSizes.has(String(body.size))||!allowedHolds.has(String(body.hold)))return res.status(400).json({error:'Choose a recorded pair, size and holding period.'});
+  const snapshot=await currentSnapshot();
+  if(typeof body.pair!=='string'||!snapshot.sizes.map(String).includes(String(body.size))||!snapshot.holds.map(String).includes(String(body.hold)))return res.status(400).json({error:'Choose a recorded pair, size and holding period.'});
   const pair=snapshot.pairs.find(item=>item.pair===body?.pair);
   const cell=pair?.grid[String(body?.size)]?.[String(body?.hold)];
   if(!pair||!cell)return res.status(404).json({error:'That recorded scenario is unavailable.'});

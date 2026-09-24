@@ -29,5 +29,5 @@ pauses the video and disables entrance animations.
 Browser questions use a local parser, not a live LLM. The dashboard displays
 exported calculations and discloses rounding to the nearest scenario. Favorites
 stay in local browser storage. No trade or account connection is initiated.
-`legacy.html` preserves the former single-page dashboard as a reference; it is
+`archive/legacy.html` preserves the former single-page dashboard as a reference; it is
 not an entry in the new production build.

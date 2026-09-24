@@ -46,7 +46,7 @@ To see the full ranked index across every tracked pair instead of one
 question:
 
 ```bash
-python src/mirage_index.py
+python src/reef_index.py
 ```
 
 To see the 95% confidence interval and effective-sample-size detail behind
