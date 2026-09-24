@@ -26,3 +26,11 @@
 /* Keep clipped table labels inside their scroll container. */
 .table-scroll{position:relative}.detail-panel{scroll-margin-top:90px}
 @media(min-width:768px){.desk-navigation{margin-bottom:26px}.desk-heading{margin-bottom:22px}.summary-strip{padding-top:20px;padding-bottom:20px;margin-bottom:22px}}
+/* Judge-facing evidence layers */
+.split-proof{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin:24px 0;padding:18px;border:1px solid var(--line,#dfe2d8);background:rgba(255,255,255,.46)}
+.split-proof>div{display:flex;flex-direction:column;gap:4px}.split-proof span,.stress-grid span,.ai-grid small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#697166)}.split-proof strong{font:600 15px/1.35 inherit}.split-proof small{color:var(--muted,#697166)}
+.stress-lab{margin:24px 0}.stress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line,#dfe2d8);border:1px solid var(--line,#dfe2d8)}.stress-grid article{display:flex;min-height:112px;flex-direction:column;justify-content:space-between;padding:16px;background:var(--surface,#faf9f5)}.stress-grid article.failed{box-shadow:inset 3px 0 0 #a84b3b}.stress-grid strong{font-size:22px;font-weight:500}.stress-grid small{color:var(--muted,#697166)}
+.ai-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin-top:14px;background:rgba(61,90,62,.18)}.ai-grid>div{padding:15px;background:rgba(251,250,246,.92)}.ai-grid p{margin:7px 0 0!important;line-height:1.5}.ai-skeleton{height:13px;margin-top:14px;border-radius:3px;background:linear-gradient(90deg,rgba(61,90,62,.08),rgba(61,90,62,.18),rgba(61,90,62,.08));background-size:200% 100%;animation:reef-shimmer 1.3s infinite}.ai-skeleton.short{width:68%;margin-top:9px}.report-actions{display:grid;gap:8px;margin-top:10px}
+@keyframes reef-shimmer{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.ai-skeleton{animation:none}}
+@media (max-width:720px){.split-proof{grid-template-columns:1fr}.split-proof>svg{transform:rotate(90deg);justify-self:center}.stress-grid,.ai-grid{grid-template-columns:1fr}}

@@ -1,6 +1,6 @@
 ---
 name: reef-pricer
-description: Answer a plain-English question about whether a Bitget RWA (real-world-asset) perpetual pair's funding yield is real, once execution cost and residual spread risk are priced in. Use when the user asks things like "is the XAU/XAUT carry real", "can I trust this funding yield", "what's the Sharpe on SMH/SOXL at $50k for 2 weeks", or names any Bitget RWA/equity-linked perp pair together with a size or holding period. Returns a REAL / UNPROVEN / MIRAGE verdict with a 95% confidence interval, backed by evidence computed entirely outside the model (never invented by it).
+description: Answer a plain-English question about whether a Bitget RWA (real-world-asset) perpetual pair's funding yield is real, once execution cost and residual spread risk are priced in. Use when the user asks things like "is the XAU/XAUT carry real", "can I trust this funding yield", "what's the Sharpe on SMH/SOXL at $50k for 2 weeks", or names any Bitget RWA/equity-linked perp pair together with a size or holding period. Returns a SUPPORTED / UNPROVEN / UNFAVOURABLE verdict with a 95% confidence interval, backed by evidence computed entirely outside the model (never invented by it).
 ---
 
 # Reef pricer
@@ -36,7 +36,7 @@ paired instrument automatically (e.g. naming `XAU` alone resolves to
 
 1. `--- evidence ---` — a JSON block: `pair`, `beta`, `edge` (gross funding
    figures, cadence, sample size), `risk_adjusted` (net bp, cost bp, risk bp,
-   Sharpe), `breakeven_days`, `n_funding_intervals`, `data_asof_utc`. Treat
+   Sharpe), `breakeven_days`, `n_funding_intervals`, `generated_at_utc`. Treat
    this as the complete and only source of truth.
 2. `--- verdict ---` — a human-readable explanation synthesized from that
    evidence (template-based if no LLM key is configured, `BITGET_QWEN_API_KEY`
@@ -50,7 +50,7 @@ python src/mirage_index.py
 ```
 
 To see the 95% confidence interval and effective-sample-size detail behind
-any Sharpe figure (why REAL requires the interval to exclude zero, not just
+any Sharpe figure (why SUPPORTED requires the interval to exclude zero, not just
 the point estimate to clear 0.5):
 
 ```bash
@@ -59,11 +59,11 @@ python src/intervals.py
 
 ## Interpreting the verdict
 
-- **REAL** — net Sharpe clears 0.5 on its point estimate *and* the 95%
+- **SUPPORTED** — net Sharpe clears 0.5 on its point estimate *and* the 95%
   confidence interval excludes zero. Evidence of an edge, on this sample.
 - **UNPROVEN** — clears 0.5 on the point estimate, but the interval includes
   zero. Not evidence of an edge — could easily be sampling noise.
-- **MIRAGE** — doesn't clear 0.5. The visible yield doesn't survive execution
+- **UNFAVOURABLE** — doesn't clear 0.5. The visible yield doesn't survive execution
   cost and risk.
 
 Two things worth surfacing to the user if relevant, because they are easy to
@@ -73,7 +73,7 @@ misread as bugs but are documented, deliberate properties of the data:
   doesn't serve more. Gold contracts (XAU/XAUT/PAXG) settle funding every 4h,
   everything else every 8h, so the same 100 intervals cover ~16.5 days of
   gold history vs ~33 days for equities (see `DECISIONS.md` D-15).
-- A pair that was REAL or UNPROVEN in one run can look different after a data
+- A pair that was SUPPORTED or UNPROVEN in one run can look different after a data
   refresh, purely because the funding window has rolled forward — this is
   expected sampling variation, not a broken model (`DECISIONS.md` D-06).
 
@@ -81,7 +81,7 @@ misread as bugs but are documented, deliberate properties of the data:
 
 - Never invent a pair, price, or Sharpe value not present in the evidence
   JSON.
-- Never state a verdict word (REAL/UNPROVEN/MIRAGE) other than the one the
+- Never state a verdict word (SUPPORTED/UNPROVEN/UNFAVOURABLE) other than the one the
   script printed.
 - Never average, extrapolate, or "round up" a number across pairs or holding
   periods the user didn't ask about.
