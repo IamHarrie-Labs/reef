@@ -14,7 +14,7 @@ Bitget lists perpetual futures on real-world assets: tokenized equities, ETFs, i
 
 Reef asks whether that carry survives once you **walk the actual order book, pay fees both ways, and carry the residual price risk of the hedge**, and it answers from evidence rather than vibes.
 
-| Example, $25k held 30 days | Headline yield | After cost and risk | Verdict |
+| Example, $25k held 30 days (snapshot 24 Sep 2026) | Headline yield | After cost and risk | Verdict |
 |---|---:|---:|---|
 | SMH / SOXL | +5.9% | **−29.1%** | Unfavourable |
 | XAU / XAUT | +7.2% | +3.9% | Unproven (interval crosses zero) |

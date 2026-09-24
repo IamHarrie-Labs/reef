@@ -3,7 +3,7 @@
     python src/desk_cycle.py
 
 refresh (funding, books, recent candles) -> shadow desk (exit, marks, open)
--> web export -> Bitcoin anchor. Each step is isolated so a failed fetch
+-> Bitcoin anchor -> web export (so the site shows the anchor it just made). Each step is isolated so a failed fetch
 leaves the previous cycle's data in place rather than a half-written state.
 """
 import os, subprocess, sys, time
@@ -13,8 +13,8 @@ STEPS = [
     ("refresh", ["refresh.py", "--funding", "--depth"]),
     ("prices", ["refresh.py", "--prices", "--recent"]),
     ("shadow", ["shadow.py"]),
-    ("export", ["export_web.py"]),
     ("anchor", ["anchor.py"]),
+    ("export", ["export_web.py"]),
 ]
 
 
