@@ -10,7 +10,7 @@ type Pair={pair:string;a:string;b:string;beta:number;price_train_end:number;n_fi
 type LedgerRow={recorded_ts:number;question:string;pair:string;hold_days:number;shadow:boolean;verdict:Verdict|null;predicted_net_bp:number;predicted_cost_bp:number|null;status:string;matures_ms?:number|null;actual_net_bp?:number|null;realised_cost_bp?:number|null;realised_funding_bp?:number|null;key:string};
 type ShadowSummary={n_graded:number;mean_predicted_net_bp:number;mean_realised_net_bp:number;net_sign_agreement:number;n_with_cost_breakdown:number;mean_predicted_cost_bp:number|null;mean_realised_cost_bp:number|null;mean_abs_cost_error_bp:number|null;mean_predicted_funding_bp:number|null;mean_realised_funding_bp:number|null};
 type Anchor={id:string;root:string;n_leaves:number;n_ledger_rows:number;stamped:boolean;bitcoin_block:number|null};
-type Change={ts:number;pair:string;verdict:Verdict;previous:Verdict;bp_per_day:number;previous_bp_per_day:number|null};
+type Change={ts:number;pair:string;verdict:Verdict|null;previous:Verdict;bp_per_day:number;previous_bp_per_day:number|null};
 type GoldRow={symbol:string;reference_feed:string;status:'ok'|'stale'|'unavailable';bitget_price?:number;bitget_source?:'live_ticker'|'hourly_candle';onchain_price?:number;basis_bp?:number;onchain_age_s?:number;error?:string};
 type OnchainGold={generated_utc:string;source:string;rows:GoldRow[]};
 type AICommentary={finding:string;binding_constraint:string;invalidation:string;next_check:string};
@@ -28,7 +28,7 @@ const ago=(utc:string)=>{const t=Date.parse(utc.replace(' ','T').replace(/Z?$/,'
 const nearest=(arr:number[],v:number)=>arr.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a);
 const day=(n:number|string|null)=>n?new Date(Number(n)).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}):'Not recorded';
 const market=(p:Pair)=>/XAU|PAXG/.test(p.pair)?'Metals':/HKD/.test(p.pair)?'Global equities':/QQQ|SPY|SP500|VOO|SOX|SMH|NDX/.test(p.pair)?'ETFs & indices':'US equities';
-function Badge({value}:{value:Verdict}){return <span className={`badge ${value.toLowerCase()}`}><i/>{status[value]}</span>}
+function Badge({value}:{value:Verdict|null|undefined}){if(!value)return <span className="badge unpriced"><i/>Unpriced</span>;return <span className={`badge ${value.toLowerCase()}`}><i/>{status[value]}</span>}
 function Logo(){return <a className="logo" href="#/" aria-label="Reef home"><Triangle size={19} fill="currentColor" strokeWidth={1.5}/><span>Reef</span></a>}
 function Navbar({desk=false}:{desk?:boolean}){
  const [scrolled,setScrolled]=useState(false),[menu,setMenu]=useState(false);const modal=useRef<HTMLDialogElement>(null);
