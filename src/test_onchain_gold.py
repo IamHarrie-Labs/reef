@@ -101,7 +101,7 @@ class BasisMath(unittest.TestCase):
 
     def test_stale_feed_is_flagged_not_hidden(self):
         with patch.object(og, "read_feed", side_effect=lambda addr: self.fake_feeds(
-                          xau_age_s=og.STALE_AFTER_S + 60)["XAU/USD" if addr == XAU_ADDR else "PAXG/USD"]), \
+                          xau_age_s=int(og.FEED_HEARTBEAT_S["XAU/USD"] * og.STALE_GRACE) + 60)["XAU/USD" if addr == XAU_ADDR else "PAXG/USD"]), \
              patch.object(og, "bitget_reference", return_value={"price": 4257.85, "ts_ms": self.now, "source": "hourly_candle"}):
             payload = og.build_payload(now_ms=self.now)
         row = next(r for r in payload["rows"] if r["symbol"] == "XAUUSDT")

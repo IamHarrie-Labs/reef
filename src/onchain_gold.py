@@ -35,6 +35,15 @@ FEEDS = {
 # XAUT has no Chainlink feed of its own on mainnet; it is checked against XAU/USD too.
 BITGET_TO_FEED = {"XAUUSDT": "XAU/USD", "XAUTUSDT": "XAU/USD", "PAXGUSDT": "PAXG/USD"}
 
+# Each feed's own published heartbeat (seconds) from the same directory as its
+# address, not guessed: both post a new round at least this often even with no
+# price movement, sooner if price moves past their deviation threshold (0.3%
+# XAU/USD, 0.5% PAXG/USD). A first version of this file assumed a ~1h
+# heartbeat and flagged perfectly normal 18h-old rounds as "stale" - fixed
+# after seeing that live on the site (see DECISIONS.md D-21 update).
+FEED_HEARTBEAT_S = {"XAU/USD": 86_400, "PAXG/USD": 86_400}
+STALE_GRACE = 1.25  # allow this multiple of the heartbeat before flagging
+
 RPCS = [
     "https://ethereum-rpc.publicnode.com",
     "https://rpc.ankr.com/eth",
@@ -42,7 +51,6 @@ RPCS = [
 ]
 LATEST_ROUND_DATA = "0xfeaf968c"
 DECIMALS = "0x313ce567"
-STALE_AFTER_S = 6 * 3600  # Chainlink's own gold-feed heartbeat is ~1h; 6h is a generous staleness bar
 OUT = os.path.join(model.DATA, "onchain", "gold_basis.json")
 
 
@@ -124,7 +132,8 @@ def build_payload(now_ms=None):
             rows.append({"symbol": symbol, "reference_feed": feed_name, "status": "unavailable",
                         "error": feed_errors.get(feed_name, "no cached Bitget price")})
             continue
-        stale = (now_ms - feed["updated_at_ms"]) / 1000 > STALE_AFTER_S
+        stale_after_s = FEED_HEARTBEAT_S[feed_name] * STALE_GRACE
+        stale = (now_ms - feed["updated_at_ms"]) / 1000 > stale_after_s
         basis_bp = (bg["price"] - feed["price"]) / feed["price"] * 1e4
         rows.append({
             "symbol": symbol, "reference_feed": feed_name, "status": "stale" if stale else "ok",

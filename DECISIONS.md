@@ -535,6 +535,15 @@ mainnet. Rather than substitute a proxy silently, it's compared against the
 same `XAU/USD` feed as XAU, and that substitution is stated on the page, not
 buried in a footnote.
 
+**What it caught a day later.** The first version guessed a ~1h heartbeat
+and flagged an oracle "stale" after 6h. Both feeds actually publish a new
+round every 24h even with no price movement (sooner on a 0.3-0.5% deviation)
+— published in the same Chainlink directory as the addresses, not another
+guess. At 18h old the live site was labelling a perfectly normal round as
+stale. Fixed by reading each feed's own heartbeat instead of assuming one;
+this class of bug (a plausible-sounding constant nobody checked against the
+source) is the same one D-15 found in Bitget's own funding cadence.
+
 **What this is not.** A trading signal. An oracle and a Bitget perpetual
 clear through unrelated books, unrelated hours and unrelated latency; some
 basis is structural, not a mispricing. It's the same category of check as
