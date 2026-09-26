@@ -37,8 +37,9 @@
   non-zero basis is normal; the check reports its magnitude, not a verdict.
   XAUT has no Chainlink feed of its own on mainnet and is compared against
   the general XAU/USD feed instead of a token-specific one. A stale oracle
-  (no update within 6h) is flagged, not hidden; an unreachable RPC reports
-  "unavailable", never a fabricated 0 bp.
+  (no update within its own published heartbeat, 24h for both feeds, times
+  1.25) is flagged, not hidden; an unreachable RPC reports "unavailable",
+  never a fabricated 0 bp.
 - RWA contracts and clusters are not guaranteed economically interchangeable.
   Correlation/beta does not verify instrument identity or legal exposure.
 - Legacy regime and decay utilities are exploratory. Shared legs invalidate an
