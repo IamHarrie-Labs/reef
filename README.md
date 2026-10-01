@@ -14,16 +14,16 @@ Bitget lists perpetual futures on real-world assets: tokenized equities, ETFs, i
 
 Reef asks whether that carry survives once you **walk the actual order book, pay fees both ways, and carry the residual price risk of the hedge**, and it answers from evidence rather than vibes.
 
-| Example, $25k held 30 days (snapshot 24 Sep 2026) | Headline yield | After cost and risk | Verdict |
+| Example, $25k held 30 days (snapshot 1 Oct 2026) | Headline yield | After cost and risk | Verdict |
 |---|---:|---:|---|
-| SMH / SOXL | +5.9% | **−29.1%** | Unfavourable |
-| XAU / XAUT | +7.2% | +3.9% | Unproven (interval crosses zero) |
+| QQQ / TQQQ | +23.2% | **+14.0%** | **Supported** (95% CI [0.26, 2.91], Sharpe 1.59) |
+| SMH / SOXL | +5.7% | −34.6% | Unfavourable |
 
-**Across 27 priced pairs at $25k / 30 days: 0 supported, 2 unproven, 25 unfavourable.** The desk refreshes hourly, so these figures change. The live site is the source of truth.
+**Across 27 priced pairs at $25k / 30 days: 1 supported, 3 unproven, 20 unfavourable, 3 too thin to price.** The desk refreshes hourly, so these figures change — the live site is the source of truth, not this table. One pair clearing the bar isn't a trend; it's one result that survives its own confidence interval and a 50%-risk stress test, out of 27 tried.
 
 ## What makes it different
 
-1. **It answers "what would make it work", not just "no."** For every pair, size and hold, Reef inverts the verdict. It reports the funding rate the trade would need, the shortest hold that clears both tests, the largest size that does, and which constraint binds: cost, residual risk, or noise in the evidence. QQQ/SQQQ at $25k becomes viable after about **53 days**. SMH/SOXL would need **10×** today's funding, and holding longer never helps, because its residual risk grows as fast as its carry. ([`solve.py`](src/solve.py))
+1. **It answers "what would make it work", not just "no."** For every pair, size and hold, Reef inverts the verdict. It reports the funding rate the trade would need, the shortest hold that clears both tests, the largest size that does, and which constraint binds: cost, residual risk, or noise in the evidence. That's exactly how QQQ/TQQQ went from "no" to **Supported** — not luck, a condition the solver already named. QQQ/SQQQ is close behind: viable at $10k past ~40 days. SMH/SOXL would need an order of magnitude more funding than today's rate, and holding longer never helps there, because its residual risk grows as fast as its carry. ([`solve.py`](src/solve.py))
 
 2. **It grades itself against live books.** Every 8 hours the shadow desk freezes a prediction for every pair, records a hypothetical fill by walking the live Bitget book, exits against the book when the hold ends, and fetches the exchange's mark price at each funding settlement in between. That tests the one thing a backtest can't: does the predicted execution cost show up in a later book? No orders are ever placed. ([`shadow.py`](src/shadow.py), [`score.py`](src/score.py))
 
