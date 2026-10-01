@@ -40,12 +40,12 @@ The verdict is **Supported** only when the risk-adjusted estimate clears 0.5 and
    - the largest size that works;
    - which constraint binds: cost, risk, or noise in the evidence.
 
-   Some trades only need patience. Some need 10× today's funding, because their residual risk grows as fast as their carry.
+   Some trades only need patience. Some need an order of magnitude more funding than today's rate, because their residual risk grows as fast as their carry.
 2. *It grades itself against the live exchange.* Every 8 hours a shadow desk freezes a prediction for every pair, records a hypothetical fill by walking the live Bitget book, exits against the book when the hold ends, and records the mark price at each funding settlement. It then compares predicted cost and carry with what the later book actually delivered. No orders are placed.
 3. *Its predictions are provably frozen.* Every prediction and every execution is hashed into a Merkle root and stamped to Bitcoin with OpenTimestamps. Anyone can verify, without trusting us, that a prediction existed before its outcome.
 4. *It's a live desk.* An hourly job refreshes funding, books and candles, advances the shadow desk, re-prices every pair and anchors the record. A feed shows which verdicts moved and why.
 
-**Result (live).** Across 27 priced pairs at $25k / 30 days, none is Supported today. A small number are Unproven: the estimate is positive, but the sample can't yet separate it from zero. The rest are Unfavourable. SMH/SOXL is the widest gap: a positive headline yield becomes a double-digit annualised loss once the book is walked. Reef's value is in telling those apart, and in showing exactly which assumption would have to change.
+**Result (live).** Across 27 priced pairs at $25k / 30 days, one clears the bar: QQQ/TQQQ is **Supported** — Sharpe 1.59, 95% CI [0.26, 2.91] excluding zero, and it still clears 1.06 under a 50%-higher-risk stress test. A handful more are Unproven — the estimate is positive but the sample can't yet separate it from zero. The rest are Unfavourable; SMH/SOXL is the widest gap, a positive headline yield that becomes a double-digit annualised loss once the book is walked. Reef's value is in telling these apart, in showing exactly which assumption would have to change for an Unfavourable pair to work, and — now, concretely — in not missing it when one actually does.
 
 **Built with.** Python for the deterministic model (no numerical libraries needed), React + Vite for the site, Vercel, GitHub Actions for the hourly desk, Qwen via the Bitget hackathon endpoint, and OpenTimestamps.
 
@@ -98,15 +98,15 @@ Record at 1080p. Use the live site. Speak plainly.
 
 | Time | Screen | Say |
 |---|---|---|
-| 0:00 | Landing page, hero card | "This pair advertises a positive yield. After walking the real order book and pricing the hedge's risk, it's a loss. Reef is built to catch that." |
+| 0:00 | Landing page, hero card | "This pair advertises a positive yield. After walking the real order book and pricing the hedge's risk, it's a loss. Reef is built to catch that — and, just as importantly, to catch it when one actually holds up." |
 | 0:15 | Click *Open the desk* | "Reef prices 27 real-world-asset pairs on Bitget: tokenized stocks, ETFs and gold. It refreshes every hour." |
-| 0:30 | Type "Is SMH/SOXL worth $25k over 30 days?" and submit | "I ask in plain English. Qwen reads the question. Every number that comes back is from a deterministic model." |
-| 0:45 | Scroll the right panel: Investigator, then Failure path | "Gross carry, minus a round trip through the actual book, minus residual risk. Here's exactly where it breaks." |
-| 1:00 | *What would make it work* card | "Most tools stop at no. Reef inverts the answer. This one needs ten times today's funding, and holding longer won't save it, because the risk grows as fast as the carry." |
-| 1:15 | Click QQQ/SQQQ in the watchlist | "This one is different: at $25k it becomes viable after about 53 days. That's something a trader can act on." |
-| 1:30 | Qwen interpretation panel | "Qwen explains the finding, what binds, and what would change it. It isn't allowed to write a single digit; if it tries, the reply is rejected." |
-| 1:45 | Scroll to *The shadow desk* | "Every 8 hours Reef shadow-trades every pair against the live book, then grades itself: predicted cost against what the book actually charged." |
-| 2:05 | Open `data/anchors` on GitHub, then opentimestamps.org | "Each prediction is hashed and stamped to Bitcoin before its outcome exists. You don't have to trust us; you can verify it." |
-| 2:20 | *What changed* feed | "And because it's live, verdicts move. This pair went from Unfavourable to Unproven as its funding widened. Reef: look past the headline yield." |
+| 0:30 | Point at row 1 of the watchlist, QQQ/TQQQ, badge "Supported" | "Right now, one pair clears the bar: QQQ/TQQQ. Sharpe 1.6, and its 95% confidence interval excludes zero — that's the difference between a lucky number and actual evidence." |
+| 0:50 | Click into QQQ/TQQQ, scroll the Investigator panel | "Every claim here is checked: the gross carry, the cost that was actually walked through the book, the interval, even what happens if risk rises 50% — it still holds." |
+| 1:10 | Click SMH/SOXL in the watchlist instead | "Compare that to this one. Same process, opposite answer: a positive headline yield becomes a double-digit annualised loss once the book is walked." |
+| 1:25 | *What would make it work* card on SMH/SOXL | "Most tools stop at no. Reef inverts the answer — this one needs about an order of magnitude more funding than today's rate, and holding longer won't save it, because its risk grows as fast as its carry." |
+| 1:40 | Qwen interpretation panel | "Qwen explains the finding and what would change it. It isn't allowed to write a single digit; if it tries, the reply is rejected." |
+| 1:55 | Scroll to *The shadow desk* | "Every 8 hours Reef shadow-trades every pair against the live book, then grades itself: predicted cost against what the book actually charged — [N] trades graded so far." |
+| 2:10 | Open `data/anchors` on GitHub, then opentimestamps.org | "Each prediction is hashed and stamped to Bitcoin before its outcome exists. You don't have to trust us; you can verify it." |
+| 2:25 | *What changed* feed | "And because it's live, verdicts move — this is how QQQ/TQQQ got here. Reef: look past the headline yield." |
 
-Tips: before recording, run the desk workflow manually so "updated" reads minutes ago. If the shadow desk has graded trades by then, linger on the predicted-vs-realised numbers. They are the strongest ten seconds in the video.
+Tips: before recording, run the desk workflow manually so "updated" reads minutes ago, and re-check which pair is Supported — it moves with the data, and today it's QQQ/TQQQ. Fill in the shadow desk's actual graded-trade count at 1:55. Lingering on the predicted-vs-realised numbers there is the strongest ten seconds in the video.
