@@ -1,29 +1,5 @@
 [
  {
-  "end_ms": 1790803928276,
-  "hold_days": 3,
-  "id": "1790544728276:SOXX/SMH:3",
-  "ledger_ts": 1790544728276,
-  "legs": {
-   "SMHUSDT": {
-    "entry_book_ts": "1790544714666",
-    "entry_mid": 612.9000000000001,
-    "entry_price": 613.9975793328326,
-    "entry_ts": 1790544728276,
-    "qty": 40.71677290188163
-   },
-   "SOXXUSDT": {
-    "entry_book_ts": "1790544715537",
-    "entry_mid": 576.47,
-    "entry_price": 571.6104871069329,
-    "entry_ts": 1790544728276,
-    "qty": -33.05221592981833
-   }
-  },
-  "pair": "SOXX/SMH",
-  "verdict": "UNFAVOURABLE"
- },
- {
   "end_ms": 1790903539241,
   "hold_days": 3,
   "id": "1790644339241:SPY/VOO:3",
@@ -621,54 +597,6 @@
    }
   },
   "pair": "MINIMAX/MINIMAXHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1790796930274,
-  "hold_days": 1,
-  "id": "1790710530274:SOXX/SMH:1",
-  "ledger_ts": 1790710530274,
-  "legs": {
-   "SMHUSDT": {
-    "entry_book_ts": "1790710514833",
-    "entry_mid": 608.42,
-    "entry_price": 610.124872323724,
-    "entry_ts": 1790710530274,
-    "qty": 40.97521857252745
-   },
-   "SOXXUSDT": {
-    "entry_book_ts": "1790710515873",
-    "entry_mid": 567.1800000000001,
-    "entry_price": 565.9409879855002,
-    "entry_ts": 1790710530274,
-    "qty": -33.36697234155438
-   }
-  },
-  "pair": "SOXX/SMH",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1790796930274,
-  "hold_days": 1,
-  "id": "1790710530274:SOXX/SOXS:1",
-  "ledger_ts": 1790710530274,
-  "legs": {
-   "SOXSUSDT": {
-    "entry_book_ts": "1790710515532",
-    "entry_mid": 33.207,
-    "entry_price": 33.1709266377996,
-    "entry_ts": 1790710530274,
-    "qty": -753.672041573644
-   },
-   "SOXXUSDT": {
-    "entry_book_ts": "1790710515873",
-    "entry_mid": 567.1800000000001,
-    "entry_price": 565.4456554416157,
-    "entry_ts": 1790710530274,
-    "qty": -159.6798903687328
-   }
-  },
-  "pair": "SOXX/SOXS",
   "verdict": "UNFAVOURABLE"
  },
  {
