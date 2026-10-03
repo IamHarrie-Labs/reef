@@ -13505,6 +13505,12 @@
   "pair": "SOXX/SMH",
   "status": "closed"
  },
+ "1790747531783:SOXX/SMH:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "SOXX/SMH",
+  "status": "missed_exit_window"
+ },
  "1790747531783:SOXX/SOXL:1": {
   "execution_type": "shadow",
   "hold_days": 1,
@@ -13606,6 +13612,12 @@
   "hold_days": 1,
   "pair": "SOXX/SOXS",
   "status": "closed"
+ },
+ "1790747531783:SOXX/SOXS:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "SOXX/SOXS",
+  "status": "missed_exit_window"
  },
  "1790747531783:SPY/SP500:1": {
   "execution": {
