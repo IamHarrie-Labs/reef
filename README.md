@@ -19,7 +19,7 @@ Reef asks whether that carry survives once you **walk the actual order book, pay
 | QQQ / TQQQ | +23.2% | **+14.0%** | **Supported** (95% CI [0.26, 2.91], Sharpe 1.59) |
 | SMH / SOXL | +5.7% | −34.6% | Unfavourable |
 
-**Across 27 priced pairs at $25k / 30 days: 1 supported, 3 unproven, 20 unfavourable, 3 too thin to price.** The desk refreshes hourly, so these figures change — the live site is the source of truth, not this table. One pair clearing the bar isn't a trend; it's one result that survives its own confidence interval and a 50%-risk stress test, out of 27 tried.
+**Across 27 priced pairs at $25k / 30 days, a small handful clear the bar (1 on 1 Oct, 2 on 4 Oct), a few more are unproven, and most are unfavourable.** The desk refreshes hourly and the Supported set changes with it — the live site is the source of truth, not this page. What stays constant: a pair is only Supported if it survives its own 95% confidence interval, and the 1 Oct example above also survives a 50%-higher-risk stress test.
 
 ## What makes it different
 
