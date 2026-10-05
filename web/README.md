@@ -1,6 +1,6 @@
 # Reef website
 
-React + TypeScript + Vite, with Tailwind and lucide-react.
+React + TypeScript + Vite, with lucide-react icons.
 
 ```sh
 cd web
@@ -10,24 +10,37 @@ npm run build
 npm run preview
 ```
 
-- Home: `#/` — fixed navigation and a full-viewport video hero.
-- Research: `#/desk` — the corrected pricing snapshot, filtering, sorting,
-  local saved pairs, research questions, scenario controls and capacity curve.
+- Home: `#/` — landing page: headline-vs-priced comparison and a live stats strip.
+- Research: `#/desk` — pair watchlist (filter by Supported / Unproven / Saved, search,
+  sort), scenario controls, evidence investigator, "what would make it work",
+  stress tests, capacity chart, shadow desk, on-chain gold check, verdict-change feed.
 - Method: `#/desk/method`.
-- Evidence: `#/desk/evidence` — limitations and downloadable snapshot.
+- Evidence: `#/desk/evidence` — limitations, the full shadow ledger, and links for
+  verifying the Bitcoin anchors yourself.
 
-Deploy `dist/` as a static website. Hash navigation does not require server rewrites.
-The Vite evidence plugin serves `web_export.json` in development and copies the
-same file into the production build. Refresh the snapshot with
-`python src/export_web.py` from the repository root, then rebuild the site.
+## Data
 
-The landing uses the exact video and font URLs from the supplied design brief.
-No generated images or fake backers are used. External assets need network access;
-video failure leaves readable copy on the cream background. Reduced-motion mode
-pauses the video and disables entrance animations.
+The site never prices anything in the browser. It reads `web_export.json`, written by
+`python src/export_web.py`. In production it loads the newest of the bundled copy and
+the live copy on `main` (refreshed hourly by `.github/workflows/desk.yml`), so the
+page updates without a redeploy. `python src/test_export_consistency.py` checks that
+every exported scenario matches the Python calculator.
 
-Browser questions use a local parser, not a live LLM. The dashboard displays
-exported calculations and discloses rounding to the nearest scenario. Favorites
-stay in local browser storage. No trade or account connection is initiated.
+## AI
+
+Qwen explains a frozen evidence object through `api/investigate.js`, a server route that
+holds the API key. It returns four fixed fields and any reply containing a digit is
+rejected; the numbers on screen always come from the deterministic model. If the route is
+unreachable or rejects a reply, the page shows the calculated result without commentary.
+The question box itself matches a tracked pair, size and hold in the browser and snaps to
+the nearest precomputed scenario, which it discloses.
+
+## Assets
+
+The hero is an original landscape image (`public/reef-hero-landscape.webp`); no
+third-party video is used. Fonts load from external CDNs and need network access.
+Reduced-motion mode disables the hero drift and entrance animations. Saved pairs stay in
+local browser storage. No trade or account connection is ever initiated.
+
 `archive/legacy.html` preserves the former single-page dashboard as a reference; it is
-not an entry in the new production build.
+not part of the production build.
