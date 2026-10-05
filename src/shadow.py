@@ -16,7 +16,7 @@ trade is actually walked through a later book.
 """
 import argparse, json, os, sys, time
 sys.path.insert(0, os.path.dirname(__file__))
-import model, capacity, verdict, ledger, refresh
+import model, capacity, verdict, ledger, refresh, book_evidence
 from score import EXECUTIONS, EXIT_GRACE_MS, execution_key
 
 SHADOW = os.path.join(model.DATA, "shadow")
@@ -78,7 +78,7 @@ def mark_at(sym, t, cache):
     return None
 
 
-def open_batch(hold, now_ms, prices, funding, books, positions):
+def open_batch(hold, now_ms, prices, funding, books, positions, book_recorder=None):
     with open(os.path.join(model.DATA, "clusters.json"), encoding="utf-8") as f:
         CL = json.load(f)
     pairs = [(sy[i], sy[j]) for c, sy in CL.items() if c != "CONTROL"
@@ -100,12 +100,15 @@ def open_batch(hold, now_ms, prices, funding, books, positions):
                 break
             legs[sym] = {"qty": SIZE * w / px, "entry_price": px, "entry_mid": mid(books[sym]),
                          "entry_ts": now_ms, "entry_book_ts": books[sym].get("timestamp")}
+            if book_recorder:
+                legs[sym]["entry_book_sha256"] = book_recorder(books[sym])
         if not legs:
             continue
         ledger.append({"ts": now_ms, "question": f"[shadow desk] {ev['pair']} at ${SIZE:,} for {hold} days",
                        "query": {"a": a, "b": b, "size": SIZE, "hold_days": hold,
                                  "parsed_by": "shadow-scheduler"},
-                       "evidence": ev, "shadow": True})
+                       "evidence": ev, "shadow": True,
+                       **({"book_evidence": {sym: leg["entry_book_sha256"] for sym, leg in legs.items()}} if book_recorder else {})})
         positions.append({"id": execution_key(now_ms, ev["pair"], hold), "ledger_ts": now_ms,
                           "pair": ev["pair"], "hold_days": hold, "end_ms": now_ms + hold * DAY_MS,
                           "verdict": ev["verdict"], "legs": legs})
@@ -113,7 +116,7 @@ def open_batch(hold, now_ms, prices, funding, books, positions):
     return opened
 
 
-def close_due(now_ms, books, funding, positions, executions, marks):
+def close_due(now_ms, books, funding, positions, executions, marks, book_recorder=None):
     still_open, closed, missed = [], 0, 0
     for pos in positions:
         if now_ms < pos["end_ms"]:
@@ -136,6 +139,8 @@ def close_due(now_ms, books, funding, positions, executions, marks):
                               "exit_book_ts": books[sym].get("timestamp"),
                               "fees_usdt": abs(q) * (leg["entry_price"] + px) * model.TAKER_BP / 1e4,
                               "settlement_marks": {}}
+            if book_recorder:
+                execution[sym]["exit_book_sha256"] = book_recorder(books[sym])
         if len(execution) != len(pos["legs"]):
             still_open.append(pos)  # retry next cycle while inside the grace window
             continue
@@ -171,13 +176,20 @@ def run(now_ms=None):
     marks = _read(MARKS, {})
     state = _read(STATE, {})
 
-    closed, missed = close_due(now_ms, books, funding_archive, positions, executions, marks)
+    recorded = {}
+    def retain(book):
+        # One snapshot can be reused by many pairs and holding periods.
+        identity = id(book)
+        if identity not in recorded:
+            recorded[identity] = book_evidence.store(book)
+        return recorded[identity]
+    closed, missed = close_due(now_ms, books, funding_archive, positions, executions, marks, book_recorder=retain)
     filled = backfill_marks(executions, funding_archive, marks)
     opened = {}
     for hold, every_h in BATCH_EVERY_H.items():
         last = state.get(f"last_batch_{hold}d", 0)
         if now_ms - last >= every_h * 3_600_000 - 10 * 60_000:
-            opened[hold] = open_batch(hold, now_ms, prices, funding_window, books, positions)
+            opened[hold] = open_batch(hold, now_ms, prices, funding_window, books, positions, book_recorder=retain)
             state[f"last_batch_{hold}d"] = now_ms
 
     _write(OPEN, positions)

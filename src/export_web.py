@@ -156,6 +156,7 @@ payload = {
     "anchors": anchors,
     "verdict_changes": changes_out,
     "onchain_gold": onchain_gold,
+    "case_study": json.load(open(os.path.join(model.DATA, "case_study.json"), encoding="utf-8")) if os.path.exists(os.path.join(model.DATA, "case_study.json")) else None,
     "pairs": out_pairs,
 }
 outpath = os.path.join(model.DATA, "web_export.json")

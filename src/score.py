@@ -100,11 +100,25 @@ def summarise(graded):
     mean = lambda xs: sum(xs)/len(xs) if xs else None
     cost = [g for g in graded if 'realised_cost_bp' in g]
     sign_ok = [(g['net_bp'] > 0) == (g['predicted_net_bp'] > 0) for g in graded]
+    funding = [g for g in graded if g.get('predicted_funding_bp') is not None]
+    def errors(rows):
+        costs = [g for g in rows if g.get('realised_cost_bp') is not None and g.get('predicted_cost_bp') is not None]
+        carries = [g for g in rows if g.get('predicted_funding_bp') is not None]
+        return {'n': len(rows), 'n_cost': len(costs), 'n_funding': len(carries),
+                'cost_mae_bp': mean([abs(g['realised_cost_bp']-g['predicted_cost_bp']) for g in costs]),
+                'funding_mae_bp': mean([abs(g['realised_funding_bp']-g['predicted_funding_bp']) for g in carries])}
     return {
         'n_graded': len(graded),
         'mean_predicted_net_bp': mean([g['predicted_net_bp'] for g in graded]),
         'mean_realised_net_bp': mean([g['net_bp'] for g in graded]),
         'net_sign_agreement': sum(sign_ok)/len(sign_ok),
+        'always_nonpositive_agreement': sum(g['net_bp'] <= 0 for g in graded)/len(graded),
+        'n_predicted_positive': sum(g['predicted_net_bp'] > 0 for g in graded),
+        'n_observed_positive': sum(g['net_bp'] > 0 for g in graded),
+        'verdict_counts': {v: sum(g.get('verdict') == v for g in graded) for v in sorted({g.get('verdict') or 'UNKNOWN' for g in graded})},
+        'mean_abs_funding_error_bp': mean([abs(g['realised_funding_bp']-g['predicted_funding_bp']) for g in funding]),
+        'errors_by_pair': {p: errors([g for g in graded if g['pair'] == p]) for p in sorted({g['pair'] for g in graded})},
+        'errors_by_hold': {str(h): errors([g for g in graded if g['hold_days'] == h]) for h in sorted({g['hold_days'] for g in graded})},
         'n_with_cost_breakdown': len(cost),
         'mean_predicted_cost_bp': mean([g['predicted_cost_bp'] for g in cost]),
         'mean_realised_cost_bp': mean([g['realised_cost_bp'] for g in cost]),

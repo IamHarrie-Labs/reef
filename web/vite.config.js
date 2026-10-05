@@ -1,10 +1,12 @@
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import {existsSync,readFileSync} from 'node:fs';
+import {research} from './research/core.mjs';
 
 const envPath=new URL('../.env',import.meta.url);
 const env=existsSync(envPath)?Object.fromEntries(readFileSync(envPath,'utf8').split(/\r?\n/).filter(x=>x&&!x.startsWith('#')&&x.includes('=')).map(x=>{const i=x.indexOf('=');return [x.slice(0,i).trim(),x.slice(i+1).trim()]})):{};
 const evidence=()=>JSON.parse(readFileSync(new URL('./web_export.json',import.meta.url),'utf8'));
+const researchEnv=process.env.REEF_QWEN_DISABLED==='1'?{}:env;
 
 async function explain(body){
   const pair=evidence().pairs.find(p=>p.pair===body.pair);
@@ -19,4 +21,4 @@ async function explain(body){
   return {commentary,model:env.BITGET_QWEN_MODEL||'qwen3.8-max',evidence:facts};
 }
 
-export default defineConfig({base:'./',build:{outDir:'dist/client',emptyOutDir:true},plugins:[react(),{name:'reef-evidence',configureServer(server){server.middlewares.use('/web_export.json',(_req,res)=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(evidence()))});server.middlewares.use('/api/investigate',async(req,res)=>{if(req.method!=='POST'){res.statusCode=405;return res.end()}let raw='';req.on('data',c=>raw+=c);req.on('end',async()=>{try{const result=await explain(JSON.parse(raw));res.setHeader('Content-Type','application/json');res.end(JSON.stringify(result))}catch(error){res.statusCode=502;res.setHeader('Content-Type','application/json');res.end(JSON.stringify({error:error.message}))}})})},generateBundle(){this.emitFile({type:'asset',fileName:'web_export.json',source:readFileSync(new URL('./web_export.json',import.meta.url))})}}]});
+export default defineConfig({base:'./',build:{outDir:'dist/client',emptyOutDir:true},plugins:[react(),{name:'reef-evidence',configureServer(server){server.middlewares.use('/api/research',async(req,res)=>{res.setHeader('Content-Type','application/json');if(req.method!=='POST'){res.statusCode=405;return res.end(JSON.stringify({error:'Method not allowed.'}))}let raw='';req.on('data',c=>{raw+=c;if(raw.length>14000)req.destroy()});req.on('end',async()=>{try{const body=JSON.parse(raw),snapshot=evidence();if(body.snapshot_utc!==snapshot.generated_utc){res.statusCode=409;return res.end(JSON.stringify({error:'The desk snapshot changed. Start a new notebook.'}))}res.end(JSON.stringify(await research(snapshot,body,researchEnv)))}catch(error){res.statusCode=error.status||500;res.end(JSON.stringify({error:error.status?error.message:'Research is temporarily unavailable. Retry this question.'}))}})});server.middlewares.use('/web_export.json',(_req,res)=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(evidence()))});server.middlewares.use('/api/investigate',async(req,res)=>{if(req.method!=='POST'){res.statusCode=405;return res.end()}let raw='';req.on('data',c=>raw+=c);req.on('end',async()=>{try{const result=await explain(JSON.parse(raw));res.setHeader('Content-Type','application/json');res.end(JSON.stringify(result))}catch(error){res.statusCode=502;res.setHeader('Content-Type','application/json');res.end(JSON.stringify({error:error.message}))}})})},generateBundle(){this.emitFile({type:'asset',fileName:'web_export.json',source:readFileSync(new URL('./web_export.json',import.meta.url))})}}]});

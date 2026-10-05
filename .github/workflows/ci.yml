@@ -21,6 +21,14 @@ jobs:
       - name: Shadow desk and Bitcoin anchor, offline end to end
         run: python src/test_shadow.py
 
+      - name: Future book retention and fill replay
+        run: python src/test_book_evidence.py
+
+      - name: Portable proof and baseline regressions
+        run: |
+          python -m pip install -r requirements-proof.txt
+          python src/test_evidence.py
+
       - name: What-would-make-it-work solver
         run: python src/solve.py
 
@@ -75,3 +83,6 @@ jobs:
       - name: Type-check and build landing page and dashboard
         working-directory: web
         run: npm run build
+
+      - name: Research conversation, evidence selection and AI guards
+        run: node --test web/research/core.test.mjs api/research.test.cjs

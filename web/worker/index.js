@@ -1,4 +1,10 @@
+import {research} from '../research/core.mjs';
 const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});
+
+async function researchTurn(request,env){
+ if(request.method!=='POST')return json({error:'Method not allowed.'},405);
+ try{const raw=await request.text();if(raw.length>14000)return json({error:'Research request is too large.'},400);const body=JSON.parse(raw);const snapshot=await (await env.ASSETS.fetch(new URL('/web_export.json',request.url))).json();if(body.snapshot_utc!==snapshot.generated_utc)return json({error:'The desk snapshot changed. Start a new notebook.'},409);return json(await research(snapshot,body,env))}catch(error){return json({error:error.status?error.message:'Research is temporarily unavailable.'},error.status||500)}
+}
 
 async function investigate(request,env){
   if(request.method!=='POST')return json({error:'Method not allowed.'},405);
@@ -19,4 +25,4 @@ async function investigate(request,env){
   }catch{return json({error:'The AI explanation timed out. Reef’s calculated evidence is still available.'},504)}
 }
 
-export default {async fetch(request,env){const url=new URL(request.url);if(url.pathname==='/api/investigate')return investigate(request,env);return env.ASSETS.fetch(request)}};
+export default {async fetch(request,env){const url=new URL(request.url);if(url.pathname==='/api/research')return researchTurn(request,env);if(url.pathname==='/api/investigate')return investigate(request,env);return env.ASSETS.fetch(request)}};

@@ -4,6 +4,10 @@
   "buildCommand": "npm run build --prefix web",
   "outputDirectory": "web/dist/client",
   "functions": {
+    "api/research.js": {
+      "maxDuration": 90,
+      "includeFiles": "web/{web_export.json,research/core.mjs}"
+    },
     "api/investigate.js": {
       "maxDuration": 90
     }

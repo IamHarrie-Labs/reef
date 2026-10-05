@@ -19,9 +19,11 @@
   approximation nor the funding-only confidence interval is a realised Sharpe.
 - Confidence intervals condition on fixed beta, costs and volatility and ignore
   model-selection uncertainty. They are approximate, not certified error bounds.
-- The ledger is append-only by code and, from the first anchor onward, provably
-  so: roots are stamped to Bitcoin (D-19). Rows logged before anchoring began
-  are proven only from their first anchor. Web queries are not appended to it.
+- Confirmed Bitcoin proofs bind the content included in a root by the block
+  timestamp (D-19); they do not prove that no record was withheld. A prediction
+  is shown before maturity only when its Bitcoin block time precedes that
+  endpoint. Bitcoin header timestamps are approximate, not precise wall clocks.
+  Rows logged before anchoring began are proven only from their first anchor. Web queries are not appended to it.
   Old rows are retained but marked superseded by the scorer.
 - Qwen commentary is live on the site through a server route. Prompts cannot
   enforce factual correctness, so replies containing any digit are rejected and
@@ -44,3 +46,25 @@
   Correlation/beta does not verify instrument identity or legal exposure.
 - Legacy regime and decay utilities are exploratory. Shared legs invalidate an
   independent-pairs interpretation of their p-values. No 20x signal/noise claim.
+
+- Net direction agreement must be read alongside the always-nonpositive baseline
+  on the same graded records. With predominantly negative predictions/outcomes,
+  high agreement alone does not demonstrate predictive skill. Repeated holds
+  and shared legs also make observations dependent.
+- The portable case includes recorded fills and marks, not original full entry
+  and exit books. Its accounting and timestamp inclusion are reproducible;
+  available depth and exchange-source truth are not independently authenticated.
+- No actual target-user results have been supplied for the three-person
+  validation protocol. Task times, usability and demand remain unvalidated.
+
+- The research notebook supports recorded comparisons, ranks, solver conditions
+  and four preset stresses. It does not introduce arbitrary financial simulations
+  or infer forecasts. A stressed interval and verdict are not computed.
+- Notebook turns use one dated export and remain separate from the anchored
+  prediction ledger. Browser-local notes can be edited and are not timing proofs.
+  Submitted questions and recent context are sent to the service and Qwen when
+  available. Model planning is validated; prose factual correctness is not proven.
+- Complete captured books are retained only for shadow fills recorded after the
+  retention code is deployed. Legacy records, including the fixed case study,
+  still lack original books. Replayed hypothetical depth does not guarantee fills
+  or authenticate the exchange source.

@@ -1,112 +1,127 @@
 # Submission pack
 
-Copy-ready text for the hackathon form, the X post and the demo video.
-Numbers marked *live* change hourly. Re-read them from the site before you paste.
+Copy-ready text for the form, X post and demo video. Live figures change hourly;
+read them from the same snapshot immediately before recording or submitting.
 
----
+## Project name and track
 
-## Project name
-
-Reef
-
-## One-liner
-
-Reef checks whether a Bitget RWA funding yield survives real execution costs and risk. When it doesn't, Reef says what would have to change, and grades its own predictions against the live book.
-
-## Links
+**Reef** · Track 3 — AI Trading Desk (Open theme)
 
 - Live desk: https://reef-research-desk.vercel.app
 - Code: https://github.com/IamHarrie-Labs/reef
-- Track: 3 — AI Trading Desk (Open theme)
 
----
+## One-liner
+
+Reef checks whether a Bitget RWA funding yield survives execution costs and hedge
+risk, shows what would need to change, and compares frozen estimates with later
+hypothetical execution — with downloadable Bitcoin timestamp proofs.
 
 ## Project description
 
-**The problem.** Bitget lists perpetual futures on real-world assets: tokenized stocks, ETFs, indices and gold. Pairs of them pay a funding differential that looks like steady carry on a screen. The screen leaves out three things: what it costs to enter and exit through the actual order book, the price risk the hedge still carries, and whether the funding sample is long enough to mean anything. A yield that ignores them is a headline, not an opportunity.
+**Who it serves.** Experienced perpetual-futures traders researching a two-legged
+Bitget RWA carry setup before opening it. Their question is specific: at this
+size and holding period, does the setup deserve further investigation?
 
-**What Reef does.** Ask a question in plain English, like "Is SMH/SOXL worth $25k over 30 days?" Reef prices the trade the way a desk would:
-- It fits the hedge ratio on earlier prices only.
-- It picks the trade direction on the first 60% of the funding history, then evaluates it on the untouched 40%.
-- It walks both live order books at your actual size.
-- It prices the residual risk of the hedge.
+**The problem.** A funding differential can look attractive while hiding entry
+and exit costs, residual price risk, and a short or noisy funding sample. A gross
+yield alone cannot answer whether the trade is worth researching.
 
-The verdict is **Supported** only when the risk-adjusted estimate clears 0.5 and its 95% confidence interval excludes zero. If the estimate clears 0.5 but the interval crosses zero, the verdict is **Unproven**. Everything else is **Unfavourable**.
+**What Reef does.** Ask “Compare QQQ/TQQQ with SMH/SOXL at $25k over 30 days,” then follow up with “What if funding reverses?” Reef fits the hedge
+ratio on earlier prices, chooses direction on the first 60% of funding history,
+evaluates carry on the untouched 40%, walks captured books at the selected size,
+and estimates residual spread volatility. Supported means the modelled
+risk-adjusted estimate exceeds 0.5 and its approximate, funding-only 95% interval
+excludes zero. Unproven clears the point threshold but not the interval test;
+Unfavourable does not clear the point threshold. These are conditional research
+verdicts, not realised trading Sharpe or promises of returns.
 
 **What makes it different.**
-1. *It says what would make it work.* For every pair, size and holding period, Reef inverts the verdict and reports:
-   - the funding rate needed;
-   - the shortest hold that works;
-   - the largest size that works;
-   - which constraint binds: cost, risk, or noise in the evidence.
 
-   Some trades only need patience. Some need an order of magnitude more funding than today's rate, because their residual risk grows as fast as their carry.
-2. *It grades itself against the live exchange.* Every 8 hours a shadow desk freezes a prediction for every pair, records a hypothetical fill by walking the live Bitget book, exits against the book when the hold ends, and records the mark price at each funding settlement. It then compares predicted cost and carry with what the later book actually delivered. No orders are placed.
-3. *Its predictions are provably frozen.* Every prediction and every execution is hashed into a Merkle root and stamped to Bitcoin with OpenTimestamps. Anyone can verify, without trusting us, that a prediction existed before its outcome.
-4. *It's a live desk.* An hourly job refreshes funding, books and candles, advances the shadow desk, re-prices every pair and anchors the record. A feed shows which verdicts moved and why.
+1. **It explains the condition for a different answer.** The solver reports
+   required carry, the shortest qualifying hold, the largest supported tested
+   size, and the constraint that binds. Under fixed assumptions, some scenarios
+   stay below the annualised risk-adjusted threshold even at longer holds.
+2. **It exposes its estimation errors.** The shadow desk freezes one-day
+   predictions every eight hours and three-day predictions daily, records
+   hypothetical entry/exit fills against real Bitget books, and captures funding
+   settlement marks. The evidence page leads with mean absolute cost and funding
+   errors, including a breakdown by pair. Net direction agreement appears beside
+   the same-sample baseline of always predicting a nonpositive outcome. A high
+   agreement rate alone is not proof of skill; the current predominantly negative
+   sample makes that baseline essential.
+3. **It offers one complete, downloadable case.** The case is the earliest
+   eligible completed shadow record by timestamp and record key, not a profitable
+   or especially accurate example. It includes the frozen prediction, completed
+   paper execution, archived funding observations, marks, Merkle paths, original
+   OpenTimestamps proofs and Bitcoin headers. A verifier recomputes the accounting
+   and checks the prediction block time against maturity. Online verification
+   checks canonical block hashes with two public explorers.
+4. **It keeps researching.** An hourly job refreshes data, advances the shadow
+   desk, reprices scenarios and publishes verdict changes. The gold sanity check
+   compares Bitget observations with Ethereum Chainlink feeds.
 
-**Result (live).** Across 27 priced pairs at $25k / 30 days, only a couple clear the bar at any moment (check the site for the current set; QQQ/TQQQ has held that status). As of 1 Oct it was **Supported** with Sharpe 1.59, 95% CI [0.26, 2.91] excluding zero, and it still cleared 1.06 under a 50%-higher-risk stress test. A handful more are Unproven — the estimate is positive but the sample can't yet separate it from zero. The rest are Unfavourable; SMH/SOXL is the widest gap, a positive headline yield that becomes a double-digit annualised loss once the book is walked. Reef's value is in telling these apart, in showing exactly which assumption would have to change for an Unfavourable pair to work, and — now, concretely — in not missing it when one actually does.
+**What the evidence establishes.** Cost and funding prediction errors are
+inspectable, and the selected prediction was committed to Bitcoin before its
+holding period ended, using the block header's approximate timestamp. The case
+shows a loss, which is useful evidence for a desk built to interrogate yield.
+Timestamp proofs bind recorded content; they do not authenticate exchange data
+or guarantee executable fills. Legacy records lack original full books, so this case reproduces accounting
+rather than its original depth walk. Future shadow fills retain complete captured
+books with content hashes and a fill-replay verifier.
 
-**Built with.** Python for the deterministic model (no numerical libraries needed), React + Vite for the site, Vercel, GitHub Actions for the hourly desk, Qwen via the Bitget hackathon endpoint, and OpenTimestamps.
+**Built with.** Python, React + Vite, Vercel, GitHub Actions, Qwen via the Bitget
+hackathon endpoint, and OpenTimestamps.
 
-**Honest limits.**
-- The funding holdout is short: 13 complete days for most pairs, 7 for gold.
-- Shadow fills are hypothetical.
-- The confidence interval covers funding uncertainty only.
-- Returns are per reference notional, not return on margin.
+**Limits.** Shadow fills are hypothetical; returns use reference notional rather
+than collateral; fees are assumptions; liquidation is not simulated. The
+confidence interval covers funding uncertainty under fixed beta, cost and
+volatility. Repeated holds and shared legs are dependent observations. Actual
+three-person target-user validation remains pending; the protocol is in
+VALIDATION.md. All limitations and model corrections are public.
 
-Every limit is listed in `LIMITATIONS.md`. Every model correction made during the build, and why old numbers were withdrawn, is in `DECISIONS.md`.
+## Role of the LLM
 
----
+The website supports a research notebook: comparisons, ranking, solver conditions
+and four recorded stresses. Qwen resolves a task into a validated plan, then
+explains the selected evidence. Follow-ups preserve pairs, reference size, hold
+and stress. Financial figures are selected from a single dated Python export.
+Invalid plans fall back to the scenario matcher. Interpretation prose containing
+digits or an invalid schema is discarded while calculated evidence stays visible.
+The guard constrains numeric invention; it does not prove prose correctness.
 
-## Role of the LLM in your project
+The notebook is locally saved and exportable. Submitted questions and recent
+context go to the research service and Qwen when available. Notebook turns are
+separate from the Bitcoin-anchored prediction ledger.
+The separate CLI path uses validated Qwen parsing with a deterministic fallback,
+records its model evidence in the ledger, then requests an explanation. Browser
+questions do not append new predictions to that ledger. All displayed financial
+figures and verdicts come from Python, not the language model.
 
-Qwen (qwen3.8-max via the Bitget hackathon endpoint) has two narrow jobs:
+## X post — publish from your account
 
-1. **Understanding the question.** It turns free text into a structured request: which pair, what size, what holding period. Its output is validated against the list of instruments Reef actually tracks, and size and hold must be finite and positive. If Qwen is unavailable or returns something invalid, a deterministic parser takes over.
-2. **Explaining frozen evidence.** After the deterministic model has priced the trade and written the prediction to the ledger, Qwen explains what the evidence means in four fixed fields: the finding, the binding constraint, what would change the answer, and the next thing to check.
+> Built Reef for #BitgetHackathon: a research desk for @Bitget RWA funding carry.
+> Actual book costs, hedge risk, and what would need to change.
+> Hypothetical execution, visible estimation errors, downloadable Bitcoin proofs.
+> reef-research-desk.vercel.app @Bitget_AI
 
-The LLM **never produces a number**. Every figure on screen comes from the Python model. The server route rejects any Qwen reply that contains a digit, a missing field or an extra field, and shows the deterministic result instead. In the command-line path, every number in Qwen's prose is checked against the evidence object before it is shown.
+## Demo video — about 2.5 minutes
 
-We made this choice on purpose. In trading, a fluent model that invents a plausible number is worse than no model at all. Reef uses the LLM for what it's good at, reading intent and explaining reasoning, and keeps the arithmetic, the verdict and the audit trail deterministic, reproducible and anchored to Bitcoin.
-
----
-
-## X post (you post this, from your account)
-
-> Most "yield" on RWA perps is a headline.
->
-> Built Reef for #BitgetHackathon: it walks the real @Bitget order book, prices hedge risk, and tells you whether a funding yield survives — and if not, what would have to change.
->
-> It also grades itself live: every prediction is shadow-traded against the book and stamped to Bitcoin before the outcome exists.
->
-> 🔗 reef-research-desk.vercel.app
-> @Bitget_AI
-
-Shorter alternative:
-
-> Reef: an AI trading desk that says "no" to fake yield — with receipts.
-> Live Bitget books · shadow-traded predictions · proofs anchored to Bitcoin.
-> #BitgetHackathon @Bitget_AI
-> reef-research-desk.vercel.app
-
----
-
-## Demo video script (about 2.5 minutes)
-
-Record at 1080p. Use the live site. Speak plainly.
+Record at 1080p. Read live numbers from the selected snapshot; do not assume a
+particular pair is Supported or quote a fixed count from an older recording.
 
 | Time | Screen | Say |
 |---|---|---|
-| 0:00 | Landing page, hero card | "This pair advertises a positive yield. After walking the real order book and pricing the hedge's risk, it's a loss. Reef is built to catch that — and, just as importantly, to catch it when one actually holds up." |
-| 0:15 | Click *Open the desk* | "Reef prices 27 real-world-asset pairs on Bitget: tokenized stocks, ETFs and gold. It refreshes every hour." |
-| 0:30 | Point at row 1 of the watchlist, QQQ/TQQQ, badge "Supported" | "Right now, [N] pairs clear the bar — look at row 1, QQQ/TQQQ. Sharpe 1.6, and its 95% confidence interval excludes zero — that's the difference between a lucky number and actual evidence." |
-| 0:50 | Click into QQQ/TQQQ, scroll the Investigator panel | "Every claim here is checked: the gross carry, the cost that was actually walked through the book, the interval, even what happens if risk rises 50% — it still holds." |
-| 1:10 | Click SMH/SOXL in the watchlist instead | "Compare that to this one. Same process, opposite answer: a positive headline yield becomes a double-digit annualised loss once the book is walked." |
-| 1:25 | *What would make it work* card on SMH/SOXL | "Most tools stop at no. Reef inverts the answer — this one needs about an order of magnitude more funding than today's rate, and holding longer won't save it, because its risk grows as fast as its carry." |
-| 1:40 | Qwen interpretation panel | "Qwen explains the finding and what would change it. It isn't allowed to write a single digit; if it tries, the reply is rejected." |
-| 1:55 | Scroll to *The shadow desk* | "Every 8 hours Reef shadow-trades every pair against the live book, then grades itself: predicted cost against what the book actually charged — [N] trades graded so far." |
-| 2:10 | Open `data/anchors` on GitHub, then opentimestamps.org | "Each prediction is hashed and stamped to Bitcoin before its outcome exists. You don't have to trust us; you can verify it." |
-| 2:25 | *What changed* feed | "And because it's live, verdicts move — this is how QQQ/TQQQ got here. Reef: look past the headline yield." |
+| 0:00 | Landing page | “A trader sees a positive funding yield. What survives entry and exit costs, and how much hedge risk remains? That is the question Reef answers.” |
+| 0:15 | Research question | “Here is SMH/SOXL, $25k, 30 days. Compare it with QQQ/TQQQ at the same size and hold. The notebook keeps this context as we ask what changes if funding reverses.” |
+| 0:35 | Investigator and solver | “This is the binding constraint. Here is the carry needed, shortest qualifying hold and largest tested size. These conditions hold the other assumptions fixed.” |
+| 0:55 | Supported or Unproven filter | “Apply the same test across pairs. Supported requires both the point threshold and a funding-only interval above zero. Other uncertainty remains.” |
+| 1:10 | Live Qwen interpretation | “Qwen explains the evidence. It plans the research task and explains the selected evidence. Follow-ups keep the scenario. Financial figures come from Python, and the export includes the entire notebook.” |
+| 1:25 | Shadow desk | “We record hypothetical fills, then compare estimates with later books and funding marks. These are the cost and funding errors. Direction agreement is shown beside an always-nonpositive baseline.” |
+| 1:45 | Case study, timeline and comparison | “This is the earliest eligible completed record. We did not select it for profit or agreement. The estimate and paper outcome differ; you can inspect both.” |
+| 2:00 | Download bundle and verifier output | “Download the records, marks and proofs. This command recomputes the result and checks that the prediction's Bitcoin block time precedes maturity. Bitcoin timestamps are approximate.” |
+| 2:20 | Case limitations, closing | “The proof binds recorded content. Fills remain hypothetical, and original full books were not retained per record. Reef makes the evidence, errors and limits visible before you trade.” |
 
-Tips: before recording, run the desk workflow manually so "updated" reads minutes ago, and re-check which pair is Supported — it moves with the data, and today it's QQQ/TQQQ. Fill in the shadow desk's actual graded-trade count at 1:55. Lingering on the predicted-vs-realised numbers there is the strongest ten seconds in the video.
+Before recording, verify the downloadable bundle, read the current snapshot and
+confirm the live site contains these changes. Do not claim the planned user
+sessions have happened. Prefer a visible verifier result to an unexecuted
+command or a directory of unexplained proof files.

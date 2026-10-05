@@ -1,4 +1,4 @@
-"""Anchor the prediction record to Bitcoin, so "frozen before the outcome" is provable.
+"""Anchor recorded content to Bitcoin; compare block time to maturity separately.
 
     python src/anchor.py                 # anchor if the record changed, upgrade pending proofs
     python src/anchor.py --verify KEY    # Merkle proof for a ledger row, KEY = "<ts>:<pair>:<hold>"
@@ -10,8 +10,9 @@ through public calendar servers - no wallet, key or fee. Pending proofs are
 upgraded on later runs once the calendar's Bitcoin transaction confirms.
 
 What this proves: a row whose hash is under a confirmed root existed before
-that Bitcoin block. A prediction anchored before its hold ended cannot have
-been written with knowledge of the outcome. What it does not prove: that the
+that Bitcoin block. A before-maturity claim additionally requires checking
+the block timestamp against the holding-period endpoint. Bitcoin header times
+are approximate, not precise wall-clock certificates. What it does not prove: that the
 row is correct, or that no other rows were withheld before the first anchor.
 
 Anyone can check a root without trusting this repo: upload the .root.txt and

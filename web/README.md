@@ -32,8 +32,14 @@ Qwen explains a frozen evidence object through `api/investigate.js`, a server ro
 holds the API key. It returns four fixed fields and any reply containing a digit is
 rejected; the numbers on screen always come from the deterministic model. If the route is
 unreachable or rejects a reply, the page shows the calculated result without commentary.
-The question box itself matches a tracked pair, size and hold in the browser and snaps to
-the nearest precomputed scenario, which it discloses.
+The notebook uses `/api/research` for validated task planning and evidence selection.
+Comparisons, rankings, constraint questions and recorded stresses preserve context
+across turns. Qwen can interpret the task and explain the returned evidence; a
+scenario matcher and the recorded calculations remain available without it.
+Nearest-scenario snapping is disclosed. Notes are saved locally and exportable.
+Each submitted question and recent context are sent to the service and Qwen when
+available. `REEF_QWEN_DISABLED=1 npm run dev` starts an offline research preview
+without contacting Qwen. The older `/api/investigate` route remains compatible.
 
 ## Assets
 
@@ -44,3 +50,22 @@ local browser storage. No trade or account connection is ever initiated.
 
 `archive/legacy.html` preserves the former single-page dashboard as a reference; it is
 not part of the production build.
+
+## Forward evidence and downloadable case
+
+The shadow panel leads with execution-cost and funding-carry mean absolute errors,
+then compares direction agreement with an always-nonpositive baseline on the same
+records. The evidence page expands errors by pair.
+
+The prediction-to-outcome case comes from `data/case_study.json`, embedded in the
+export. Its download includes the complete records, funding histories and both
+OpenTimestamps proofs. Build it deliberately with `python src/case_study.py --build`
+after installing `requirements-proof.txt`; normal hourly exports retain the fixed
+case. See `evidence/CASE_STUDY.md` for verification and limitations.
+
+The research service is shared by Vite, Vercel and the Worker in
+`web/research/core.mjs`. `node --test web/research/core.test.mjs` covers context,
+comparisons, stress selection, unavailable instruments, rejected AI plans and
+numeric prose guards using mocked upstream responses. It does not certify live
+model accuracy. Financial figures are copied from Python cells, not recalculated
+in JavaScript. A snapshot change requires a new notebook.

@@ -85,3 +85,44 @@
 .gold-grid article>small{font-size:10px;color:var(--muted)}
 .onchain-gold .ledger-note{margin-top:14px}
 @media(max-width:767px){.gold-grid{grid-template-columns:1fr}}
+/* Portable prediction-to-outcome evidence, using the desk's existing panels. */
+.case-intro{font-size:13px;line-height:1.7;color:var(--muted,#6c756c);max-width:90ch}
+.case-timeline{list-style:none;padding:0;margin:22px 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.case-timeline li{border-top:1px solid #d9ddd3;padding-top:12px;display:flex;flex-direction:column;gap:7px;font-size:12px}
+.case-timeline time{font-variant-numeric:tabular-nums;font-size:11px;line-height:1.6;color:#65705f}
+.case-study table{width:100%;text-align:left;border-collapse:collapse;font-size:13px}
+.case-study th,.case-study td{padding:12px 8px;border-bottom:1px solid #e3e5dc}
+.case-limits{font-size:13px;line-height:1.8;margin:18px 0;color:#56614f}
+.case-limits summary{cursor:pointer;font-weight:600;color:#243b2b}
+.case-limits code{overflow-wrap:anywhere}
+@media(max-width:800px){.case-timeline{grid-template-columns:1fr 1fr}.case-study .panel-top{flex-wrap:wrap;gap:16px}.case-study th,.case-study td{min-width:110px}}
+/* Research follows the existing cream, forest and editorial desk palette. */
+.research-notebook{border:1px solid var(--line);background:var(--panel);padding:28px;margin-bottom:28px}
+.research-notebook>header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}
+.research-notebook h2{font-size:27px;font-weight:400;letter-spacing:-.5px;margin:9px 0}
+.research-notebook header p,.research-privacy{font-size:12px;line-height:1.7;color:var(--muted)}
+.notebook-actions{display:flex;gap:8px;flex-shrink:0}.notebook-actions button{min-height:40px}
+.research-context{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:20px 0;font-size:11px}
+.research-context>span{background:var(--sage);padding:7px 10px;border-radius:3px}.research-context>small{color:var(--muted);margin-left:auto}
+.research-notebook form{display:flex;gap:12px;padding-top:20px;border-top:1px solid var(--line)}
+.research-notebook input{flex:1;border:1px solid var(--line);background:var(--cream);padding:13px 14px;font-size:14px;min-height:48px}
+.research-suggestions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.research-suggestions button{border:1px solid var(--line);background:transparent;min-height:40px;padding:10px 12px;display:flex;align-items:center;gap:10px;font-size:11px}
+.research-suggestions button:hover{background:var(--sage)}.research-privacy{font-size:10px;max-width:100ch}
+.research-thread{max-height:760px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.research-turn{padding:22px 0;border-top:1px solid var(--line)}
+.research-question{display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.5;margin-bottom:18px}.research-question svg{flex:none;margin-top:3px}.research-question small{margin-left:auto;white-space:nowrap;color:var(--muted);font-size:10px}
+.research-result h3{font-size:20px;font-weight:400;margin-bottom:18px}
+.research-comparison{width:100%;border-collapse:collapse;text-align:left;font-size:12px}
+.research-comparison caption{text-align:left;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.research-comparison th,.research-comparison td{border-bottom:1px solid var(--line);padding:12px 10px;vertical-align:top;min-width:140px;font-variant-numeric:tabular-nums}
+.research-comparison th{font-weight:500}.research-comparison thead th{background:var(--cream)}
+.research-comparison small{display:block;color:var(--muted);font-size:10px;font-weight:400;line-height:1.5;margin-top:5px}
+.research-stress-row{background:var(--sage)}.research-leading,.research-empty{font-size:12px;line-height:1.8;margin:15px 0}
+.research-interpretation{background:var(--light);padding:18px;margin:18px 0}.research-interpretation p{font-size:13px;line-height:1.7;margin-top:12px}.research-interpretation strong{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.research-fallback{font-size:11px;line-height:1.7;color:var(--muted);display:flex;gap:8px;margin:16px 0}.research-fallback svg{flex:none;margin-top:3px}
+.research-sources{font-size:11px;line-height:1.8;color:var(--muted)}.research-sources summary{cursor:pointer;min-height:40px;display:list-item;padding:9px 0}.research-sources p{margin:8px 0}.research-sources ul{padding-left:18px}
+.research-loading{padding:20px 0}.research-loading p{font-size:12px;margin-bottom:12px;color:var(--muted)}
+@media(max-width:900px){.research-notebook>header{flex-direction:column;gap:12px}.research-context>small{width:100%;margin:3px 0}.research-thread{max-height:600px}}
+@media(max-width:600px){.research-notebook{padding:18px}.research-notebook h2{font-size:24px}.research-notebook form{flex-direction:column}.research-notebook form button{justify-content:center;min-height:44px}.research-comparison th,.research-comparison td{min-width:125px}.notebook-actions{flex-wrap:wrap}.research-question small{display:none}}
+.research-export{margin-top:24px;border-top:1px solid var(--line);padding-top:16px}.research-export summary{cursor:pointer;font-weight:600}.research-export p{font-size:12px;color:var(--muted)}.research-export pre{max-height:240px;overflow:auto;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--cream);padding:16px}

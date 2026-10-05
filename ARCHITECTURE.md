@@ -31,6 +31,35 @@ CI runs financial regression tests, parser tests and offline pipeline smoke chec
    commit       "[skip ci]" push to main; the site reads the newest export directly
 ```
 
-The browser picks whichever is newer: the export bundled at deploy time, or
-the live one on `main`. It never recomputes a number. `api/investigate.js`
-reads the same live snapshot, so Qwen explains exactly what the visitor sees.
+The production browser picks whichever is newer: the export bundled at deploy
+time, or the live one on `main`. Development uses the local export. The browser
+never recomputes a financial number.
+
+## Conversational research
+
+`web/research/core.mjs` is shared by the Vercel `/api/research` route, Vite and
+the Worker. Questions resolve to tracked pairs, a recorded size and hold, an
+operation, and an optional recorded stress. Qwen may interpret the operation
+through a strict plan; validation prevents it substituting instruments, stress
+or ranking scope. A deterministic matcher provides a fallback. Comparisons and
+rankings select existing Python cells without repricing them.
+
+The service rejects a request when its snapshot identity differs from the
+notebook's identity. Recent context preserves comparisons and follow-ups.
+Qwen's optional three-field explanation is rejected if it contains digits.
+This guards numerical output, not the truth of prose. Stress point estimates
+do not acquire a newly computed confidence interval or verdict.
+
+The browser keeps up to twelve turns locally and exports dated JSON notes.
+Notebook turns are not appended to the anchored prediction ledger. Submitted
+questions and recent context go to the service and, when enabled, Qwen.
+The older `/api/investigate` route remains for compatibility.
+
+## Future paper-fill replay
+
+`book_evidence.py` stores complete captured books as compressed, canonical JSON
+addressed by SHA-256. New shadow positions and executions bind their entry and
+exit book hashes. Replay verifies book identity, timestamp, mid and depth-walk
+price. This establishes reproducibility of hypothetical fills against retained
+inputs; it does not authenticate exchange origin or prove an actual order fill.
+Legacy executions have no retained books and cannot pass this replay.
