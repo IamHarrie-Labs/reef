@@ -1,9 +1,13 @@
 import {Download,ShieldCheck} from 'lucide-react';
+import {useEffect,useState} from 'react';
 
 export type CaseEvidence={key:string;selection:string;earlier_ineligible_records:number;prediction:{evidence:{pair:string;size:number;hold_days:number;verdict:string}};prediction_anchor:{bitcoin_header:{height:number}};timeline:Record<string,number>;comparison:[string,number,number][];limits:string[]};
 
 const time=(ms:number)=>new Date(ms).toISOString().replace('T',' ').replace('Z',' UTC');
-export function CaseStudy({bundle}:{bundle?:CaseEvidence|null}){
+export function CaseStudy({bundle:supplied}:{bundle?:CaseEvidence|null}){
+ const [portable,setPortable]=useState<CaseEvidence|null>(null);
+ useEffect(()=>{if(supplied)return;const controller=new AbortController();fetch(`${import.meta.env.BASE_URL}case-studies/reef-case-1790265456123-AAPL-AAPU-1.json`,{signal:controller.signal}).then(r=>{if(!r.ok)throw Error();return r.json()}).then(b=>{if(!controller.signal.aborted&&b.key==='1790265456123:AAPL/AAPU:1')setPortable(b)}).catch(()=>{});return()=>controller.abort()},[supplied]);
+ const bundle=supplied||portable;
  if(!bundle)return null;
  const ev=bundle.prediction.evidence;
  const filename=`reef-case-${bundle.key.replaceAll(':','-').replaceAll('/','-')}.json`;

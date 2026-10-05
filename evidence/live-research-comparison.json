@@ -1,0 +1,149 @@
+{
+  "schema": "reef-research-1",
+  "question": "Compare QQQ/TQQQ with SMH/SOXL at $25k for 30 days",
+  "snapshot_utc": "2026-10-05 12:23Z",
+  "model_version": "2.0",
+  "plan": {
+    "intent": "compare",
+    "pairs": [
+      "QQQ/TQQQ",
+      "SMH/SOXL"
+    ],
+    "size": 25000,
+    "hold": 30,
+    "stress": null,
+    "onlySupported": false,
+    "requestedSize": 25000,
+    "requestedHold": 30
+  },
+  "result": {
+    "title": "Compare the complete trade, not the headline yield",
+    "cards": [
+      {
+        "pair": "QQQ/TQQQ",
+        "size": 25000,
+        "hold": 30,
+        "beta": 2.727358244663857,
+        "direction": "short A / long B",
+        "source_timestamps": {
+          "prices": {
+            "QQQUSDT": 1791180000000,
+            "TQQQUSDT": 1791180000000
+          },
+          "funding": {
+            "QQQUSDT": 1791158400000,
+            "TQQQUSDT": 1791158400000
+          },
+          "books": {
+            "QQQUSDT": "1791185732226",
+            "TQQQUSDT": "1791185735283"
+          }
+        },
+        "history_days": 13,
+        "cell": {
+          "annual_pct": 14.13,
+          "net_bp": 116.2,
+          "gross_bp": 185.1,
+          "cost_bp": 69,
+          "risk_bp": 251,
+          "breakeven_days": 11.2,
+          "sharpe": 1.616,
+          "ci_lo": 0.126,
+          "ci_hi": 3.106,
+          "verdict": "SUPPORTED",
+          "stress": {
+            "half_funding": 23.6,
+            "funding_reversal": -254.1,
+            "cost_plus_50": 81.7,
+            "risk_plus_50_sharpe": 1.077
+          },
+          "requires": {
+            "bp_per_day_now": 6.171,
+            "bp_per_day_needed": 5.87,
+            "multiple": 0.95,
+            "binding": "evidence",
+            "min_hold_days": 27,
+            "sharpe_ceiling": 2.575
+          }
+        },
+        "stress": null
+      },
+      {
+        "pair": "SMH/SOXL",
+        "size": 25000,
+        "hold": 30,
+        "beta": 3.0557875669750594,
+        "direction": "long A / short B",
+        "source_timestamps": {
+          "prices": {
+            "SMHUSDT": 1791180000000,
+            "SOXLUSDT": 1791180000000
+          },
+          "funding": {
+            "SMHUSDT": 1791158400000,
+            "SOXLUSDT": 1791158400000
+          },
+          "books": {
+            "SMHUSDT": "1791185732971",
+            "SOXLUSDT": "1791185733227"
+          }
+        },
+        "history_days": 13,
+        "cell": {
+          "annual_pct": -35.69,
+          "net_bp": -293.3,
+          "gross_bp": -27.7,
+          "cost_bp": 265.6,
+          "risk_bp": 1528,
+          "breakeven_days": null,
+          "sharpe": -0.67,
+          "ci_lo": -1.056,
+          "ci_hi": -0.283,
+          "verdict": "UNFAVOURABLE",
+          "stress": {
+            "half_funding": -279.5,
+            "funding_reversal": -237.9,
+            "cost_plus_50": -426.1,
+            "risk_plus_50_sharpe": -0.446
+          },
+          "requires": {
+            "bp_per_day_now": -0.923,
+            "bp_per_day_needed": 16.154,
+            "multiple": null,
+            "binding": "cost",
+            "min_hold_days": null,
+            "sharpe_ceiling": -0.063
+          }
+        },
+        "stress": null
+      }
+    ],
+    "leading": {
+      "pair": "QQQ/TQQQ",
+      "metric": "modelled Sharpe proxy"
+    },
+    "disclosures": [
+      "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+      "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+    ]
+  },
+  "planner": "qwen3.8-max",
+  "commentary": {
+    "finding": "QQQ/TQQQ shows supported positive carry, while SMH/SOXL is unfavourable due to heavy execution costs.",
+    "tradeoff": "The pairs compete between funding carry and execution cost, where SMH/SOXL execution cost binds negatively.",
+    "next_check": "Verify whether stressed funding reversal point estimates alter the base verdict for QQQ/TQQQ."
+  },
+  "interpreter": "qwen3.8-max",
+  "context": {
+    "pairs": [
+      "QQQ/TQQQ",
+      "SMH/SOXL"
+    ],
+    "size": 25000,
+    "hold": 30,
+    "stress": null,
+    "intent": "compare",
+    "onlySupported": false
+  },
+  "note": "Qwen explains the selected evidence. Its prose can still be wrong."
+}
