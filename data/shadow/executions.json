@@ -21143,6 +21143,12 @@
   "pair": "AAPL/AAPU",
   "status": "closed"
  },
+ "1791050885716:AAPL/AAPU:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "AAPL/AAPU",
+  "status": "missed_exit_window"
+ },
  "1791050885716:AMZN/AMZU:1": {
   "execution": {
    "AMZNUSDT": {
@@ -21184,6 +21190,12 @@
   "hold_days": 1,
   "pair": "AMZN/AMZU",
   "status": "closed"
+ },
+ "1791050885716:AMZN/AMZU:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "AMZN/AMZU",
+  "status": "missed_exit_window"
  },
  "1791050885716:GOOGL/GGLL:1": {
   "execution": {
@@ -21227,6 +21239,12 @@
   "pair": "GOOGL/GGLL",
   "status": "closed"
  },
+ "1791050885716:GOOGL/GGLL:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "GOOGL/GGLL",
+  "status": "missed_exit_window"
+ },
  "1791050885716:META/METU:1": {
   "execution": {
    "METAUSDT": {
@@ -21268,6 +21286,12 @@
   "hold_days": 1,
   "pair": "META/METU",
   "status": "closed"
+ },
+ "1791050885716:META/METU:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "META/METU",
+  "status": "missed_exit_window"
  },
  "1791050885716:MINIMAX/MINIMAXHKD:1": {
   "execution": {
@@ -21311,6 +21335,12 @@
   "pair": "MINIMAX/MINIMAXHKD",
   "status": "closed"
  },
+ "1791050885716:MINIMAX/MINIMAXHKD:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "MINIMAX/MINIMAXHKD",
+  "status": "missed_exit_window"
+ },
  "1791050885716:MSFT/MSFU:1": {
   "execution": {
    "MSFTUSDT": {
@@ -21352,6 +21382,12 @@
   "hold_days": 1,
   "pair": "MSFT/MSFU",
   "status": "closed"
+ },
+ "1791050885716:MSFT/MSFU:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "MSFT/MSFU",
+  "status": "missed_exit_window"
  },
  "1791050885716:NVDA/NVDL:1": {
   "execution": {
@@ -21395,6 +21431,12 @@
   "pair": "NVDA/NVDL",
   "status": "closed"
  },
+ "1791050885716:NVDA/NVDL:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "NVDA/NVDL",
+  "status": "missed_exit_window"
+ },
  "1791050885716:QQQ/NDX100:1": {
   "execution": {
    "NDX100USDT": {
@@ -21436,6 +21478,12 @@
   "hold_days": 1,
   "pair": "QQQ/NDX100",
   "status": "closed"
+ },
+ "1791050885716:QQQ/NDX100:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "QQQ/NDX100",
+  "status": "missed_exit_window"
  },
  "1791050885716:QQQ/SQQQ:1": {
   "execution": {
@@ -21479,6 +21527,12 @@
   "pair": "QQQ/SQQQ",
   "status": "closed"
  },
+ "1791050885716:QQQ/SQQQ:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "QQQ/SQQQ",
+  "status": "missed_exit_window"
+ },
  "1791050885716:QQQ/TQQQ:1": {
   "execution": {
    "QQQUSDT": {
@@ -21520,6 +21574,12 @@
   "hold_days": 1,
   "pair": "QQQ/TQQQ",
   "status": "closed"
+ },
+ "1791050885716:QQQ/TQQQ:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "QQQ/TQQQ",
+  "status": "missed_exit_window"
  },
  "1791050885716:SMH/SOXL:1": {
   "execution": {
@@ -21563,6 +21623,12 @@
   "pair": "SMH/SOXL",
   "status": "closed"
  },
+ "1791050885716:SMH/SOXL:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "SMH/SOXL",
+  "status": "missed_exit_window"
+ },
  "1791050885716:SMH/SOXS:1": {
   "execution": {
    "SMHUSDT": {
@@ -21604,6 +21670,12 @@
   "hold_days": 1,
   "pair": "SMH/SOXS",
   "status": "closed"
+ },
+ "1791050885716:SMH/SOXS:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "SMH/SOXS",
+  "status": "missed_exit_window"
  },
  "1791050885716:SOXL/SOXS:1": {
   "execution": {
@@ -21647,6 +21719,12 @@
   "pair": "SOXL/SOXS",
   "status": "closed"
  },
+ "1791050885716:SOXL/SOXS:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "SOXL/SOXS",
+  "status": "missed_exit_window"
+ },
  "1791050885716:SPY/SP500:1": {
   "execution": {
    "SP500USDT": {
@@ -21688,6 +21766,12 @@
   "hold_days": 1,
   "pair": "SPY/SP500",
   "status": "closed"
+ },
+ "1791050885716:SPY/SP500:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "SPY/SP500",
+  "status": "missed_exit_window"
  },
  "1791050885716:SPY/VOO:1": {
   "execution": {
@@ -21731,6 +21815,12 @@
   "pair": "SPY/VOO",
   "status": "closed"
  },
+ "1791050885716:SPY/VOO:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "SPY/VOO",
+  "status": "missed_exit_window"
+ },
  "1791050885716:TENCENT/TENCENTHKD:1": {
   "execution": {
    "TENCENTHKDUSDT": {
@@ -21772,6 +21862,12 @@
   "hold_days": 1,
   "pair": "TENCENT/TENCENTHKD",
   "status": "closed"
+ },
+ "1791050885716:TENCENT/TENCENTHKD:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "TENCENT/TENCENTHKD",
+  "status": "missed_exit_window"
  },
  "1791050885716:TQQQ/SQQQ:1": {
   "execution": {
@@ -21815,6 +21911,12 @@
   "pair": "TQQQ/SQQQ",
   "status": "closed"
  },
+ "1791050885716:TQQQ/SQQQ:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "TQQQ/SQQQ",
+  "status": "missed_exit_window"
+ },
  "1791050885716:TSLA/TSLL:1": {
   "execution": {
    "TSLAUSDT": {
@@ -21857,6 +21959,12 @@
   "pair": "TSLA/TSLL",
   "status": "closed"
  },
+ "1791050885716:TSLA/TSLL:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "TSLA/TSLL",
+  "status": "missed_exit_window"
+ },
  "1791050885716:VOO/SP500:1": {
   "execution": {
    "SP500USDT": {
@@ -21898,6 +22006,12 @@
   "hold_days": 1,
   "pair": "VOO/SP500",
   "status": "closed"
+ },
+ "1791050885716:VOO/SP500:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "VOO/SP500",
+  "status": "missed_exit_window"
  },
  "1791050885716:XAU/PAXG:1": {
   "execution": {
@@ -21947,6 +22061,12 @@
   "pair": "XAU/PAXG",
   "status": "closed"
  },
+ "1791050885716:XAU/PAXG:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "XAU/PAXG",
+  "status": "missed_exit_window"
+ },
  "1791050885716:XAU/XAUT:1": {
   "execution": {
    "XAUTUSDT": {
@@ -21994,6 +22114,12 @@
   "hold_days": 1,
   "pair": "XAU/XAUT",
   "status": "closed"
+ },
+ "1791050885716:XAU/XAUT:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "XAU/XAUT",
+  "status": "missed_exit_window"
  },
  "1791050885716:XAUT/PAXG:1": {
   "execution": {
@@ -22043,6 +22169,12 @@
   "pair": "XAUT/PAXG",
   "status": "closed"
  },
+ "1791050885716:XAUT/PAXG:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "XAUT/PAXG",
+  "status": "missed_exit_window"
+ },
  "1791050885716:XIAOMI/XIAOMIHKD:1": {
   "execution": {
    "XIAOMIHKDUSDT": {
@@ -22085,6 +22217,12 @@
   "pair": "XIAOMI/XIAOMIHKD",
   "status": "closed"
  },
+ "1791050885716:XIAOMI/XIAOMIHKD:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "XIAOMI/XIAOMIHKD",
+  "status": "missed_exit_window"
+ },
  "1791050885716:ZHIPU/ZHIPUHKD:1": {
   "execution": {
    "ZHIPUHKDUSDT": {
@@ -22126,6 +22264,12 @@
   "hold_days": 1,
   "pair": "ZHIPU/ZHIPUHKD",
   "status": "closed"
+ },
+ "1791050885716:ZHIPU/ZHIPUHKD:3": {
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "ZHIPU/ZHIPUHKD",
+  "status": "missed_exit_window"
  },
  "1791103302274:AAPL/AAPU:1": {
   "execution_type": "shadow",
