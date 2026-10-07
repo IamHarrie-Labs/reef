@@ -10,7 +10,7 @@ Ask: “May I take anonymous notes? May I record the screen?” Recording is opt
 
 ## Tasks
 
-1. Open https://getreef.xyz/#/desk. You are investigating QQQ/TQQQ and SMH/SOXL at $25,000 reference notional for 30 days. Decide which, if either, deserves more research. Explain your reasoning and one assumption you would check before relying on it. Allow five minutes.
+1. Open https://getreef.xyz/desk. You are investigating QQQ/TQQQ and SMH/SOXL at $25,000 reference notional for 30 days. Decide which, if either, deserves more research. Explain your reasoning and one assumption you would check before relying on it. Allow five minutes.
 2. Ask your own follow-up question. Do not read a prepared example to them. Record the exact wording, response and whether they found the answer useful. Allow two minutes.
 3. Now consider funding reversing, then a seven-day hold. Ask them what changed and whether the same instruments and stress stayed selected. Ask whether the displayed base verdict also describes the stressed result. Allow two minutes.
 4. Find what would have to change for one of these setups to qualify. Export the notebook, then find the recorded prediction-to-outcome example. Allow two minutes.

@@ -49,7 +49,7 @@ export async function handle(request,kind){
    if(typeof body.email!=='string'||body.email.length>254)throw Object.assign(new Error('Enter your verified recovery email.'),{status:400});
    // Always invoke the auth endpoint to apply its persistent rate limit. Only verified identities receive email.
    const user=await pool.query('SELECT id FROM "user" WHERE email=$1 AND "emailVerified"=true',[body.email.trim().toLowerCase()]);
-   const result=await auth.handler(new Request(`${origin}/api/auth/sign-in/magic-link`,{method:'POST',headers:request.headers,body:JSON.stringify({email:user.rows.length?body.email.trim().toLowerCase():`${randomUUID()}@accounts.reef.invalid`,callbackURL:`${origin}/#/desk`})}));
+   const result=await auth.handler(new Request(`${origin}/api/auth/sign-in/magic-link`,{method:'POST',headers:request.headers,body:JSON.stringify({email:user.rows.length?body.email.trim().toLowerCase():`${randomUUID()}@accounts.reef.invalid`,callbackURL:`${origin}/desk`})}));
    if(result.status===429)return result;
    return Response.json({sent:true});
   }

@@ -6,18 +6,37 @@
   "redirects": [
     {
       "source": "/",
-      "has": [{"type": "host", "value": "reef-research-desk.vercel.app"}],
+      "has": [
+        {
+          "type": "host",
+          "value": "reef-research-desk.vercel.app"
+        }
+      ],
       "destination": "https://getreef.xyz/",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{"type": "host", "value": "reef-research-desk.vercel.app"}],
+      "has": [
+        {
+          "type": "host",
+          "value": "reef-research-desk.vercel.app"
+        }
+      ],
       "destination": "https://getreef.xyz/:path*",
       "permanent": true
     }
   ],
-  "rewrites": [{"source":"/api/auth/:authPath*","destination":"/api/auth-handler?authPath=:authPath*"}],
+  "rewrites": [
+    {
+      "source": "/api/auth/:authPath*",
+      "destination": "/api/auth-handler?authPath=:authPath*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ],
   "functions": {
     "api/auth-handler.js": {
       "maxDuration": 30

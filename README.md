@@ -2,7 +2,7 @@
 
 **Look past the headline yield. See what holds up.**
 
-**Live desk → [getreef.xyz](https://getreef.xyz)** · [Evidence](https://getreef.xyz/#/desk/evidence) · [Method](https://getreef.xyz/#/desk/method) · [Architecture](ARCHITECTURE.md) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md) · [Validation](VALIDATION.md)
+**Live desk → [getreef.xyz](https://getreef.xyz)** · [Evidence](https://getreef.xyz/desk/evidence) · [Method](https://getreef.xyz/desk/method) · [Architecture](ARCHITECTURE.md) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md) · [Validation](VALIDATION.md)
 
 [![ci](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml) [![live desk](https://github.com/IamHarrie-Labs/reef/actions/workflows/desk.yml/badge.svg)](https://github.com/IamHarrie-Labs/reef/actions/workflows/desk.yml)
 

@@ -20,7 +20,7 @@ change hourly. Ask permission before recording a session.
 
 ## Send this task
 
-Open https://getreef.xyz/#/desk.
+Open https://getreef.xyz/desk.
 
 You are comparing QQQ/TQQQ and SMH/SOXL at $25,000 reference notional for 30 days. Use Reef
 to decide whether the setup deserves further investigation. You do not need to

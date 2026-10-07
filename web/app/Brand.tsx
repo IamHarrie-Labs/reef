@@ -4,5 +4,5 @@ export function ReefMark({size=32}:{size?:number}){
 }
 
 export function ReefLogo(){
- return <a className="logo" href="#/" aria-label="Reef home"><ReefMark/><span>Reef</span></a>;
+ return <a className="logo" href="/" aria-label="Reef home"><ReefMark/><span>Reef</span></a>;
 }
