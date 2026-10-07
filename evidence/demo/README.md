@@ -13,5 +13,5 @@ To rebuild after capturing new screenshots, install Pillow and imageio-ffmpeg
 locally, then run `render_demo.py`. The script expects the six named captures in
 this directory. The runtime used here is ignored by Git and deployment.
 
-The latest film is `reef-research-walkthrough.mp4`. Historical proof timestamps
+Running `render_demo.py` produces `reef-research-walkthrough.mp4`. Historical proof timestamps
 establish content commitment, not authenticated exchange origin or actual fills.
