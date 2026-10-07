@@ -7,7 +7,7 @@ read them from the same snapshot immediately before recording or submitting.
 
 **Reef** · Track 3 — AI Trading Desk (Open theme)
 
-- Live desk: https://reef-research-desk.vercel.app
+- Live desk: https://getreef.xyz
 - Code: https://github.com/IamHarrie-Labs/reef
 
 ## One-liner
@@ -102,7 +102,7 @@ figures and verdicts come from Python, not the language model.
 > Built Reef for #BitgetHackathon: a research desk for @Bitget RWA funding carry.
 > Actual book costs, hedge risk, and what would need to change.
 > Hypothetical execution, visible estimation errors, downloadable Bitcoin proofs.
-> reef-research-desk.vercel.app @Bitget_AI
+> getreef.xyz @Bitget_AI
 
 ## Demo video — about 2.5 minutes
 

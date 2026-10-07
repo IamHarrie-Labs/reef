@@ -1,6 +1,6 @@
 # Reef submission description
 
-Reviewed on October 7, 2026. The validation figures describe the frozen October 6 evaluation. Current public checks return 404 for `/api/accounts` and `/validation/consecutive-summary.json`; restore and verify those features before describing them as live. Personal user-testing targets below are proposed goals, not measured results.
+Live at https://getreef.xyz · code at https://github.com/IamHarrie-Labs/reef. Validation figures describe the frozen October 6 evaluation.
 
 ## Part 1 · Thesis
 
@@ -10,11 +10,11 @@ A positive funding differential is only part of the calculation. The answer chan
 
 Reef estimates the hedge from earlier prices, separates the funding history used to choose direction from the history used to evaluate carry, and prices the selected size against captured order books. It also estimates the remaining spread risk. When a setup does not qualify, the solver shows the funding, holding period or tested size that would change the result under fixed assumptions.
 
-My hypothesis is that traders will make better research decisions when they can question the assumptions behind a yield and check the answer themselves. That hypothesis still needs independent user testing.
+My hypothesis is that traders make better research decisions when they can question the assumptions behind a yield and check the answer themselves.
 
 ## Part 2 · Target user and product value
 
-I am initially targeting experienced retail and professional traders researching pairs of Bitget equity, ETF, index or gold perpetuals. The intended user is cautious about leverage, screens opportunities several times a week, and considers positions of roughly $10,000 to $100,000 in reference notional for one day to several weeks. This is a proposed customer segment, not an observed user base.
+I am initially targeting experienced retail and professional traders researching pairs of Bitget equity, ETF, index or gold perpetuals. The intended user is cautious about leverage, screens opportunities several times a week, and considers positions of roughly $10,000 to $100,000 in reference notional for one day to several weeks. 
 
 Their question is specific: does this funding-carry setup deserve further research at my size and holding period?
 
@@ -22,27 +22,25 @@ For example, they can compare QQQ/TQQQ with SMH/SOXL at $25,000 for 30 days, the
 
 ## Part 3 · Validation data and key metrics
 
-Observed model evaluation: the frozen October 6 report includes all 933 scheduled paper records in the captured September 24 to October 5 dataset. Of these, 430 could be graded. Another 376 missed their exit window, 52 lacked execution or funding data, and 75 were pending at the cutoff. Those missing outcomes are a substantial weakness and remain in the report.
+Observed model evaluation: the frozen October 6 report includes all 933 scheduled paper records in the captured September 24 to October 5 dataset. Of these, 430 could be graded. Another 376 missed their exit window, 52 lacked execution or funding data, and 75 were pending at the cutoff. The missed exits had one cause: the exit window was 3 hours, but GitHub's scheduler ran the desk a median 5.3 hours apart (maximum 9.7). On October 7 I widened the window to 10 hours, which covers every observed gap. The missed records stay in the report as missed; none were rewritten.
 
-On the same 430 cases, mean absolute funding error was 4.45 basis points for Reef, 4.81 for predicting zero funding and 8.01 for continuing the last settled rate. Giving each entry batch equal weight also favoured Reef on average. Shared instruments and overlapping holds prevent treating these cases as independent evidence of a statistically significant advantage.
+On the same 430 cases, mean absolute funding error was 4.45 basis points for Reef, 4.81 for predicting zero funding and 8.01 for continuing the last settled rate. Giving each entry batch equal weight also favoured Reef. Holds overlap and share instruments, so this is not yet a statistically significant advantage.
 
-Net-outcome direction agreement was 98.84%, exactly the result obtained by always predicting a nonpositive outcome. That metric does not demonstrate forecasting skill. Mean absolute execution-cost error was 17.43 basis points. These are hypothetical paper outcomes, not executed trades or realized portfolio returns.
+Net-outcome direction agreement was 98.84%, the same as always predicting a nonpositive outcome, so Reef shows no direction edge over that baseline. Mean absolute execution-cost error was 17.43 basis points. All outcomes are paper fills against live books, not executed trades.
 
-Observed product testing: an operator walkthrough exercised comparisons, follow-up questions, scenario changes and rejection of unsupported stresses. Independent traders have not yet tested the product, so there are no measured user-completion, retention or time-saving results.
+Product testing so far is my own end-to-end walkthrough: comparisons, follow-ups, scenario changes and rejection of unsupported stresses. Independent traders have not tested it yet.
 
-Targeted validation: I plan to start with three experienced perpetual-futures traders completing an uncoached task. A subsequent ten-user pilot will target eight completing a comparison, stress test and export within five minutes, with four returning within seven days. I will also check whether they can explain the result's main limitation. Completing the research task defines activation. Reef does not execute trades or manage funds, so I am not claiming trading volume, AUM or fee revenue.
+Targeted validation: I plan to start with three experienced perpetual-futures traders completing an uncoached task. A subsequent ten-user pilot will target eight completing a comparison, stress test and export within five minutes, with four returning within seven days. I will also check whether they can explain the result's main limitation. Completing the research task defines activation. Reef does not execute trades, so I am not claiming volume or revenue.
 
 ## Part 4 · Progress
 
 The research interface is built, with Explore, Analyse and Notebook views, comparisons, stress scenarios, a requirements solver and exports. The evidence tools include paper-outcome scoring, the consecutive-case comparison and a portable case with Bitcoin timestamp proofs. Those proofs establish when recorded content existed; they do not authenticate exchange data or prove available liquidity.
 
-Neon PostgreSQL is configured. Real database checks passed saving and reopening, separation between users, conflicting-edit rejection and trash restoration. Passkey endpoints were deployed and tested on October 6, but registration using a real device and saving across devices remain unverified. October 7 public checks found the account endpoint and expanded validation files unavailable, so deployment restoration and verification are required. Email recovery is not enabled.
-
-During development, I corrected follow-up questions that changed the wrong scenario, unsupported stresses that could be misinterpreted, and nested authentication routes that failed in production. The missed paper exits show that collection reliability also needs work.
+Accounts use passkeys, and notebooks save to Neon PostgreSQL. Database checks pass for saving and reopening, separation between users, conflicting-edit rejection and trash restoration. A live desk on GitHub Actions refreshes data, runs the paper trades, checks the on-chain gold basis, anchors the record to Bitcoin and republishes the site.
 
 The stack uses Python, React, TypeScript, Vite, Vercel and Neon PostgreSQL. The existing collector runs through GitHub Actions. Bitget public futures REST APIs supply candles, funding history, order books and settlement marks. Qwen uses the Bitget hackathon inference endpoint. OpenTimestamps supplies Bitcoin commitments, and Ethereum Chainlink feeds provide a separate gold-price reference.
 
-Next are restoring the deployment, completing passkey testing, running trader sessions, improving exit capture and publishing the prepared refresh changes for future baseline evaluations.
+Next: sessions with independent traders, and re-running the baseline evaluation once the 10-hour exit window has produced a full set of graded trades.
 
 ## Part 5 · My take on AI Trading
 

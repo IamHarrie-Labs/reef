@@ -1,5 +1,9 @@
 # Architecture v2
 
+![How Reef fits together](docs/images/diagram-architecture.png)
+
+![How one answer is made](docs/images/diagram-verdict.png)
+
 Question -> validated parser -> signed portfolio -> historical estimation ->
 snapshot cost scenario -> shared verdict -> append evidence -> explanation.
 
@@ -15,7 +19,7 @@ actual fills from candles. Historical records without v2 accounting are excluded
 Research utilities are exploratory, not an independent trading backtest.
 CI runs financial regression tests, parser tests and offline pipeline smoke checks.
 
-## The live desk (hourly)
+## The live desk (scheduled hourly; GitHub runs it every few hours)
 
 ```
 .github/workflows/desk.yml ─► src/desk_cycle.py
@@ -54,6 +58,13 @@ The browser keeps up to twelve turns locally and exports dated JSON notes.
 Notebook turns are not appended to the anchored prediction ledger. Submitted
 questions and recent context go to the service and, when enabled, Qwen.
 The older `/api/investigate` route remains for compatibility.
+
+## The evidence loop
+
+![The evidence loop](docs/images/diagram-evidence.png)
+
+Exits are taken within 10 hours of maturity (`EXIT_GRACE_MS` in `score.py`), which covers
+every observed gap between scheduled runs. See DECISIONS.md D-22.
 
 ## Future paper-fill replay
 
