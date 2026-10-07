@@ -2,15 +2,15 @@
 
 **Look past the headline yield. See what holds up.**
 
-**Live desk → [getreef.xyz](https://getreef.xyz)** · [Evidence](https://getreef.xyz/desk/evidence) · [Method](https://getreef.xyz/desk/method) · [Architecture](ARCHITECTURE.md) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md) · [Validation](VALIDATION.md) · [Film](https://x.com/IamHarrie/status/2107864545460994138)
+**Live desk → [getreef.xyz](https://getreef.xyz)** · [Evidence](https://getreef.xyz/desk/evidence) · [Method](https://getreef.xyz/desk/method) · [Architecture](ARCHITECTURE.md) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md) · [Validation](VALIDATION.md) · [Demo video](https://drive.google.com/file/d/1gicjNHsBtsWMXO5cGbnRZgSgtLSEr3xT/view?usp=sharing) · [X post](https://x.com/IamHarrie/status/2107864545460994138)
 
 [![ci](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml) [![live desk](https://github.com/IamHarrie-Labs/reef/actions/workflows/desk.yml/badge.svg)](https://github.com/IamHarrie-Labs/reef/actions/workflows/desk.yml)
 
 Bitget AI Base Camp Hackathon S2 · Track 3, AI Trading Desk · Open theme
 
-[![Watch the 1 minute 44 second Reef film](docs/images/film-poster.jpg)](https://x.com/IamHarrie/status/2107864545460994138)
+[![Watch the Reef demo video](docs/images/film-poster.jpg)](https://drive.google.com/file/d/1gicjNHsBtsWMXO5cGbnRZgSgtLSEr3xT/view?usp=sharing)
 
-**▶ [Watch the 1:44 film on X](https://x.com/IamHarrie/status/2107864545460994138)** · [Download the MP4](docs/reef-film.mp4)
+**▶ [Watch the demo video](https://drive.google.com/file/d/1gicjNHsBtsWMXO5cGbnRZgSgtLSEr3xT/view?usp=sharing)** · [Project post on X](https://x.com/IamHarrie/status/2107864545460994138) · [Download the MP4](docs/reef-film.mp4)
 
 ---
 
