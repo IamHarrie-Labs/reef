@@ -1,0 +1,14 @@
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {resolveQuestion,executePlan} from '../research/core.mjs';
+const source=process.argv[2]?pathToFileURL(resolve(process.argv[2])):new URL('../web_export.json',import.meta.url);
+const snapshot=JSON.parse(await readFile(source,'utf8'));
+const context={pairs:['QQQ/TQQQ','SMH/SOXL'],size:25000,hold:30,stress:null};
+const result=question=>executePlan(snapshot,resolveQuestion(snapshot,question,context));
+const key={status:'Observer answer key, not participant results',snapshot_utc:snapshot.generated_utc,source:'Frozen export copied alongside this file',tasks:{comparison:result('Compare QQQ/TQQQ with SMH/SOXL at $25k for 30 days'),funding_reversal:result('What if funding reverses?'),seven_day_reversal:executePlan(snapshot,resolveQuestion(snapshot,'Now use a 7-day hold',{...context,stress:'funding_reversal'})),conditions:result('What would need to change?')},scoring_note:'Stress figures have no recomputed verdict or confidence interval. Check the base verdict separately.'};
+const output=new URL('../../evidence/validation/',import.meta.url);
+await mkdir(output,{recursive:true});
+await writeFile(new URL('snapshot.json',output),JSON.stringify(snapshot,null,2));
+await writeFile(new URL('observer-answer-key.json',output),JSON.stringify(key,null,2));
+console.log(`Prepared frozen observer materials for ${snapshot.generated_utc}. No participant results were generated.`);

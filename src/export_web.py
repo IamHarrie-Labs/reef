@@ -5,6 +5,7 @@ the real (Python) pipeline so the browser never re-derives anything.
 import json, os, sys, datetime as dt, math
 sys.path.insert(0, os.path.dirname(__file__))
 import model, capacity, reef_index, intervals, ledger, score, solve
+import prospective_validation
 
 prices, funding, books = model.load_prices(), model.load_funding(), model.load_books()
 CL = json.load(open(os.path.join(model.DATA, "clusters.json")))
@@ -165,3 +166,4 @@ print(f"wrote {outpath}  ({os.path.getsize(outpath):,} bytes, {len(out_pairs)} p
 
 from pathlib import Path
 Path("web/web_export.json").write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+prospective_validation.write(now_ms)

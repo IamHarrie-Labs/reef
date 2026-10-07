@@ -1,0 +1,171 @@
+{
+  "snapshot_utc": "2026-10-05 23:19Z",
+  "context": {
+    "pairs": [
+      "QQQ/TQQQ",
+      "SMH/SOXL"
+    ],
+    "size": 25000,
+    "hold": 30,
+    "stress": null,
+    "intent": "compare",
+    "onlySupported": false
+  },
+  "turns": [
+    {
+      "schema": "reef-research-1",
+      "question": "Compare QQQ/TQQQ with SMH/SOXL at $25,000 for 30 days",
+      "snapshot_utc": "2026-10-05 23:19Z",
+      "model_version": "2.0",
+      "plan": {
+        "intent": "compare",
+        "pairs": [
+          "QQQ/TQQQ",
+          "SMH/SOXL"
+        ],
+        "size": 25000,
+        "hold": 30,
+        "stress": null,
+        "onlySupported": false,
+        "requestedSize": 25000,
+        "requestedHold": 30
+      },
+      "result": {
+        "title": "Compare the complete trade, not the headline yield",
+        "cards": [
+          {
+            "pair": "QQQ/TQQQ",
+            "size": 25000,
+            "hold": 30,
+            "beta": 2.7275251117333004,
+            "direction": "short A / long B",
+            "source_timestamps": {
+              "prices": {
+                "QQQUSDT": 1791237600000,
+                "TQQQUSDT": 1791237600000
+              },
+              "funding": {
+                "QQQUSDT": 1791216000000,
+                "TQQQUSDT": 1791216000000
+              },
+              "books": {
+                "QQQUSDT": "1791242337221",
+                "TQQQUSDT": "1791242341549"
+              }
+            },
+            "history_days": 13,
+            "cell": {
+              "annual_pct": 14.92,
+              "net_bp": 122.6,
+              "gross_bp": 185.1,
+              "cost_bp": 62.5,
+              "risk_bp": 251,
+              "breakeven_days": 10.1,
+              "sharpe": 1.704,
+              "ci_lo": 0.216,
+              "ci_hi": 3.191,
+              "verdict": "SUPPORTED",
+              "stress": {
+                "half_funding": 30.1,
+                "funding_reversal": -247.7,
+                "cost_plus_50": 91.4,
+                "risk_plus_50_sharpe": 1.136
+              },
+              "requires": {
+                "bp_per_day_now": 6.172,
+                "bp_per_day_needed": 5.654,
+                "multiple": 0.92,
+                "binding": "evidence",
+                "min_hold_days": 25,
+                "sharpe_ceiling": 2.572
+              }
+            },
+            "stress": null
+          },
+          {
+            "pair": "SMH/SOXL",
+            "size": 25000,
+            "hold": 30,
+            "beta": 3.052353627360213,
+            "direction": "long A / short B",
+            "source_timestamps": {
+              "prices": {
+                "SMHUSDT": 1791237600000,
+                "SOXLUSDT": 1791237600000
+              },
+              "funding": {
+                "SMHUSDT": 1791216000000,
+                "SOXLUSDT": 1791216000000
+              },
+              "books": {
+                "SMHUSDT": "1791242338370",
+                "SOXLUSDT": "1791242338718"
+              }
+            },
+            "history_days": 13,
+            "cell": {
+              "annual_pct": -44.12,
+              "net_bp": -362.6,
+              "gross_bp": -27.7,
+              "cost_bp": 334.9,
+              "risk_bp": 1515,
+              "breakeven_days": null,
+              "sharpe": -0.835,
+              "ci_lo": -1.225,
+              "ci_hi": -0.445,
+              "verdict": "UNFAVOURABLE",
+              "stress": {
+                "half_funding": -348.8,
+                "funding_reversal": -307.2,
+                "cost_plus_50": -530.1,
+                "risk_plus_50_sharpe": -0.557
+              },
+              "requires": {
+                "bp_per_day_now": -0.923,
+                "bp_per_day_needed": 18.404,
+                "multiple": null,
+                "binding": "cost",
+                "min_hold_days": null,
+                "sharpe_ceiling": -0.064
+              }
+            },
+            "stress": null
+          }
+        ],
+        "leading": {
+          "pair": "QQQ/TQQQ",
+          "metric": "modelled Sharpe proxy"
+        },
+        "disclosures": [
+          "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+          "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+        ]
+      },
+      "planner": "qwen3.8-max",
+      "commentary": {
+        "finding": "QQQ/TQQQ shows supported positive carry while SMH/SOXL is unfavourable due to heavy execution costs.",
+        "tradeoff": "The first pair competes on evidence sufficiency whereas the second is constrained by binding execution costs.",
+        "next_check": "Monitor updated order books and funding rates to reassess execution cost drag on both pairs."
+      },
+      "interpreter": "qwen3.8-max",
+      "context": {
+        "pairs": [
+          "QQQ/TQQQ",
+          "SMH/SOXL"
+        ],
+        "size": 25000,
+        "hold": 30,
+        "stress": null,
+        "intent": "compare",
+        "onlySupported": false
+      },
+      "note": "Qwen explains the selected evidence. Its prose can still be wrong."
+    }
+  ],
+  "exported_utc": "2026-10-06T00:49:49.456Z",
+  "limits": [
+    "A research notebook, not an order or a forecast.",
+    "Notebook turns are not Bitcoin-anchored.",
+    "All comparisons use the stated frozen snapshot."
+  ]
+}

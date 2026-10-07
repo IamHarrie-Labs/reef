@@ -50,3 +50,11 @@ settlement marks remain inspectable, and the arithmetic is reproducible.
 
 One realised net P&L includes residual price movement. It does not validate a
 historical carry expectation, an expected Sharpe, or the funding-only interval.
+
+## Baseline comparison added 6 October 2026
+
+The evidence page now shows observed-minus-estimated differences and a funding forecast baseline on this same fixed position. The frozen funding estimate's absolute error is 0.68 bp, compared with 0.81 bp for a zero-funding forecast. Observed execution cost exceeds the estimate by 22.25 bp. The paper position loses 116.14 bp; staying out produces zero trading P&L before any return on idle capital. Staying out is an economic alternative, not a competing numerical forecast.
+
+The classification was unfavourable before maturity, but a general always-nonpositive classification would also agree with this negative outcome. This example alone therefore cannot establish incremental direction skill. Its useful evidence is the prospective record, independently checked timing, inspectable accounting and honest forecast errors.
+
+On 6 October, the existing verifier passed online checks with Blockstream and Blockchain.com. Four evidence regressions also passed, including altered-accounting and Merkle-proof rejection. No committed prediction, execution or proof bundle was rewritten to add these presentation comparisons.

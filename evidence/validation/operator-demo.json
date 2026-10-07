@@ -1,0 +1,440 @@
+{
+  "status": "Operator QA, not a trader validation session",
+  "unsupported_questions": [
+    {
+      "question": "What if costs double?",
+      "outcome": "Rejected without changing context or previous turns"
+    },
+    {
+      "question": "Funding falls 30 percent",
+      "outcome": "Rejected with Edit question; three successful turns retained"
+    }
+  ],
+  "notebook": {
+    "snapshot_utc": "2026-10-05 21:53Z",
+    "context": {
+      "pairs": [
+        "QQQ/TQQQ"
+      ],
+      "size": 10000,
+      "hold": 7,
+      "stress": "cost_plus_50",
+      "intent": "inspect",
+      "onlySupported": false
+    },
+    "turns": [
+      {
+        "schema": "reef-research-1",
+        "question": "Help me compare QQQ/TQQQ and SMH/SOXL using 10000 USDT for two weeks. Which assumption is the problem?",
+        "snapshot_utc": "2026-10-05 21:53Z",
+        "model_version": "2.0",
+        "plan": {
+          "intent": "compare",
+          "pairs": [
+            "QQQ/TQQQ",
+            "SMH/SOXL"
+          ],
+          "size": 10000,
+          "hold": 14,
+          "stress": null,
+          "onlySupported": false,
+          "requestedSize": 10000,
+          "requestedHold": 14
+        },
+        "result": {
+          "title": "Scenario comparison",
+          "cards": [
+            {
+              "pair": "QQQ/TQQQ",
+              "size": 10000,
+              "hold": 14,
+              "beta": 2.72752810951347,
+              "direction": "short A / long B",
+              "source_timestamps": {
+                "prices": {
+                  "QQQUSDT": 1791216000000,
+                  "TQQQUSDT": 1791216000000
+                },
+                "funding": {
+                  "QQQUSDT": 1791216000000,
+                  "TQQQUSDT": 1791216000000
+                },
+                "books": {
+                  "QQQUSDT": "1791220795334",
+                  "TQQQUSDT": "1791220798824"
+                }
+              },
+              "history_days": 13,
+              "cell": {
+                "annual_pct": 7.8,
+                "net_bp": 29.9,
+                "gross_bp": 86.4,
+                "cost_bp": 56.5,
+                "risk_bp": 172,
+                "breakeven_days": 9.2,
+                "sharpe": 0.889,
+                "ci_lo": -0.597,
+                "ci_hi": 2.375,
+                "verdict": "UNPROVEN",
+                "stress": {
+                  "half_funding": -13.3,
+                  "funding_reversal": -142.9,
+                  "cost_plus_50": 1.7,
+                  "risk_plus_50_sharpe": 0.593
+                },
+                "requires": {
+                  "bp_per_day_now": 6.172,
+                  "bp_per_day_needed": 7.606,
+                  "multiple": 1.23,
+                  "binding": "evidence",
+                  "min_hold_days": 22,
+                  "sharpe_ceiling": 2.569
+                }
+              },
+              "stress": null
+            },
+            {
+              "pair": "SMH/SOXL",
+              "size": 10000,
+              "hold": 14,
+              "beta": 3.052871644807476,
+              "direction": "long A / short B",
+              "source_timestamps": {
+                "prices": {
+                  "SMHUSDT": 1791216000000,
+                  "SOXLUSDT": 1791216000000
+                },
+                "funding": {
+                  "SMHUSDT": 1791216000000,
+                  "SOXLUSDT": 1791216000000
+                },
+                "books": {
+                  "SMHUSDT": "1791220796183",
+                  "SOXLUSDT": "1791220796454"
+                }
+              },
+              "history_days": 13,
+              "cell": {
+                "annual_pct": -55.51,
+                "net_bp": -212.9,
+                "gross_bp": -12.9,
+                "cost_bp": 200,
+                "risk_bp": 1037,
+                "breakeven_days": null,
+                "sharpe": -1.048,
+                "ci_lo": -1.438,
+                "ci_hi": -0.659,
+                "verdict": "UNFAVOURABLE",
+                "stress": {
+                  "half_funding": -206.5,
+                  "funding_reversal": -187.1,
+                  "cost_plus_50": -312.9,
+                  "risk_plus_50_sharpe": -0.699
+                },
+                "requires": {
+                  "bp_per_day_now": -0.923,
+                  "bp_per_day_needed": 21.539,
+                  "multiple": null,
+                  "binding": "cost",
+                  "min_hold_days": null,
+                  "sharpe_ceiling": -0.064
+                }
+              },
+              "stress": null
+            }
+          ],
+          "leading": {
+            "pair": "QQQ/TQQQ",
+            "metric": "modelled Sharpe proxy"
+          },
+          "disclosures": [
+            "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+            "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+          ]
+        },
+        "planner": "qwen3.8-max",
+        "commentary": null,
+        "interpreter": null,
+        "context": {
+          "pairs": [
+            "QQQ/TQQQ",
+            "SMH/SOXL"
+          ],
+          "size": 10000,
+          "hold": 14,
+          "stress": null,
+          "intent": "compare",
+          "onlySupported": false
+        },
+        "note": "Recorded calculations are available. Verified Qwen commentary is unavailable for this turn."
+      },
+      {
+        "schema": "reef-research-1",
+        "question": "Use the recorded stress where execution costs rise by half.",
+        "snapshot_utc": "2026-10-05 21:53Z",
+        "model_version": "2.0",
+        "plan": {
+          "intent": "compare",
+          "pairs": [
+            "QQQ/TQQQ",
+            "SMH/SOXL"
+          ],
+          "size": 10000,
+          "hold": 14,
+          "stress": "cost_plus_50",
+          "onlySupported": false,
+          "requestedSize": 10000,
+          "requestedHold": 14
+        },
+        "result": {
+          "title": "Same setups, changed assumption",
+          "cards": [
+            {
+              "pair": "QQQ/TQQQ",
+              "size": 10000,
+              "hold": 14,
+              "beta": 2.72752810951347,
+              "direction": "short A / long B",
+              "source_timestamps": {
+                "prices": {
+                  "QQQUSDT": 1791216000000,
+                  "TQQQUSDT": 1791216000000
+                },
+                "funding": {
+                  "QQQUSDT": 1791216000000,
+                  "TQQQUSDT": 1791216000000
+                },
+                "books": {
+                  "QQQUSDT": "1791220795334",
+                  "TQQQUSDT": "1791220798824"
+                }
+              },
+              "history_days": 13,
+              "cell": {
+                "annual_pct": 7.8,
+                "net_bp": 29.9,
+                "gross_bp": 86.4,
+                "cost_bp": 56.5,
+                "risk_bp": 172,
+                "breakeven_days": 9.2,
+                "sharpe": 0.889,
+                "ci_lo": -0.597,
+                "ci_hi": 2.375,
+                "verdict": "UNPROVEN",
+                "stress": {
+                  "half_funding": -13.3,
+                  "funding_reversal": -142.9,
+                  "cost_plus_50": 1.7,
+                  "risk_plus_50_sharpe": 0.593
+                },
+                "requires": {
+                  "bp_per_day_now": 6.172,
+                  "bp_per_day_needed": 7.606,
+                  "multiple": 1.23,
+                  "binding": "evidence",
+                  "min_hold_days": 22,
+                  "sharpe_ceiling": 2.569
+                }
+              },
+              "stress": {
+                "key": "cost_plus_50",
+                "label": "Execution costs rise by half",
+                "value": 1.7,
+                "unit": "bp over hold"
+              }
+            },
+            {
+              "pair": "SMH/SOXL",
+              "size": 10000,
+              "hold": 14,
+              "beta": 3.052871644807476,
+              "direction": "long A / short B",
+              "source_timestamps": {
+                "prices": {
+                  "SMHUSDT": 1791216000000,
+                  "SOXLUSDT": 1791216000000
+                },
+                "funding": {
+                  "SMHUSDT": 1791216000000,
+                  "SOXLUSDT": 1791216000000
+                },
+                "books": {
+                  "SMHUSDT": "1791220796183",
+                  "SOXLUSDT": "1791220796454"
+                }
+              },
+              "history_days": 13,
+              "cell": {
+                "annual_pct": -55.51,
+                "net_bp": -212.9,
+                "gross_bp": -12.9,
+                "cost_bp": 200,
+                "risk_bp": 1037,
+                "breakeven_days": null,
+                "sharpe": -1.048,
+                "ci_lo": -1.438,
+                "ci_hi": -0.659,
+                "verdict": "UNFAVOURABLE",
+                "stress": {
+                  "half_funding": -206.5,
+                  "funding_reversal": -187.1,
+                  "cost_plus_50": -312.9,
+                  "risk_plus_50_sharpe": -0.699
+                },
+                "requires": {
+                  "bp_per_day_now": -0.923,
+                  "bp_per_day_needed": 21.539,
+                  "multiple": null,
+                  "binding": "cost",
+                  "min_hold_days": null,
+                  "sharpe_ceiling": -0.064
+                }
+              },
+              "stress": {
+                "key": "cost_plus_50",
+                "label": "Execution costs rise by half",
+                "value": -312.9,
+                "unit": "bp over hold"
+              }
+            }
+          ],
+          "leading": {
+            "pair": "QQQ/TQQQ",
+            "metric": "net carry when execution costs rise by half"
+          },
+          "disclosures": [
+            "Stress figures change one assumption and keep the others fixed. A stressed confidence interval and verdict have not been computed.",
+            "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+            "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+          ]
+        },
+        "planner": "qwen3.8-max",
+        "commentary": {
+          "finding": "Under stressed execution costs, the first pair retains positive carry while the second suffers heavy losses.",
+          "tradeoff": "The comparison pits modest residual carry against overwhelming execution drag that dominates the second pair.",
+          "next_check": "Observe whether actual execution costs deviate from these fixed stress assumptions in upcoming sessions."
+        },
+        "interpreter": "qwen3.8-max",
+        "context": {
+          "pairs": [
+            "QQQ/TQQQ",
+            "SMH/SOXL"
+          ],
+          "size": 10000,
+          "hold": 14,
+          "stress": "cost_plus_50",
+          "intent": "compare",
+          "onlySupported": false
+        },
+        "note": "Qwen explains the selected evidence. Its prose can still be wrong."
+      },
+      {
+        "schema": "reef-research-1",
+        "question": "Remove SMH/SOXL from this comparison and use a 7-day hold.",
+        "snapshot_utc": "2026-10-05 21:53Z",
+        "model_version": "2.0",
+        "plan": {
+          "intent": "inspect",
+          "pairs": [
+            "QQQ/TQQQ"
+          ],
+          "size": 10000,
+          "hold": 7,
+          "stress": "cost_plus_50",
+          "onlySupported": false,
+          "requestedSize": 10000,
+          "requestedHold": 7
+        },
+        "result": {
+          "title": "Same setups, changed assumption",
+          "cards": [
+            {
+              "pair": "QQQ/TQQQ",
+              "size": 10000,
+              "hold": 7,
+              "beta": 2.72752810951347,
+              "direction": "short A / long B",
+              "source_timestamps": {
+                "prices": {
+                  "QQQUSDT": 1791216000000,
+                  "TQQQUSDT": 1791216000000
+                },
+                "funding": {
+                  "QQQUSDT": 1791216000000,
+                  "TQQQUSDT": 1791216000000
+                },
+                "books": {
+                  "QQQUSDT": "1791220795334",
+                  "TQQQUSDT": "1791220798824"
+                }
+              },
+              "history_days": 13,
+              "cell": {
+                "annual_pct": -6.94,
+                "net_bp": -13.3,
+                "gross_bp": 43.2,
+                "cost_bp": 56.5,
+                "risk_bp": 121,
+                "breakeven_days": 9.2,
+                "sharpe": -0.791,
+                "ci_lo": -2.277,
+                "ci_hi": 0.695,
+                "verdict": "UNFAVOURABLE",
+                "stress": {
+                  "half_funding": -34.9,
+                  "funding_reversal": -99.7,
+                  "cost_plus_50": -41.6,
+                  "risk_plus_50_sharpe": -0.527
+                },
+                "requires": {
+                  "bp_per_day_now": 6.172,
+                  "bp_per_day_needed": 11.642,
+                  "multiple": 1.89,
+                  "binding": "evidence",
+                  "min_hold_days": 22,
+                  "sharpe_ceiling": 2.569
+                }
+              },
+              "stress": {
+                "key": "cost_plus_50",
+                "label": "Execution costs rise by half",
+                "value": -41.6,
+                "unit": "bp over hold"
+              }
+            }
+          ],
+          "leading": null,
+          "disclosures": [
+            "Stress figures change one assumption and keep the others fixed. A stressed confidence interval and verdict have not been computed.",
+            "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+            "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+          ]
+        },
+        "planner": "qwen3.8-max",
+        "commentary": {
+          "finding": "Under stressed execution costs rising by half, the pair yields a negative point estimate over the hold.",
+          "tradeoff": "Higher assumed execution costs compete against signed funding carry received to determine net performance.",
+          "next_check": "Observe whether actual execution costs deviate from this fixed elevated assumption in future periods."
+        },
+        "interpreter": "qwen3.8-max",
+        "context": {
+          "pairs": [
+            "QQQ/TQQQ"
+          ],
+          "size": 10000,
+          "hold": 7,
+          "stress": "cost_plus_50",
+          "intent": "inspect",
+          "onlySupported": false
+        },
+        "note": "Qwen explains the selected evidence. Its prose can still be wrong."
+      }
+    ],
+    "exported_utc": "2026-10-06T12:49:17.170Z",
+    "limits": [
+      "A research notebook, not an order or a forecast.",
+      "Notebook turns are not Bitcoin-anchored.",
+      "All comparisons use the stated frozen snapshot."
+    ]
+  }
+}

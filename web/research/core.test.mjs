@@ -39,6 +39,25 @@ test('common instrument names resolve without changing pair identity',()=>{
 test('unsupported instruments, horizons, sizes and shocks fail honestly',()=>{
  for(const question of ['Compare ABC/XYZ with QQQ/TQQQ','QQQ/TQQQ at $-25k','QQQ/TQQQ for -7 days','QQQ/TQQQ for 2 hours','Funding falls 30%','Funding increases 50%','Costs fall 50%','Risk halves','Predict tomorrow’s yield','Place an order now'])assert.throws(()=>resolveQuestion(snapshot,question,context),{name:'Error'});
 });
+test('unscripted stress requests cannot silently return the unchanged scenario',()=>{
+ for(const question of ['What if costs double?','What if risk doubles?','Funding falls 30 percent','Costs rise 20 percent','Funding falls 10%','Risk falls 50 percent','Funding grows by half'])assert.throws(()=>resolveQuestion(snapshot,question,context),{name:'Error'});
+ assert.equal(resolveQuestion(snapshot,'What if funding falls 50 percent?',context).stress,'half_funding');
+ assert.equal(resolveQuestion(snapshot,'What if execution costs rise by half?',context).stress,'cost_plus_50');
+ assert.equal(resolveQuestion(snapshot,'What if residual risk rises fifty percent?',context).stress,'risk_plus_50_sharpe');
+});
+test('combined shocks and ambiguous scenario alternatives ask for clarification',()=>{
+ for(const question of ['Funding halves and execution costs rise 50%','Funding reverses and risk rises by half','Use $10k or $25k for 30 days','Use $10k for 7 or 30 days','Use $10k for 7 days or 30 days','Remove stress and halve funding'])assert.throws(()=>resolveQuestion(snapshot,question,context),{name:'Error'});
+});
+test('removing an instrument keeps the remaining comparison rather than selecting the removed pair',()=>{
+ const comparison={...context,pairs:['QQQ/TQQQ','SMH/SOXL']};
+ assert.deepEqual(resolveQuestion(snapshot,'Remove SMH/SOXL from the comparison',comparison).pairs,['QQQ/TQQQ']);
+ assert.deepEqual(resolveQuestion(snapshot,'Exclude QQQ/TQQQ',comparison).pairs,['SMH/SOXL']);
+ assert.throws(()=>resolveQuestion(snapshot,'Remove QQQ/TQQQ',context),{name:'Error'});
+});
+test('explicit dollar and USDT amounts are resolved without reusing the previous size',()=>{
+ for(const question of ['Use 10000 USDT for 14 days','Use 10,000 dollars for two weeks','Use $10k for 14 days'])assert.equal(resolveQuestion(snapshot,question,context).size,10000);
+ assert.throws(()=>resolveQuestion(snapshot,'Use fees of 2bp per leg',context),{name:'Error'});
+});
 test('AI cannot substitute another pair or stress, or add schema fields',()=>{
  const matched=resolveQuestion(snapshot,'What if funding reverses?',context);
  for(const plan of [{intent:'inspect',pairs:['SMH/SOXL'],stress:'funding_reversal'},{intent:'inspect',pairs:matched.pairs,stress:'half_funding'},{intent:'inspect',pairs:matched.pairs,stress:matched.stress,price:42}])assert.throws(()=>validatePlan(plan,snapshot,matched));

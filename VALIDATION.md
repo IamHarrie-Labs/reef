@@ -9,6 +9,8 @@ No participant sessions have been reported for this exercise. Do not claim
 three validated users, time saved, adoption, or improved trading outcomes until
 the sessions below have actually happened.
 
+The recruitment copy, detailed observer protocol and pending results sheet are in `evidence/validation/`. Run `node web/scripts/prepare-validation.mjs PATH_TO_EXACT_EXPORT` to prepare a frozen snapshot and observer answer key. The key is calculated evidence, not participant feedback. Include an independently worded participant question before showing suggested follow-ups.
+
 ## Recruit three people
 
 Choose three people who fit that target user, preferably including someone

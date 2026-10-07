@@ -1,5 +1,13 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App';
+import '@fontsource-variable/space-grotesk/wght.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/instrument-serif/400-italic.css';
 import './styles.css';
+import './institutional.css';
+import './landing.css';
+import './refinement.css';
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);

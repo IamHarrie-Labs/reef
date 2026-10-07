@@ -1,0 +1,474 @@
+{
+  "status": "Observer answer key, not participant results",
+  "snapshot_utc": "2026-10-05 21:53Z",
+  "source": "Frozen export copied alongside this file",
+  "tasks": {
+    "comparison": {
+      "title": "Scenario comparison",
+      "cards": [
+        {
+          "pair": "QQQ/TQQQ",
+          "size": 25000,
+          "hold": 30,
+          "beta": 2.72752810951347,
+          "direction": "short A / long B",
+          "source_timestamps": {
+            "prices": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "funding": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "books": {
+              "QQQUSDT": "1791220795334",
+              "TQQQUSDT": "1791220798824"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": 14.96,
+            "net_bp": 123,
+            "gross_bp": 185.1,
+            "cost_bp": 62.2,
+            "risk_bp": 251,
+            "breakeven_days": 10.1,
+            "sharpe": 1.706,
+            "ci_lo": 0.22,
+            "ci_hi": 3.192,
+            "verdict": "SUPPORTED",
+            "stress": {
+              "half_funding": 30.4,
+              "funding_reversal": -247.3,
+              "cost_plus_50": 91.9,
+              "risk_plus_50_sharpe": 1.138
+            },
+            "requires": {
+              "bp_per_day_now": 6.172,
+              "bp_per_day_needed": 5.642,
+              "multiple": 0.91,
+              "binding": "evidence",
+              "min_hold_days": 24,
+              "sharpe_ceiling": 2.569
+            }
+          },
+          "stress": null
+        },
+        {
+          "pair": "SMH/SOXL",
+          "size": 25000,
+          "hold": 30,
+          "beta": 3.052871644807476,
+          "direction": "long A / short B",
+          "source_timestamps": {
+            "prices": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "funding": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "books": {
+              "SMHUSDT": "1791220796183",
+              "SOXLUSDT": "1791220796454"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": -37.41,
+            "net_bp": -307.5,
+            "gross_bp": -27.7,
+            "cost_bp": 279.8,
+            "risk_bp": 1518,
+            "breakeven_days": null,
+            "sharpe": -0.707,
+            "ci_lo": -1.096,
+            "ci_hi": -0.317,
+            "verdict": "UNFAVOURABLE",
+            "stress": {
+              "half_funding": -293.7,
+              "funding_reversal": -252.1,
+              "cost_plus_50": -447.4,
+              "risk_plus_50_sharpe": -0.471
+            },
+            "requires": {
+              "bp_per_day_now": -0.923,
+              "bp_per_day_needed": 16.581,
+              "multiple": null,
+              "binding": "cost",
+              "min_hold_days": null,
+              "sharpe_ceiling": -0.064
+            }
+          },
+          "stress": null
+        }
+      ],
+      "leading": {
+        "pair": "QQQ/TQQQ",
+        "metric": "modelled Sharpe proxy"
+      },
+      "disclosures": [
+        "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+        "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+      ]
+    },
+    "funding_reversal": {
+      "title": "Same setups, changed assumption",
+      "cards": [
+        {
+          "pair": "QQQ/TQQQ",
+          "size": 25000,
+          "hold": 30,
+          "beta": 2.72752810951347,
+          "direction": "short A / long B",
+          "source_timestamps": {
+            "prices": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "funding": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "books": {
+              "QQQUSDT": "1791220795334",
+              "TQQQUSDT": "1791220798824"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": 14.96,
+            "net_bp": 123,
+            "gross_bp": 185.1,
+            "cost_bp": 62.2,
+            "risk_bp": 251,
+            "breakeven_days": 10.1,
+            "sharpe": 1.706,
+            "ci_lo": 0.22,
+            "ci_hi": 3.192,
+            "verdict": "SUPPORTED",
+            "stress": {
+              "half_funding": 30.4,
+              "funding_reversal": -247.3,
+              "cost_plus_50": 91.9,
+              "risk_plus_50_sharpe": 1.138
+            },
+            "requires": {
+              "bp_per_day_now": 6.172,
+              "bp_per_day_needed": 5.642,
+              "multiple": 0.91,
+              "binding": "evidence",
+              "min_hold_days": 24,
+              "sharpe_ceiling": 2.569
+            }
+          },
+          "stress": {
+            "key": "funding_reversal",
+            "label": "Funding reverses",
+            "value": -247.3,
+            "unit": "bp over hold"
+          }
+        },
+        {
+          "pair": "SMH/SOXL",
+          "size": 25000,
+          "hold": 30,
+          "beta": 3.052871644807476,
+          "direction": "long A / short B",
+          "source_timestamps": {
+            "prices": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "funding": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "books": {
+              "SMHUSDT": "1791220796183",
+              "SOXLUSDT": "1791220796454"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": -37.41,
+            "net_bp": -307.5,
+            "gross_bp": -27.7,
+            "cost_bp": 279.8,
+            "risk_bp": 1518,
+            "breakeven_days": null,
+            "sharpe": -0.707,
+            "ci_lo": -1.096,
+            "ci_hi": -0.317,
+            "verdict": "UNFAVOURABLE",
+            "stress": {
+              "half_funding": -293.7,
+              "funding_reversal": -252.1,
+              "cost_plus_50": -447.4,
+              "risk_plus_50_sharpe": -0.471
+            },
+            "requires": {
+              "bp_per_day_now": -0.923,
+              "bp_per_day_needed": 16.581,
+              "multiple": null,
+              "binding": "cost",
+              "min_hold_days": null,
+              "sharpe_ceiling": -0.064
+            }
+          },
+          "stress": {
+            "key": "funding_reversal",
+            "label": "Funding reverses",
+            "value": -252.1,
+            "unit": "bp over hold"
+          }
+        }
+      ],
+      "leading": {
+        "pair": "QQQ/TQQQ",
+        "metric": "net carry when funding reverses"
+      },
+      "disclosures": [
+        "Stress figures change one assumption and keep the others fixed. A stressed confidence interval and verdict have not been computed.",
+        "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+        "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+      ]
+    },
+    "seven_day_reversal": {
+      "title": "Same setups, changed assumption",
+      "cards": [
+        {
+          "pair": "QQQ/TQQQ",
+          "size": 25000,
+          "hold": 7,
+          "beta": 2.72752810951347,
+          "direction": "short A / long B",
+          "source_timestamps": {
+            "prices": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "funding": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "books": {
+              "QQQUSDT": "1791220795334",
+              "TQQQUSDT": "1791220798824"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": -9.89,
+            "net_bp": -19,
+            "gross_bp": 43.2,
+            "cost_bp": 62.2,
+            "risk_bp": 121,
+            "breakeven_days": 10.1,
+            "sharpe": -1.127,
+            "ci_lo": -2.613,
+            "ci_hi": 0.359,
+            "verdict": "UNFAVOURABLE",
+            "stress": {
+              "half_funding": -40.6,
+              "funding_reversal": -105.4,
+              "cost_plus_50": -50,
+              "risk_plus_50_sharpe": -0.752
+            },
+            "requires": {
+              "bp_per_day_now": 6.172,
+              "bp_per_day_needed": 12.451,
+              "multiple": 2.02,
+              "binding": "evidence",
+              "min_hold_days": 24,
+              "sharpe_ceiling": 2.569
+            }
+          },
+          "stress": {
+            "key": "funding_reversal",
+            "label": "Funding reverses",
+            "value": -105.4,
+            "unit": "bp over hold"
+          }
+        },
+        {
+          "pair": "SMH/SOXL",
+          "size": 25000,
+          "hold": 7,
+          "beta": 3.052871644807476,
+          "direction": "long A / short B",
+          "source_timestamps": {
+            "prices": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "funding": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "books": {
+              "SMHUSDT": "1791220796183",
+              "SOXLUSDT": "1791220796454"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": -149.28,
+            "net_bp": -286.3,
+            "gross_bp": -6.5,
+            "cost_bp": 279.8,
+            "risk_bp": 733,
+            "breakeven_days": null,
+            "sharpe": -2.819,
+            "ci_lo": -3.208,
+            "ci_hi": -2.43,
+            "verdict": "UNFAVOURABLE",
+            "stress": {
+              "half_funding": -283.1,
+              "funding_reversal": -273.4,
+              "cost_plus_50": -426.2,
+              "risk_plus_50_sharpe": -1.879
+            },
+            "requires": {
+              "bp_per_day_now": -0.923,
+              "bp_per_day_needed": 47.228,
+              "multiple": null,
+              "binding": "cost",
+              "min_hold_days": null,
+              "sharpe_ceiling": -0.064
+            }
+          },
+          "stress": {
+            "key": "funding_reversal",
+            "label": "Funding reverses",
+            "value": -273.4,
+            "unit": "bp over hold"
+          }
+        }
+      ],
+      "leading": {
+        "pair": "QQQ/TQQQ",
+        "metric": "net carry when funding reverses"
+      },
+      "disclosures": [
+        "Stress figures change one assumption and keep the others fixed. A stressed confidence interval and verdict have not been computed.",
+        "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+        "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+      ]
+    },
+    "conditions": {
+      "title": "What would need to change",
+      "cards": [
+        {
+          "pair": "QQQ/TQQQ",
+          "size": 25000,
+          "hold": 30,
+          "beta": 2.72752810951347,
+          "direction": "short A / long B",
+          "source_timestamps": {
+            "prices": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "funding": {
+              "QQQUSDT": 1791216000000,
+              "TQQQUSDT": 1791216000000
+            },
+            "books": {
+              "QQQUSDT": "1791220795334",
+              "TQQQUSDT": "1791220798824"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": 14.96,
+            "net_bp": 123,
+            "gross_bp": 185.1,
+            "cost_bp": 62.2,
+            "risk_bp": 251,
+            "breakeven_days": 10.1,
+            "sharpe": 1.706,
+            "ci_lo": 0.22,
+            "ci_hi": 3.192,
+            "verdict": "SUPPORTED",
+            "stress": {
+              "half_funding": 30.4,
+              "funding_reversal": -247.3,
+              "cost_plus_50": 91.9,
+              "risk_plus_50_sharpe": 1.138
+            },
+            "requires": {
+              "bp_per_day_now": 6.172,
+              "bp_per_day_needed": 5.642,
+              "multiple": 0.91,
+              "binding": "evidence",
+              "min_hold_days": 24,
+              "sharpe_ceiling": 2.569
+            }
+          },
+          "stress": null
+        },
+        {
+          "pair": "SMH/SOXL",
+          "size": 25000,
+          "hold": 30,
+          "beta": 3.052871644807476,
+          "direction": "long A / short B",
+          "source_timestamps": {
+            "prices": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "funding": {
+              "SMHUSDT": 1791216000000,
+              "SOXLUSDT": 1791216000000
+            },
+            "books": {
+              "SMHUSDT": "1791220796183",
+              "SOXLUSDT": "1791220796454"
+            }
+          },
+          "history_days": 13,
+          "cell": {
+            "annual_pct": -37.41,
+            "net_bp": -307.5,
+            "gross_bp": -27.7,
+            "cost_bp": 279.8,
+            "risk_bp": 1518,
+            "breakeven_days": null,
+            "sharpe": -0.707,
+            "ci_lo": -1.096,
+            "ci_hi": -0.317,
+            "verdict": "UNFAVOURABLE",
+            "stress": {
+              "half_funding": -293.7,
+              "funding_reversal": -252.1,
+              "cost_plus_50": -447.4,
+              "risk_plus_50_sharpe": -0.471
+            },
+            "requires": {
+              "bp_per_day_now": -0.923,
+              "bp_per_day_needed": 16.581,
+              "multiple": null,
+              "binding": "cost",
+              "min_hold_days": null,
+              "sharpe_ceiling": -0.064
+            }
+          },
+          "stress": null
+        }
+      ],
+      "leading": {
+        "pair": "QQQ/TQQQ",
+        "metric": "modelled Sharpe proxy"
+      },
+      "disclosures": [
+        "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+        "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+      ]
+    }
+  },
+  "scoring_note": "Stress figures have no recomputed verdict or confidence interval. Check the base verdict separately."
+}

@@ -1,0 +1,115 @@
+{
+  "status": "Production operator QA, not participant feedback",
+  "origin": "https://getreef.xyz",
+  "checked_utc": "2026-10-06T12:57:08.685Z",
+  "unsupported": {
+    "status": 400,
+    "body": {
+      "error": "Use one recorded stress: funding halving or reversing, execution costs rising by half, or residual risk rising by half."
+    }
+  },
+  "removal": {
+    "status": 200,
+    "body": {
+      "schema": "reef-research-1",
+      "question": "Remove SMH/SOXL and use 10000 USDT for 7 days",
+      "snapshot_utc": "2026-10-05 21:53Z",
+      "model_version": "2.0",
+      "plan": {
+        "intent": "inspect",
+        "pairs": [
+          "QQQ/TQQQ"
+        ],
+        "size": 10000,
+        "hold": 7,
+        "stress": "cost_plus_50",
+        "onlySupported": false,
+        "requestedSize": 10000,
+        "requestedHold": 7
+      },
+      "result": {
+        "title": "Same setups, changed assumption",
+        "cards": [
+          {
+            "pair": "QQQ/TQQQ",
+            "size": 10000,
+            "hold": 7,
+            "beta": 2.72752810951347,
+            "direction": "short A / long B",
+            "source_timestamps": {
+              "prices": {
+                "QQQUSDT": 1791216000000,
+                "TQQQUSDT": 1791216000000
+              },
+              "funding": {
+                "QQQUSDT": 1791216000000,
+                "TQQQUSDT": 1791216000000
+              },
+              "books": {
+                "QQQUSDT": "1791220795334",
+                "TQQQUSDT": "1791220798824"
+              }
+            },
+            "history_days": 13,
+            "cell": {
+              "annual_pct": -6.94,
+              "net_bp": -13.3,
+              "gross_bp": 43.2,
+              "cost_bp": 56.5,
+              "risk_bp": 121,
+              "breakeven_days": 9.2,
+              "sharpe": -0.791,
+              "ci_lo": -2.277,
+              "ci_hi": 0.695,
+              "verdict": "UNFAVOURABLE",
+              "stress": {
+                "half_funding": -34.9,
+                "funding_reversal": -99.7,
+                "cost_plus_50": -41.6,
+                "risk_plus_50_sharpe": -0.527
+              },
+              "requires": {
+                "bp_per_day_now": 6.172,
+                "bp_per_day_needed": 11.642,
+                "multiple": 1.89,
+                "binding": "evidence",
+                "min_hold_days": 22,
+                "sharpe_ceiling": 2.569
+              }
+            },
+            "stress": {
+              "key": "cost_plus_50",
+              "label": "Execution costs rise by half",
+              "value": -41.6,
+              "unit": "bp over hold"
+            }
+          }
+        ],
+        "leading": null,
+        "disclosures": [
+          "Stress figures change one assumption and keep the others fixed. A stressed confidence interval and verdict have not been computed.",
+          "Funding-only intervals condition on fixed beta, execution costs and volatility. Returns use reference notional, not collateral.",
+          "Ranking is a comparison of recorded model estimates, not a forecast or trade recommendation."
+        ]
+      },
+      "planner": "qwen3.8-max",
+      "commentary": {
+        "finding": "Stressed point estimate shows negative net carry when execution costs rise by half.",
+        "tradeoff": "Higher assumed execution costs compete against positive funding carry received over the holding period.",
+        "next_check": "Observe whether actual execution costs exceed the baseline assumption during the holding window."
+      },
+      "interpreter": "qwen3.8-max",
+      "context": {
+        "pairs": [
+          "QQQ/TQQQ"
+        ],
+        "size": 10000,
+        "hold": 7,
+        "stress": "cost_plus_50",
+        "intent": "inspect",
+        "onlySupported": false
+      },
+      "note": "Qwen explains the selected evidence. Its prose can still be wrong."
+    }
+  }
+}

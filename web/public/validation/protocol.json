@@ -1,0 +1,18 @@
+{
+  "future_start_ms": 1791300683375,
+  "protocol": {
+    "version": "reef-consecutive-1",
+    "selection": "Every shadow ledger row, sorted by recorded timestamp and record key; no outcome-based selection or row cap.",
+    "funding_baselines": [
+      "zero funding",
+      "last settled rate strictly before entry, projected over the frozen hold with frozen signed weights"
+    ],
+    "direction_baseline": "always nonpositive paper net P&L",
+    "economic_baseline": "no trade: zero trading P&L, excluding idle-capital returns",
+    "aggregation": "Paired mean absolute errors on the same eligible records, plus equal-weight entry batches and pair/hold breakdowns.",
+    "incomplete": "Keep every pending, missed or incomplete record with its reason. Never impute an outcome.",
+    "interpretation": "Overlapping holds and shared instruments are dependent; no statistical significance or portfolio return is inferred.",
+    "history_boundary": "Historical predictions were recorded before paper outcomes; this evaluation protocol is retrospective for existing records."
+  },
+  "protocol_sha256": "ef12318d03dd735585abfa058bdad328ddb6b7dcad7ed3b96dae97cc0f78645a"
+}

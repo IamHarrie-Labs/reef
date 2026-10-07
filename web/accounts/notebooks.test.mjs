@@ -1,0 +1,8 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {validateNotebook,notebookRequest} from './notebooks.mjs';
+const data={snapshot_utc:'2026-10-06',context:{pairs:['QQQ/TQQQ'],size:25000,hold:30,stress:null},turns:[]};
+test('unauthenticated requests cannot query notebooks',async()=>{await assert.rejects(notebookRequest({query(){throw Error('Must not query')}},null,'GET'),e=>e.status===401)});
+test('every read and delete scopes its query to the authenticated owner',async()=>{for(const method of ['GET','DELETE']){let query;const db={query:async(sql,args)=>{query={sql,args};return{rows:[{id:'00000000-0000-4000-8000-000000000000'}]}}};await notebookRequest(db,'owner',method,{},'00000000-0000-4000-8000-000000000000');assert.match(query.sql,/user_id=\$2/);assert.equal(query.args[1],'owner')}});
+test('stale concurrent writes fail instead of replacing newer evidence',async()=>{const db={query:async(sql,args)=>{assert.match(sql,/version=\$5/);assert.equal(args[1],'owner');return {rows:[]}}};await assert.rejects(notebookRequest(db,'owner','PUT',{title:'Research',data,version:1},'00000000-0000-4000-8000-000000000000'),e=>e.status===409)});
+test('notebook validation preserves more than twelve turns and rejects oversized input',()=>{const turn={schema:'reef-research-1',question:'Compare the pairs',snapshot_utc:'2026-10-06',result:{cards:[]}};assert.equal(validateNotebook({...data,turns:Array(30).fill(turn)}).turns.length,30);assert.throws(()=>validateNotebook({...data,turns:Array(201).fill(turn)}));assert.throws(()=>validateNotebook({...data,context:{...data.context,size:NaN}}))});

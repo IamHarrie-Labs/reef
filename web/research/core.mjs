@@ -8,7 +8,7 @@ export class ResearchError extends Error{constructor(message,status=400){super(m
 
 export function resolveQuestion(snapshot,question,context={}){
  if(typeof question!=='string'||question.trim().length<3||question.length>700)throw new ResearchError('Ask a research question between three and seven hundred characters.');
- let q=question.trim();const names=snapshot.pairs.map(p=>p.pair);
+ let q=question.trim().replace(/\bpercent\b/gi,'%');const names=snapshot.pairs.map(p=>p.pair);
  for(const [alias,symbol] of [['tether gold','XAUT'],['pax gold','PAXG'],['triple leveraged nasdaq','TQQQ'],['semiconductor etf','SMH'],['nasdaq etf','QQQ'],['tesla','TSLA'],['nvidia','NVDA'],['apple','AAPL'],['microsoft','MSFT'],['amazon','AMZN'],['alphabet','GOOGL'],['gold','XAU']])q=q.replace(new RegExp(`\\b${alias}\\b`,'gi'),symbol);
  if(/\b(place|execute|submit)\b.{0,25}\b(order|trade)\b|\b(buy|sell)\s+now\b|\b(predict|forecast|guarantee)\b/i.test(q))throw new ResearchError('Reef researches recorded scenarios. Ask about costs, carry, constraints or a stress test.');
  if(/\b(hours?|minutes?)\b/i.test(q))throw new ResearchError('Recorded holding periods use days. Ask for a hold between one and ninety days.');
@@ -17,22 +17,47 @@ export function resolveQuestion(snapshot,question,context={}){
  const unknownPairs=q.match(/\b[A-Z][A-Z0-9]*\s*\/\s*[A-Z][A-Z0-9]*\b/gi)||[];
  if(unknownPairs.some(p=>!names.some(n=>n.toLowerCase()===p.replace(/\s/g,'').toLowerCase()||n.split('/').reverse().join('/').toLowerCase()===p.replace(/\s/g,'').toLowerCase())))throw new ResearchError('One of those pairs is not tracked. Choose a pair from the watchlist.');
  const basePairs=Array.isArray(context.pairs)?context.pairs.filter(p=>names.includes(p)):[];
- const pairs=/\b(add|include|alongside)\b/i.test(q)?[...new Set([...basePairs,...found])]:found.length?found:basePairs;
+ const removing=found.length&&/\b(remove|drop|exclude)\b/i.test(q);
+ const pairs=removing?basePairs.filter(p=>!found.includes(p)):/\b(add|include|alongside)\b/i.test(q)?[...new Set([...basePairs,...found])]:found.length?found:basePairs;
+ if(removing&&!pairs.length)throw new ResearchError('Keep at least one pair in the notebook, or name a replacement pair.');
  if(pairs.length>3)throw new ResearchError('Compare up to three pairs at a time.');
- const amount=q.match(/\$\s*(-?[\d,]+(?:\.\d+)?)\s*([km])?/i)||q.match(/\b(-?\d+(?:\.\d+)?)\s*([km])\b/i);
- const duration=q.match(/(-?\d+(?:\.\d+)?)\s*[- ]?\s*(days?|weeks?|months?)/i)||q.match(/\b(a|an|one|two|three)\s+(day|week|month)s?\b/i);
+ const amounts=[...q.matchAll(/\$\s*(-?[\d,]+(?:\.\d+)?)\s*([km])?\b|(-?[\d,]+(?:\.\d+)?)\s*(k|m|USDT|dollars?)\b/gi)].map(m=>[m[0],m[1]||m[3],m[2]||m[4]]);
+ const durations=[...q.matchAll(/(-?\d+(?:\.\d+)?)\s*[- ]?\s*(days?|weeks?|months?)\b|\b(a|an|one|two|three)\s+(days?|weeks?|months?)\b/gi)].map(m=>[m[0],m[1]||m[3],m[2]||m[4]]);
+ if(amounts.length>1||durations.length>1||/\b\d+\s*(?:or|to)\s*\d+\s*(days?|weeks?|months?)\b/i.test(q))throw new ResearchError('Choose one reference size and one holding period for this question. Compare pairs first, then change the scenario in a follow-up.');
+ const amount=amounts[0],duration=durations[0];
  const words={a:1,an:1,one:1,two:2,three:3};
  const requestedSize=amount?Number(amount[1].replaceAll(',',''))*(amount[2]?.toLowerCase()==='k'?1000:amount[2]?.toLowerCase()==='m'?1e6:1):Number(context.size||25000);
  const requestedHold=duration?(words[duration[1].toLowerCase()]??Number(duration[1]))*(duration[2].toLowerCase().startsWith('week')?7:duration[2].toLowerCase().startsWith('month')?30:1):Number(context.hold||30);
  if(!Number.isFinite(requestedSize)||requestedSize<1000||requestedSize>250000||!Number.isFinite(requestedHold)||requestedHold<1||requestedHold>90)throw new ResearchError('Use a reference size from $1,000 to $250,000 and a hold from one to ninety days.');
  let stress=Object.hasOwn(STRESSES,context.stress)?context.stress:null;
- if(/\bfunding\b.{0,30}\b(rises?|increases?|doubles?|grows?)\b|\b(costs?|slippage|risk)\b.{0,30}\b(falls?|decreases?|drops?|halves?|halved)\b/i.test(q))throw new ResearchError('That direction is not a recorded stress. Use funding halving or reversing, costs rising by half, or residual risk rising by half.');
- if(/\b(reset|remove|clear)\b.{0,20}\bstress\b|\b(base case|unstressed)\b/i.test(q))stress=null;
- else if(/\b(revers|negative funding)/i.test(q))stress='funding_reversal';
- else if(/\b(half|halves|halved)\b.*\bfunding\b|\bfunding\b.*\b(half|halves|halved)\b|funding.*(?:50\s*%|fifty percent)/i.test(q))stress='half_funding';
- else if(/\b(cost|costs|slippage)\b.*(?:50\s*%|half|fifty percent)/i.test(q))stress='cost_plus_50';
- else if(/\brisk\b.*(?:50\s*%|half|fifty percent)/i.test(q))stress='risk_plus_50_sharpe';
- else if(/\b(funding|costs?|slippage|risk)\b.{0,30}\d+\s*%/i.test(q))throw new ResearchError('The recorded stresses are funding halving or reversing, costs rising by half, and residual risk rising by half.');
+ if(/\bfees?\b[^.!?;]{0,30}\d/i.test(q))throw new ResearchError('Account-specific fees are not calculated here. Reef uses the fees recorded in the snapshot; inspect Source data for that assumption.');
+ const requestedStresses=new Set();
+ const stressHelp='Use one recorded stress: funding halving or reversing, execution costs rising by half, or residual risk rising by half.';
+ for(const m of q.matchAll(/\b(funding|costs?|slippage|risk)\b([^.!?;]*?)(?=\b(?:funding|costs?|slippage|risk)\b|[.!?;]|$)/gi)){
+  const subject=m[1].toLowerCase(),change=m[2];
+  const percentage=change.match(/(-?\d+(?:\.\d+)?)\s*%/);
+  const half=/\b(half|halves|halved)\b|fifty\s*%/i.test(change)||Number(percentage?.[1])===50;
+  const up=/\b(ris\w*|increas\w*|grow\w*|doubl\w*)\b/i.test(change),down=/\b(fall\w*|decreas\w*|drop\w*|halves|halved)\b/i.test(change);
+  if(percentage&&Number(percentage[1])!==50||/\b(doubl\w*|tripl\w*)\b/i.test(change))throw new ResearchError(stressHelp);
+  if(subject==='funding'){
+   if(up)throw new ResearchError(stressHelp);
+   if(/\brevers\w*\b/i.test(change))requestedStresses.add('funding_reversal');
+   if(half)requestedStresses.add('half_funding');
+   else if(down)throw new ResearchError(stressHelp);
+  }else{
+   if(down)throw new ResearchError(stressHelp);
+   if(half)requestedStresses.add(subject==='risk'?'risk_plus_50_sharpe':'cost_plus_50');
+   else if(up)throw new ResearchError(stressHelp);
+  }
+ }
+ // Also accept the usual shorthand when the amount precedes the subject.
+ if(/\b(half|halve|halved)\b\s+(?:the\s+)?funding\b/i.test(q))requestedStresses.add('half_funding');
+ if(/\bnegative funding\b/i.test(q))requestedStresses.add('funding_reversal');
+ if(requestedStresses.size>1)throw new ResearchError('Combined stresses have not been calculated. Test one assumption at a time, then remove the stress before trying another.');
+ if(/\b(reset|remove|clear)\b.{0,20}\bstress\b|\b(base case|unstressed)\b/i.test(q)){
+  if(requestedStresses.size)throw new ResearchError('Choose either the base case or one stress test in this question.');
+  stress=null;
+ }else if(requestedStresses.size)stress=[...requestedStresses][0];
  const intent=/\b(rank|strongest|highest|resilient|show.*supported|find.*supported)\b/i.test(q)?'rank':/\b(required|need|needs|binding|constraint|make.*work|break.?even)\b/i.test(q)?'requirements':context.intent==='rank'&&!found.length?'rank':pairs.length>1?'compare':'inspect';
  if(!pairs.length&&intent!=='rank')throw new ResearchError('Choose a pair to start. After that, follow-up questions keep your pair, size and hold.');
  return {intent,pairs,size:nearest(snapshot.sizes,requestedSize),hold:nearest(snapshot.holds,requestedHold),stress,
@@ -59,7 +84,7 @@ export function executePlan(snapshot,plan){
  if(plan.intent==='rank')cards=ordered.slice(0,3);
  else cards.sort((a,b)=>plan.pairs.indexOf(a.pair)-plan.pairs.indexOf(b.pair));
  const first=ordered[0];
- const title=!cards.length?'No recorded scenario matches this filter.':plan.intent==='requirements'?'What would need to change':plan.intent==='rank'?'Highest recorded estimates under your scenario':plan.stress?'Same setups, changed assumption':cards.length>1?'Compare the complete trade, not the headline yield':'Follow the evidence through the trade';
+ const title=!cards.length?'No recorded scenario matches this filter.':plan.intent==='requirements'?'What would need to change':plan.intent==='rank'?'Highest recorded estimates under your scenario':plan.stress?'Same setups, changed assumption':cards.length>1?'Scenario comparison':'Selected scenario';
  return {title,cards,leading:cards.length>1&&first?{pair:first.pair,metric:plan.stress?(plan.stress==='risk_plus_50_sharpe'?'modelled Sharpe proxy under higher residual risk':`net carry when ${STRESSES[plan.stress].toLowerCase()}`):'modelled Sharpe proxy'}:null,
          disclosures:[...(plan.size!==plan.requestedSize||plan.hold!==plan.requestedHold?[`Nearest recorded scenario: $${plan.size.toLocaleString('en-US')} for ${plan.hold} days; requested $${plan.requestedSize.toLocaleString('en-US')} for ${plan.requestedHold} days.`]:[]),
            ...(plan.stress?['Stress figures change one assumption and keep the others fixed. A stressed confidence interval and verdict have not been computed.']:[]),

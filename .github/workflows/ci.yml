@@ -18,6 +18,11 @@ jobs:
       - name: Financial accounting regression tests
         run: python src/test_accounting.py
 
+      - name: Consecutive baseline and cohort regressions
+        run: |
+          python src/test_prospective_validation.py
+          python src/prospective_validation.py --verify
+
       - name: Shadow desk and Bitcoin anchor, offline end to end
         run: python src/test_shadow.py
 

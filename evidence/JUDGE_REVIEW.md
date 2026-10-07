@@ -1,6 +1,6 @@
 # Reef: revised judge assessment
 
-Assessed on October 5, 2026 against Bitget AI Hackathon S2 Track 3, AI Trading
+Critically reassessed on October 6, 2026 against Bitget AI Hackathon S2 Track 3, AI Trading
 Desk. Official focus: feature depth, research quality, LUI fluency and
 personalized thesis. The organizer gives subjective judging criteria, not
 percentage weights. The equally weighted score below is our assessment.
@@ -9,16 +9,23 @@ Source: https://bitget-ai.gitbook.io/bitgetai_hackathons2
 
 | Criterion | Score / 10 | Evidence and remaining deduction |
 |---|---:|---|
-| Feature depth | 9.0 | Real Bitget funding, books and prices; shared model; solver; paired comparisons; recorded stresses; shadow desk; gold oracle check; portable timestamp proof. Future full-book retention is implemented and tested, but its remote hourly job awaits source publication. |
-| Research quality | 8.8 | Untouched funding evaluation, explicit cost/risk accounting, conditional intervals, frozen snapshot identity, solver conditions, baseline-aware errors and an independently checked historical case. Short funding samples, dependent paper observations and possible incorrect AI prose still limit conclusions. |
-| LUI fluency | 8.6 | Live Qwen plans and explanations now work; pairs, stress and hold survive follow-ups and browser reload. Unsupported requests fail without deleting previous turns. The scope remains a bounded research grammar and recorded scenario grid; unsupported questions require reformulation. |
-| Personalized thesis | 8.8 | A clear target user and research question, custom reference size/hold, saved pairs, conversational comparisons and exportable dated notes. No observed trader adoption or portfolio-level personalization has been established. |
+| Feature depth | 8.5 | Real funding, books, solver, comparisons, recorded stresses, paper outcomes, oracle checks and timestamp proofs. Passkeys/cloud notebooks remain inactive without a database; newer book-retention deployment is not established. |
+| Research quality | 8.5 | Reproducible estimates, explicit cost/risk assumptions, dated evidence and honest limitations. Short holdouts, dependent observations and hypothetical fills limit confidence; predictive benefit beyond simple baselines is unproven. |
+| LUI fluency | 8.0 | Live Qwen and retained context work on tested requests, with a calculation-only fallback. The supported research vocabulary is bounded. Harder QA exposed silent unsupported-shock and pair-removal failures, subsequently corrected. Real trader questions remain untested. |
+| Personalized thesis | 8.0 | A specific paired-RWA funding question, chosen size/hold, saved pairs and contextual notebooks. No observed trader sessions, actual portfolio constraints or account-specific fees establish deeper personalization. |
 
-**Overall: 88/100**, compared with the earlier 78/100. This is a strong,
-distinctive research-workbench entry. It is not an honest ten-out-of-ten claim
-and does not establish a grand-prize rank without reviewing the competing field.
+**Overall: 82.5, rounded to 83/100.** The earlier 88 was too generous about
+product completeness and demonstrated user value. The subsequent fixes improve
+the product, but prepared test protocols are not completed validation. No grand-prize
+rank can be established without the competing field and accepted submission materials.
 
 ## What changed the score
+
+The critical reassessment gives more weight to unfinished account activation and
+missing independent trader evidence. The 6 October follow-up fixes hard-question
+resolution and error recovery, adds a baseline to the fixed prospective case,
+verifies its proofs online and removes all current npm audit advisories. The domain
+now works over HTTPS. Database activation and actual trader sessions remain pending.
 
 The language interface now completes a research task rather than resolving a
 single scenario. Live testing exposed a Qwen reasoning-mode latency issue,
@@ -42,6 +49,16 @@ high direction-agreement rate as predictive skill.
   still explicitly pending.
 
 ## Verification boundary
+
+The 6 October follow-up ran 36 focused checks: 26 Node account/research/route,
+six presentation/case and four Python evidence regressions. The proof verifier
+passed online checks against both public explorers. All seven page/view routes
+were checked at 375 px without document overflow. The saved operator demo is QA,
+not an independent trader session; one turn used calculation-only fallback and
+two follow-ups displayed live Qwen commentary. See `validation/OPERATOR_REVIEW.md`.
+
+The paragraph below records the previous October 5 check, not a new run of all
+Python regressions today.
 
 Forty-six focused regressions pass: thirty-one Python and fifteen Node. Export
 consistency matches twenty-seven pairs and thirteen hundred sixteen priced

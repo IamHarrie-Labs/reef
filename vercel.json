@@ -3,7 +3,20 @@
   "installCommand": "npm ci --prefix web",
   "buildCommand": "npm run build --prefix web",
   "outputDirectory": "web/dist/client",
+  "rewrites": [{"source":"/api/auth/:authPath*","destination":"/api/auth-handler?authPath=:authPath*"}],
   "functions": {
+    "api/auth-handler.js": {
+      "maxDuration": 30
+    },
+    "api/accounts.js": {
+      "maxDuration": 30
+    },
+    "api/notebooks.js": {
+      "maxDuration": 30
+    },
+    "api/auth/[...path].js": {
+      "maxDuration": 30
+    },
     "api/research.js": {
       "maxDuration": 90,
       "includeFiles": "web/{web_export.json,research/core.mjs}"
