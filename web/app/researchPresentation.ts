@@ -2,7 +2,7 @@ type Estimate = {net_bp:number;gross_bp:number;verdict:string;requires?:{binding
 
 /** Display the exported basis-point result as a percentage of reference notional. */
 export function holdReturn(basisPoints:number){
- return new Intl.NumberFormat('en-US',{style:'percent',minimumFractionDigits:2,maximumFractionDigits:4,signDisplay:'exceptZero'}).format(basisPoints/10000);
+ return new Intl.NumberFormat('en-US',{style:'percent',minimumFractionDigits:3,maximumFractionDigits:4,signDisplay:'exceptZero'}).format(basisPoints/10000);
 }
 
 export function verdictReason(cell:Estimate|null|undefined){

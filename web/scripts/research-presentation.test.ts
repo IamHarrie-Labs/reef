@@ -5,7 +5,8 @@ import {holdReturn,verdictReason} from '../app/researchPresentation.ts';
 test('holding-period percentage preserves sign, units and small nonzero returns',()=>{
  assert.equal(holdReturn(122.6),'+1.226%');
  assert.equal(holdReturn(-362.6),'-3.626%');
- assert.equal(holdReturn(0),'0.00%');
+ assert.equal(holdReturn(0),'0.000%');
+ assert.equal(holdReturn(81),'+0.810%');
  assert.equal(holdReturn(0.01),'+0.0001%');
 });
 test('a positive but unfavourable estimate is not described as costs exceeding funding',()=>{

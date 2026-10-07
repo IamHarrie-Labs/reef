@@ -556,3 +556,29 @@ would be pure sample-project ceremony (see D-19, which anchors the record
 itself, differently and with an actual reason). Also rejected: a DEX pool
 price for PAXG/XAUT. A Chainlink feed already aggregates multiple venues and
 is deliberately harder for one thin pool to move.
+
+---
+
+## D-22 · Widen the shadow exit window from 3 to 10 hours
+
+**Context.** By 7 October, 376 of 933 scheduled shadow records had
+missed their exit window and could never be graded. The window assumed the
+"hourly" desk ran roughly hourly.
+
+**Finding.** It doesn't. Over 58 scheduled runs, GitHub started the desk a
+median 5.3 hours apart (p90 6.9h, max 9.7h). 93% of gaps exceeded 3 hours,
+so most positions were simply never looked at inside their window.
+
+**Decision.** `EXIT_GRACE_MS` is now 10 hours, covering every observed gap.
+The exit is still priced against the book at the moment it actually
+happened and its real timestamp is recorded. Funding that settles between
+the hold end and that exit is not counted.
+
+**Not rewritten.** Records already marked `missed_exit_window` stay that way.
+Re-grading them with a later book would be fitting outcomes after the fact,
+the thing the ledger exists to prevent (D-10). The larger window applies to
+positions closed from now on.
+
+**Rejected.** Running the cron more often. GitHub throttles scheduled
+workflows regardless of the requested interval; asking for every 15
+minutes would not have changed the observed spacing.

@@ -17,7 +17,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 import model, ledger
 
 EXECUTIONS = os.path.join(model.DATA, "shadow", "executions.json")
-EXIT_GRACE_MS = 3 * 3_600_000  # a scheduled job exits within 3h of the hold ending
+# GitHub runs the scheduled desk a median 5.3h apart (p90 6.9h, max 9.7h over
+# 58 runs, measured 2026-10-07); a 3h window missed 93% of exits. 10h covers
+# every observed gap. Exit time is recorded as it happened, not snapped to the end.
+EXIT_GRACE_MS = 10 * 3_600_000
 
 
 def execution_key(ts, pair, hold):

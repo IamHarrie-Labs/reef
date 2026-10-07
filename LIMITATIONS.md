@@ -5,7 +5,9 @@
   pairs were inspected. The hourly desk extends it every cycle.
 - The shadow desk (D-18) is forward paper execution, not trading. Fills walk
   real Bitget books and use real mark prices, but our size never moves the
-  book, and exits may be up to 3 hours after the hold ends. A single graded
+  book, and exits may be up to 10 hours after the hold ends (raised from 3h on 7 Oct, after
+  the 3h window missed most exits; earlier misses stay recorded as missed). Funding
+  settled between the hold end and the actual exit is not counted. A single graded
   hold's net P&L is dominated by residual price noise; cost and funding
   comparisons are the informative part.
 - Returns use B-leg reference notional, not gross exposure or posted collateral.
