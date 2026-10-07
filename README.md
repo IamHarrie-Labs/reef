@@ -2,13 +2,15 @@
 
 **Look past the headline yield. See what holds up.**
 
-**Live desk → [getreef.xyz](https://getreef.xyz)** · [Evidence](https://getreef.xyz/desk/evidence) · [Method](https://getreef.xyz/desk/method) · [Architecture](ARCHITECTURE.md) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md) · [Validation](VALIDATION.md)
+**Live desk → [getreef.xyz](https://getreef.xyz)** · [Evidence](https://getreef.xyz/desk/evidence) · [Method](https://getreef.xyz/desk/method) · [Architecture](ARCHITECTURE.md) · [Decisions](DECISIONS.md) · [Limitations](LIMITATIONS.md) · [Validation](VALIDATION.md) · [Film](https://x.com/IamHarrie/status/2107864545460994138)
 
 [![ci](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml/badge.svg)](https://github.com/IamHarrie-Labs/reef/actions/workflows/ci.yml) [![live desk](https://github.com/IamHarrie-Labs/reef/actions/workflows/desk.yml/badge.svg)](https://github.com/IamHarrie-Labs/reef/actions/workflows/desk.yml)
 
 Bitget AI Base Camp Hackathon S2 · Track 3, AI Trading Desk · Open theme
 
-![Reef landing page](docs/images/01-landing.png)
+[![Watch the 1 minute 44 second Reef film](docs/images/film-poster.jpg)](https://x.com/IamHarrie/status/2107864545460994138)
+
+**▶ [Watch the 1:44 film on X](https://x.com/IamHarrie/status/2107864545460994138)** · [Download the MP4](docs/reef-film.mp4)
 
 ---
 
@@ -105,6 +107,10 @@ question ─► research plan + retained context (validated Qwen plan; rules fal
 The verdict is written to the ledger **before** any explanation is generated, so the explanation cannot shape the number. Stress tests ("what if funding reverses?", "what if costs rise by half?") show a stressed point estimate. They are labelled separately and never get a recomputed verdict or interval.
 
 ## A tour of the product
+
+### The landing page
+
+![Reef landing page](docs/images/01-landing.png)
 
 ### Explore: every pair at a glance
 
@@ -286,6 +292,6 @@ The full list is in [LIMITATIONS.md](LIMITATIONS.md). Every model change, includ
 
 ---
 
-The diagrams were drawn with [rough.js](https://roughjs.com) in the Caveat typeface. The screenshots are of the live site on 7 October 2026.
+The diagrams were drawn with [rough.js](https://roughjs.com) in the Caveat typeface. The screenshots are of the live site on 7 October 2026. The film was rendered frame by frame from code, and its music is an original score generated in code.
 
 MIT licensed. Research, not advice. Reef never places an order.
