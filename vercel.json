@@ -3,6 +3,14 @@
   "installCommand": "npm ci --prefix web",
   "buildCommand": "npm run build --prefix web",
   "outputDirectory": "web/dist/client",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{"type": "host", "value": "reef-research-desk.vercel.app"}],
+      "destination": "https://getreef.xyz/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [{"source":"/api/auth/:authPath*","destination":"/api/auth-handler?authPath=:authPath*"}],
   "functions": {
     "api/auth-handler.js": {
