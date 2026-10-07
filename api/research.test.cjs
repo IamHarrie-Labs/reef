@@ -18,7 +18,7 @@ test('Vercel route refuses a different snapshot instead of mixing evidence',asyn
  const result=await invoke({...body(),snapshot_utc:'1900-01-01'});assert.equal(result.code,409);
 });
 test('Vercel route rejects malformed requests and unsupported methods',async()=>{
- assert.equal((await invoke('{bad')).code,400);assert.equal((await invoke(body(),'GET')).code,405);
+ assert.equal((await invoke('{bad')).code,400);assert.equal((await invoke({})).code,400);assert.equal((await invoke({question:'Compare QQQ/TQQQ'})).code,400);assert.equal((await invoke(body(),'GET')).code,405);
  assert.equal((await invoke({...body(),question:'Place an order now'})).code,400);
  assert.equal((await invoke({...body(),history:'x'.repeat(15000)})).code,400);
 });

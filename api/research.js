@@ -10,7 +10,8 @@ module.exports=async(req,res)=>{
  const recent=(counts.get(key)||[]).filter(t=>now-t<60000);recent.push(now);counts.set(key,recent);
  if(counts.size>2000)for(const [k,v] of counts)if(v.at(-1)<now-60000)counts.delete(k);
  if(recent.length>12)return res.status(429).json({error:'Too many research turns. Wait a minute and retry.'});
- let body;try{body=typeof req.body==='string'?JSON.parse(req.body):req.body;if(!body||JSON.stringify(body).length>14000)throw Error()}catch{return res.status(400).json({error:'Invalid research request.'})}
+ let body;try{body=typeof req.body==='string'?JSON.parse(req.body):req.body;if(!body||typeof body!=='object'||JSON.stringify(body).length>14000)throw Error()}catch{return res.status(400).json({error:'Invalid research request.'})}
+ if(typeof body.question!=='string'||typeof body.snapshot_utc!=='string')return res.status(400).json({error:'A research request needs a question and the snapshot it was asked against.'});
  let snapshot=bundled;
  if(body.snapshot_utc!==bundled.generated_utc){
   if(!cached||now-cachedAt>60000){try{const r=await fetch('https://raw.githubusercontent.com/IamHarrie-Labs/reef/main/web/web_export.json',{signal:AbortSignal.timeout(4000)});if(r.ok){cached=await r.json();cachedAt=now}}catch{}}

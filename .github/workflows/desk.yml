@@ -2,7 +2,9 @@ name: live desk
 
 on:
   schedule:
-    - cron: "34 * * * *"
+    # GitHub drops many scheduled runs; two attempts an hour keep the desk fresher.
+    # Paper-trade batches are time-gated in shadow.py, so extra runs open nothing new.
+    - cron: "4,34 * * * *"
   workflow_dispatch:
 
 permissions:
