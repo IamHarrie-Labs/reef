@@ -1,42 +1,42 @@
 {
- "generated_utc": "2026-10-14 23:04Z",
+ "generated_utc": "2026-10-15 01:25Z",
  "source": "Chainlink price feeds on Ethereum mainnet, read directly via eth_call",
  "rows": [
   {
    "symbol": "XAUUSDT",
    "reference_feed": "XAU/USD",
    "status": "ok",
-   "bitget_price": 4112.18,
-   "bitget_ts_ms": 1792019083075,
+   "bitget_price": 4151.75,
+   "bitget_ts_ms": 1792027514823,
    "bitget_source": "live_ticker",
-   "onchain_price": 4110.63,
-   "onchain_updated_ms": 1792017863000,
-   "onchain_age_s": 1219,
-   "basis_bp": 3.8
+   "onchain_price": 4150.135,
+   "onchain_updated_ms": 1792026239000,
+   "onchain_age_s": 1275,
+   "basis_bp": 3.9
   },
   {
    "symbol": "XAUTUSDT",
    "reference_feed": "XAU/USD",
    "status": "ok",
-   "bitget_price": 4105.63,
-   "bitget_ts_ms": 1792019083252,
+   "bitget_price": 4141.54,
+   "bitget_ts_ms": 1792027515053,
    "bitget_source": "live_ticker",
-   "onchain_price": 4110.63,
-   "onchain_updated_ms": 1792017863000,
-   "onchain_age_s": 1219,
-   "basis_bp": -12.2
+   "onchain_price": 4150.135,
+   "onchain_updated_ms": 1792026239000,
+   "onchain_age_s": 1275,
+   "basis_bp": -20.7
   },
   {
    "symbol": "PAXGUSDT",
    "reference_feed": "PAXG/USD",
    "status": "ok",
-   "bitget_price": 4114.19,
-   "bitget_ts_ms": 1792019083406,
+   "bitget_price": 4150.97,
+   "bitget_ts_ms": 1792027515278,
    "bitget_source": "live_ticker",
-   "onchain_price": 4114.6352645,
-   "onchain_updated_ms": 1792017083000,
-   "onchain_age_s": 1999,
-   "basis_bp": -1.1
+   "onchain_price": 4136.95876083,
+   "onchain_updated_ms": 1792023407000,
+   "onchain_age_s": 4107,
+   "basis_bp": 33.9
   }
  ]
 }
