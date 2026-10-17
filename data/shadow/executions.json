@@ -66807,6 +66807,52 @@
   "pair": "SOXX/SMH",
   "status": "closed"
  },
+ "1792152706696:SOXX/SOXL:1": {
+  "execution": {
+   "SOXLUSDT": {
+    "entry_book_sha256": "388e92fd41f4a45caab500485bca82745c9de9a5736940e928ee915349eac8a7",
+    "entry_book_ts": "1792152691103",
+    "entry_mid": 104.14,
+    "entry_price": 104.09943265779198,
+    "entry_ts": 1792152706696,
+    "exit_book_sha256": "5240f853e0d7790d7854ecea6cd7e96f0d1b969f7b7c7db0e6d9d18c544c116f",
+    "exit_book_ts": "1792256133130",
+    "exit_mid": 93.57499999999999,
+    "exit_price": 93.59494201676601,
+    "exit_ts": 1792256147589,
+    "fees_usdt": 28.486376384649823,
+    "qty": -240.15500720530312,
+    "settlement_marks": {
+     "1792166400000": 100.07,
+     "1792195200000": 94.57,
+     "1792224000000": 94.47
+    }
+   },
+   "SOXXUSDT": {
+    "entry_book_sha256": "153e015292c6446d76cbcd14d9fc08b902c5ad5f655859cd1f0251b9909700bf",
+    "entry_book_ts": "1792152691826",
+    "entry_mid": 511.11,
+    "entry_price": 512.1268276440258,
+    "entry_ts": 1792152706696,
+    "exit_book_sha256": "2192cfda46fa39aa47b77b3e6e6864f5131143be00e77373dd4aed43a8e7d853",
+    "exit_book_ts": "1792256133667",
+    "exit_mid": 495.755,
+    "exit_price": 494.31362231172335,
+    "exit_ts": 1792256147589,
+    "fees_usdt": 83.61142206056206,
+    "qty": 138.46062139798116,
+    "settlement_marks": {
+     "1792166400000": 505.17,
+     "1792195200000": 495.6,
+     "1792224000000": 495.29
+    }
+   }
+  },
+  "execution_type": "shadow",
+  "hold_days": 1,
+  "pair": "SOXX/SOXL",
+  "status": "closed"
+ },
  "1792152706696:SOXX/SOXS:1": {
   "execution": {
    "SOXSUSDT": {
