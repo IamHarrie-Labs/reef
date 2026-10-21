@@ -1,655 +1,5 @@
 [
  {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:SPY/VOO:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SPYUSDT": {
-    "entry_book_sha256": "fbcb146a147c521a7469cb3d157efd31ce09ad2cfa93a5380282e6a5d1cded35",
-    "entry_book_ts": "1792295343069",
-    "entry_mid": 761.745,
-    "entry_price": 761.6671773798381,
-    "entry_ts": 1792295354819,
-    "qty": -24.35429139063467
-   },
-   "VOOUSDT": {
-    "entry_book_sha256": "2696b808fcfb3a992187edb43fd0e41c839dac68e9f731f40da097f9e43497d7",
-    "entry_book_ts": "1792295345104",
-    "entry_mid": 700.1600000000001,
-    "entry_price": 702.3663910649816,
-    "entry_ts": 1792295354819,
-    "qty": 35.59395825032728
-   }
-  },
-  "pair": "SPY/VOO",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:SPY/SP500:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SP500USDT": {
-    "entry_book_sha256": "6c88f4b5bb003d08f93ef01ef6f3c83250b6f78e4c288c3e1a66334b52d4967f",
-    "entry_book_ts": "1792295342780",
-    "entry_mid": 7631.9,
-    "entry_price": 7644.443695537128,
-    "entry_ts": 1792295354819,
-    "qty": 3.270349157597321
-   },
-   "SPYUSDT": {
-    "entry_book_sha256": "fbcb146a147c521a7469cb3d157efd31ce09ad2cfa93a5380282e6a5d1cded35",
-    "entry_book_ts": "1792295343069",
-    "entry_mid": 761.745,
-    "entry_price": 761.6661257378476,
-    "entry_ts": 1792295354819,
-    "qty": -28.53533800318304
-   }
-  },
-  "pair": "SPY/SP500",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:VOO/SP500:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SP500USDT": {
-    "entry_book_sha256": "6c88f4b5bb003d08f93ef01ef6f3c83250b6f78e4c288c3e1a66334b52d4967f",
-    "entry_book_ts": "1792295342780",
-    "entry_mid": 7631.9,
-    "entry_price": 7617.519076192782,
-    "entry_ts": 1792295354819,
-    "qty": -3.2819084205687266
-   },
-   "VOOUSDT": {
-    "entry_book_sha256": "2696b808fcfb3a992187edb43fd0e41c839dac68e9f731f40da097f9e43497d7",
-    "entry_book_ts": "1792295345104",
-    "entry_mid": 700.1600000000001,
-    "entry_price": 702.1054720222735,
-    "entry_ts": 1792295354819,
-    "qty": 9.187324344991666
-   }
-  },
-  "pair": "VOO/SP500",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:QQQ/NDX100:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "NDX100USDT": {
-    "entry_book_sha256": "1ce309516734cfa7682aacf9eec62d345427375831976af3174133f0993a1a10",
-    "entry_book_ts": "1792295339523",
-    "entry_mid": 29102.0,
-    "entry_price": 29161.97863086043,
-    "entry_ts": 1792295354819,
-    "qty": 0.8572806501388747
-   },
-   "QQQUSDT": {
-    "entry_book_sha256": "9252442933fec21bdade3583130424a6da6207244b875c05455f96806525e8d2",
-    "entry_book_ts": "1792295340687",
-    "entry_mid": 708.345,
-    "entry_price": 708.2060686558968,
-    "entry_ts": 1792295354819,
-    "qty": -32.481978340068196
-   }
-  },
-  "pair": "QQQ/NDX100",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:QQQ/TQQQ:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "QQQUSDT": {
-    "entry_book_sha256": "9252442933fec21bdade3583130424a6da6207244b875c05455f96806525e8d2",
-    "entry_book_ts": "1792295340687",
-    "entry_mid": 708.345,
-    "entry_price": 708.0526138207064,
-    "entry_ts": 1792295354819,
-    "qty": -96.5708998050534
-   },
-   "TQQQUSDT": {
-    "entry_book_sha256": "95e2dabe38375cc2626ac47e56874ed599cde710eb34a38f4a2cf04e2ccf925b",
-    "entry_book_ts": "1792295344212",
-    "entry_mid": 67.57499999999999,
-    "entry_price": 67.6443495332344,
-    "entry_ts": 1792295354819,
-    "qty": 369.5800192108763
-   }
-  },
-  "pair": "QQQ/TQQQ",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:QQQ/SQQQ:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "QQQUSDT": {
-    "entry_book_sha256": "9252442933fec21bdade3583130424a6da6207244b875c05455f96806525e8d2",
-    "entry_book_ts": "1792295340687",
-    "entry_mid": 708.345,
-    "entry_price": 708.0536252597559,
-    "entry_ts": 1792295354819,
-    "qty": -95.5276388371639
-   },
-   "SQQQUSDT": {
-    "entry_book_sha256": "37741d37afc6f06fddf5c32c1a51712b5a43be478c26a951e996d4f700cf2eea",
-    "entry_book_ts": "1792295343351",
-    "entry_mid": 39.55,
-    "entry_price": 39.49123406120279,
-    "entry_ts": 1792295354819,
-    "qty": -633.0518808618505
-   }
-  },
-  "pair": "QQQ/SQQQ",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:TQQQ/SQQQ:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SQQQUSDT": {
-    "entry_book_sha256": "37741d37afc6f06fddf5c32c1a51712b5a43be478c26a951e996d4f700cf2eea",
-    "entry_book_ts": "1792295343351",
-    "entry_mid": 39.55,
-    "entry_price": 39.58746048349911,
-    "entry_ts": 1792295354819,
-    "qty": 631.5131027518305
-   },
-   "TQQQUSDT": {
-    "entry_book_sha256": "95e2dabe38375cc2626ac47e56874ed599cde710eb34a38f4a2cf04e2ccf925b",
-    "entry_book_ts": "1792295344212",
-    "entry_mid": 67.57499999999999,
-    "entry_price": 67.64367689030205,
-    "entry_ts": 1792295354819,
-    "qty": 360.13602149481557
-   }
-  },
-  "pair": "TQQQ/SQQQ",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:SMH/SOXL:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SMHUSDT": {
-    "entry_book_sha256": "30a404fb232017bdf2638033489326f8f6d59267e6bc86ae84ee67e55bb89ac4",
-    "entry_book_ts": "1792295341569",
-    "entry_mid": 543.4749999999999,
-    "entry_price": 546.0959049663845,
-    "entry_ts": 1792295354819,
-    "qty": 138.94397336632733
-   },
-   "SOXLUSDT": {
-    "entry_book_sha256": "b0da0cde89e97602bac0f413b657a38e36abebe02019debca833812dd9faf9f1",
-    "entry_book_ts": "1792295341872",
-    "entry_mid": 92.31,
-    "entry_price": 92.29090029365189,
-    "entry_ts": 1792295354819,
-    "qty": -270.88261053315995
-   }
-  },
-  "pair": "SMH/SOXL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:SMH/SOXS:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SMHUSDT": {
-    "entry_book_sha256": "30a404fb232017bdf2638033489326f8f6d59267e6bc86ae84ee67e55bb89ac4",
-    "entry_book_ts": "1792295341569",
-    "entry_mid": 543.4749999999999,
-    "entry_price": 546.2979748206168,
-    "entry_ts": 1792295354819,
-    "qty": 171.04053358095305
-   },
-   "SOXSUSDT": {
-    "entry_book_sha256": "ee120d2fc1a270aac1bfb78704cfc2e985c5701b797a470f94b567f08ae63f06",
-    "entry_book_ts": "1792295342176",
-    "entry_mid": 50.3755,
-    "entry_price": 50.400570405131425,
-    "entry_ts": 1792295354819,
-    "qty": 496.02613222517573
-   }
-  },
-  "pair": "SMH/SOXS",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:SOXL/SOXS:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SOXLUSDT": {
-    "entry_book_sha256": "b0da0cde89e97602bac0f413b657a38e36abebe02019debca833812dd9faf9f1",
-    "entry_book_ts": "1792295341872",
-    "entry_mid": 92.31,
-    "entry_price": 92.29004110898747,
-    "entry_ts": 1792295354819,
-    "qty": -294.0611444099386
-   },
-   "SOXSUSDT": {
-    "entry_book_sha256": "ee120d2fc1a270aac1bfb78704cfc2e985c5701b797a470f94b567f08ae63f06",
-    "entry_book_ts": "1792295342176",
-    "entry_mid": 50.3755,
-    "entry_price": 50.36154122964051,
-    "entry_ts": 1792295354819,
-    "qty": -496.4105424415832
-   }
-  },
-  "pair": "SOXL/SOXS",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:XAU/XAUT:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "XAUTUSDT": {
-    "entry_book_sha256": "5934011dcaf5f22b71fa89bc592bbf393a1b184060e7791340bccde7a8266889",
-    "entry_book_ts": "1792295345404",
-    "entry_mid": 4155.765,
-    "entry_price": 4156.510777390706,
-    "entry_ts": 1792295354819,
-    "qty": 6.014660213558743
-   },
-   "XAUUSDT": {
-    "entry_book_sha256": "5e03fa7a3418e2161885268f951876ca64297cecc1395fd5d3a4112f1f142f95",
-    "entry_book_ts": "1792295345700",
-    "entry_mid": 4168.105,
-    "entry_price": 4168.1,
-    "entry_ts": 1792295354819,
-    "qty": -5.745551048335874
-   }
-  },
-  "pair": "XAU/XAUT",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:XAU/PAXG:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "PAXGUSDT": {
-    "entry_book_sha256": "bbe38231ced787f165b55ecaac39bda645196eaba94f00cf15bbe0d037e12806",
-    "entry_book_ts": "1792295340396",
-    "entry_mid": 4158.305,
-    "entry_price": 4159.272099070963,
-    "entry_ts": 1792295354819,
-    "qty": 6.010667108214471
-   },
-   "XAUUSDT": {
-    "entry_book_sha256": "5e03fa7a3418e2161885268f951876ca64297cecc1395fd5d3a4112f1f142f95",
-    "entry_book_ts": "1792295345700",
-    "entry_mid": 4168.105,
-    "entry_price": 4168.1,
-    "entry_ts": 1792295354819,
-    "qty": -5.878635658966583
-   }
-  },
-  "pair": "XAU/PAXG",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:XAUT/PAXG:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "PAXGUSDT": {
-    "entry_book_sha256": "bbe38231ced787f165b55ecaac39bda645196eaba94f00cf15bbe0d037e12806",
-    "entry_book_ts": "1792295340396",
-    "entry_mid": 4158.305,
-    "entry_price": 4159.272099070963,
-    "entry_ts": 1792295354819,
-    "qty": 6.010667108214471
-   },
-   "XAUTUSDT": {
-    "entry_book_sha256": "5934011dcaf5f22b71fa89bc592bbf393a1b184060e7791340bccde7a8266889",
-    "entry_book_ts": "1792295345404",
-    "entry_mid": 4155.765,
-    "entry_price": 4154.767762700076,
-    "entry_ts": 1792295354819,
-    "qty": -6.122439407163949
-   }
-  },
-  "pair": "XAUT/PAXG",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:TSLA/TSLL:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "TSLAUSDT": {
-    "entry_book_sha256": "55e362a1a3f977f868ee879a8e1b99ae2df1fe9ed74f385a08b3b45f51dfe919",
-    "entry_book_ts": "1792295344507",
-    "entry_mid": 351.24,
-    "entry_price": 351.1028370102254,
-    "entry_ts": 1792295354819,
-    "qty": -136.4414275021408
-   },
-   "TSLLUSDT": {
-    "entry_book_sha256": "e41e7528cfad3df7a7913345d0f736249ddc5c7fe08ff736ecf959228812bbfb",
-    "entry_book_ts": "1792295344801",
-    "entry_mid": 8.7135,
-    "entry_price": 8.786460674846785,
-    "entry_ts": 1792295354819,
-    "qty": 2845.286734346642
-   }
-  },
-  "pair": "TSLA/TSLL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:NVDA/NVDL:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "NVDAUSDT": {
-    "entry_book_sha256": "bb8a5bba92accdcd82acbc54d0f152c46050b478f43b76ea7f4ab5c3f4a6d164",
-    "entry_book_ts": "1792295339821",
-    "entry_mid": 213.415,
-    "entry_price": 213.36946720415997,
-    "entry_ts": 1792295354819,
-    "qty": -217.45596326165557
-   },
-   "NVDLUSDT": {
-    "entry_book_sha256": "3ef49abc03cad89f63a78cc0ab3a17fde2fb2e0cad55221c4a0681a5fe290bc1",
-    "entry_book_ts": "1792295340111",
-    "entry_mid": 31.701,
-    "entry_price": 31.994512515333255,
-    "entry_ts": 1792295354819,
-    "qty": 781.3839947715671
-   }
-  },
-  "pair": "NVDA/NVDL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:AAPL/AAPU:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "AAPLUSDT": {
-    "entry_book_sha256": "dfe5b8dbe6bfd4403e2c110c94e027ba888fa805f061196dd931e576f386e808",
-    "entry_book_ts": "1792295335620",
-    "entry_mid": 342.89,
-    "entry_price": 342.66778382072965,
-    "entry_ts": 1792295354819,
-    "qty": -136.28010063800198
-   },
-   "AAPUUSDT": {
-    "entry_book_sha256": "3d757a5ec1f510b2e585a63f52cb98b6e44741d969a0c3eec398ee207ed6a980",
-    "entry_book_ts": "1792295335920",
-    "entry_mid": 46.3775,
-    "entry_price": 46.98751582249156,
-    "entry_ts": 1792295354819,
-    "qty": 532.0562188144713
-   }
-  },
-  "pair": "AAPL/AAPU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:MSFT/MSFU:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "MSFTUSDT": {
-    "entry_book_sha256": "e4b87f6b5c4b583c62f81a61b542605ce060d4d2f41fbb7d64992443e9f421a8",
-    "entry_book_ts": "1792295338921",
-    "entry_mid": 526.6600000000001,
-    "entry_price": 526.3379637046178,
-    "entry_ts": 1792295354819,
-    "qty": -86.35121966168138
-   },
-   "MSFUUSDT": {
-    "entry_book_sha256": "408f0e9cef2491f7267eb4866c59fafab4cafc4f7d353508326bf5db98dc65cf",
-    "entry_book_ts": "1792295339213",
-    "entry_mid": 41.090999999999994,
-    "entry_price": 41.88089277157059,
-    "entry_ts": 1792295354819,
-    "qty": 596.9309235205795
-   }
-  },
-  "pair": "MSFT/MSFU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:AMZN/AMZU:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "AMZNUSDT": {
-    "entry_book_sha256": "ffebe8f23d8f8451053e304e557dc9ee8a25dae8cd663445625b1c2704e0c327",
-    "entry_book_ts": "1792295336236",
-    "entry_mid": 248.725,
-    "entry_price": 248.65695101493844,
-    "entry_ts": 1792295354819,
-    "qty": -180.0168768286437
-   },
-   "AMZUUSDT": {
-    "entry_book_sha256": "67e78742d410080bc6c5726c7ae51f0dd30ca48808a1e6ad5ac4854767f17c69",
-    "entry_book_ts": "1792295336536",
-    "entry_mid": 33.447,
-    "entry_price": 33.87734373745045,
-    "entry_ts": 1792295354819,
-    "qty": 737.9563224835482
-   }
-  },
-  "pair": "AMZN/AMZU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:META/METU:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "METAUSDT": {
-    "entry_book_sha256": "ebbb0bfcbfc0cfe56ec0a77c28a80eafb8cc0a0cea3a790a61969b7e14d5f9a1",
-    "entry_book_ts": "1792295337731",
-    "entry_mid": 706.6,
-    "entry_price": 705.9110067128714,
-    "entry_ts": 1792295354819,
-    "qty": -63.109311362636426
-   },
-   "METUUSDT": {
-    "entry_book_sha256": "d6c3d9cbfa64278797dae7826d3ab12d0eb8a379f753e72e1768ac703cf5236f",
-    "entry_book_ts": "1792295338036",
-    "entry_mid": 28.738,
-    "entry_price": 29.02661792826053,
-    "entry_ts": 1792295354819,
-    "qty": 861.2784328435251
-   }
-  },
-  "pair": "META/METU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:GOOGL/GGLL:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "GGLLUSDT": {
-    "entry_book_sha256": "7d22f7d0216ca76fe259cd506b9afde6ebcfcc7be601c598218817d2a0885758",
-    "entry_book_ts": "1792295337110",
-    "entry_mid": 96.21,
-    "entry_price": 96.76856460799127,
-    "entry_ts": 1792295354819,
-    "qty": 258.3483603510584
-   },
-   "GOOGLUSDT": {
-    "entry_book_sha256": "c4f249754cf9067f5ad6b947f633f172fb7a05b5f4e9c34d38ca610c3af63502",
-    "entry_book_ts": "1792295337423",
-    "entry_mid": 339.565,
-    "entry_price": 339.43475701255807,
-    "entry_ts": 1792295354819,
-    "qty": -133.66717782453594
-   }
-  },
-  "pair": "GOOGL/GGLL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:TENCENT/TENCENTHKD:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "TENCENTHKDUSDT": {
-    "entry_book_sha256": "24f7fed81d2dcdad88eef36557b9ed3c4b1a84318888d34133c2aaab602156ab",
-    "entry_book_ts": "1792295343637",
-    "entry_mid": 414.29499999999996,
-    "entry_price": 413.87658109917413,
-    "entry_ts": 1792295354819,
-    "qty": -60.40448080827612
-   },
-   "TENCENTUSDT": {
-    "entry_book_sha256": "803f2dc8039a21184e3c1285cd327991356c335eed6dd6e35157bffad3bab50b",
-    "entry_book_ts": "1792295343925",
-    "entry_mid": 52.925,
-    "entry_price": 53.16900495408933,
-    "entry_ts": 1792295354819,
-    "qty": 335.6366353847719
-   }
-  },
-  "pair": "TENCENT/TENCENTHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:XIAOMI/XIAOMIHKD:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "XIAOMIHKDUSDT": {
-    "entry_book_sha256": "6f70496ec0ae84e4abdc9c47c7e3768790172d1dd4a928775debf0fd25dbc41d",
-    "entry_book_ts": "1792295345989",
-    "entry_mid": 26.5875,
-    "entry_price": 26.752746263105916,
-    "entry_ts": 1792295354819,
-    "qty": 934.4835013995147
-   },
-   "XIAOMIUSDT": {
-    "entry_book_sha256": "6c328df281cdbaafb57d71a0482243eb4037a81e36829b8ead2de260c17d668a",
-    "entry_book_ts": "1792295346285",
-    "entry_mid": 3.3989000000000003,
-    "entry_price": 3.390753247856529,
-    "entry_ts": 1792295354819,
-    "qty": -5989.3303123167025
-   }
-  },
-  "pair": "XIAOMI/XIAOMIHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:ZHIPU/ZHIPUHKD:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "ZHIPUHKDUSDT": {
-    "entry_book_sha256": "68272680d13f901c698801c94206de15206c02038d1f1fbdb7500857713c37a8",
-    "entry_book_ts": "1792295346582",
-    "entry_mid": 494.5,
-    "entry_price": 496.7762993477947,
-    "entry_ts": 1792295354819,
-    "qty": 50.32446200195517
-   },
-   "ZHIPUUSDT": {
-    "entry_book_sha256": "08d18efcc7a3101bf949502ad412f8ee571acfb22ad57840c00f3203897bb40b",
-    "entry_book_ts": "1792295346893",
-    "entry_mid": 62.92,
-    "entry_price": 62.857833257267224,
-    "entry_ts": 1792295354819,
-    "qty": -345.9530412683099
-   }
-  },
-  "pair": "ZHIPU/ZHIPUHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:MINIMAX/MINIMAXHKD:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "MINIMAXHKDUSDT": {
-    "entry_book_sha256": "eb649af88b221d12709dbae91ad950b9430749afd203b62f4991fd3cc7f9cfa6",
-    "entry_book_ts": "1792295338326",
-    "entry_mid": 177.125,
-    "entry_price": 178.30207600097987,
-    "entry_ts": 1792295354819,
-    "qty": 140.21149142347963
-   },
-   "MINIMAXUSDT": {
-    "entry_book_sha256": "150d5dbfb74b273eb098f40438ecc7f178a1b069de821db91120c0b64eacb342",
-    "entry_book_ts": "1792295338617",
-    "entry_mid": 22.563000000000002,
-    "entry_price": 22.5404207439156,
-    "entry_ts": 1792295354819,
-    "qty": -988.4888161096029
-   }
-  },
-  "pair": "MINIMAX/MINIMAXHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792554554819,
-  "hold_days": 3,
-  "id": "1792295354819:SHEIN/SHEINHKD:3",
-  "ledger_ts": 1792295354819,
-  "legs": {
-   "SHEINHKDUSDT": {
-    "entry_book_sha256": "95b6fa1ee67a59e991975eef2f58978cb455c0c6d1d2e7512c0d7b292a044283",
-    "entry_book_ts": "1792295340988",
-    "entry_mid": 37.245000000000005,
-    "entry_price": 36.97238736321643,
-    "entry_ts": 1792295354819,
-    "qty": -676.1803005686435
-   },
-   "SHEINUSDT": {
-    "entry_book_sha256": "eaf0a6835c0b19cd531d9da4727eb1d4205b50c7a4ad8d5a9df6921b67646c8a",
-    "entry_book_ts": "1792295341293",
-    "entry_mid": 4.7684999999999995,
-    "entry_price": 4.804982340195197,
-    "entry_ts": 1792295354819,
-    "qty": 4813.7649255252345
-   }
-  },
-  "pair": "SHEIN/SHEINHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
   "end_ms": 1792642641485,
   "hold_days": 3,
   "id": "1792383441485:SPY/VOO:3",
@@ -1380,188 +730,6 @@
  {
   "end_ms": 1792561554888,
   "hold_days": 1,
-  "id": "1792475154888:SPY/VOO:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SPYUSDT": {
-    "entry_book_sha256": "e96ebfbac607711cbc38e2ca790597c3854058a41f9a67d7b2005cb00dea8285",
-    "entry_book_ts": "1792475141565",
-    "entry_mid": 767.985,
-    "entry_price": 767.8912683161453,
-    "entry_ts": 1792475154888,
-    "qty": -24.327451011062802
-   },
-   "VOOUSDT": {
-    "entry_book_sha256": "a23a06576429640fa755ca02336408bc825f340af0ce0cdd40017c5d82be9e04",
-    "entry_book_ts": "1792475143841",
-    "entry_mid": 705.6949999999999,
-    "entry_price": 708.0576464956173,
-    "entry_ts": 1792475154888,
-    "qty": 35.30785964071182
-   }
-  },
-  "pair": "SPY/VOO",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:SPY/SP500:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SP500USDT": {
-    "entry_book_sha256": "da53638ebc75e84c3a2a225a3235652048825c1f9ff8204464f2441adb68e151",
-    "entry_book_ts": "1792475141247",
-    "entry_mid": 7696.3,
-    "entry_price": 7723.84511762467,
-    "entry_ts": 1792475154888,
-    "qty": 3.2367298436569767
-   },
-   "SPYUSDT": {
-    "entry_book_sha256": "e96ebfbac607711cbc38e2ca790597c3854058a41f9a67d7b2005cb00dea8285",
-    "entry_book_ts": "1792475141565",
-    "entry_mid": 767.985,
-    "entry_price": 767.8770010059852,
-    "entry_ts": 1792475154888,
-    "qty": -28.316913949473843
-   }
-  },
-  "pair": "SPY/SP500",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:VOO/SP500:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SP500USDT": {
-    "entry_book_sha256": "da53638ebc75e84c3a2a225a3235652048825c1f9ff8204464f2441adb68e151",
-    "entry_book_ts": "1792475141247",
-    "entry_mid": 7696.3,
-    "entry_price": 7686.004249887243,
-    "entry_ts": 1792475154888,
-    "qty": -3.252665388568678
-   },
-   "VOOUSDT": {
-    "entry_book_sha256": "a23a06576429640fa755ca02336408bc825f340af0ce0cdd40017c5d82be9e04",
-    "entry_book_ts": "1792475143841",
-    "entry_mid": 705.6949999999999,
-    "entry_price": 707.4623199627669,
-    "entry_ts": 1792475154888,
-    "qty": 9.114986777567266
-   }
-  },
-  "pair": "VOO/SP500",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:QQQ/NDX100:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "NDX100USDT": {
-    "entry_book_sha256": "5e958933b388eb06241cf21b827fc07a2054339e0d5b8d1e456155314d0d5dc9",
-    "entry_book_ts": "1792475137699",
-    "entry_mid": 29521.5,
-    "entry_price": 29560.823108034518,
-    "entry_ts": 1792475154888,
-    "qty": 0.8457139338993945
-   },
-   "QQQUSDT": {
-    "entry_book_sha256": "e2e715f48bcfd124bc7fe5c7059c2646aa40aa2c8f2cd4d53bbcad6b3658a1ed",
-    "entry_book_ts": "1792475138995",
-    "entry_mid": 717.695,
-    "entry_price": 717.6485011012461,
-    "entry_ts": 1792475154888,
-    "qty": -32.03432417174033
-   }
-  },
-  "pair": "QQQ/NDX100",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:QQQ/TQQQ:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "QQQUSDT": {
-    "entry_book_sha256": "e2e715f48bcfd124bc7fe5c7059c2646aa40aa2c8f2cd4d53bbcad6b3658a1ed",
-    "entry_book_ts": "1792475138995",
-    "entry_mid": 717.695,
-    "entry_price": 717.563496322422,
-    "entry_ts": 1792475154888,
-    "qty": -95.29761035182456
-   },
-   "TQQQUSDT": {
-    "entry_book_sha256": "b5f719f9b80718f1afce0c458d9b52717bea2b16053df55f20620571fa2707a9",
-    "entry_book_ts": "1792475142830",
-    "entry_mid": 70.22,
-    "entry_price": 70.26596128926403,
-    "entry_ts": 1792475154888,
-    "qty": 355.79104791696295
-   }
-  },
-  "pair": "QQQ/TQQQ",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:QQQ/SQQQ:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "QQQUSDT": {
-    "entry_book_sha256": "e2e715f48bcfd124bc7fe5c7059c2646aa40aa2c8f2cd4d53bbcad6b3658a1ed",
-    "entry_book_ts": "1792475138995",
-    "entry_mid": 717.695,
-    "entry_price": 717.5643575705943,
-    "entry_ts": 1792475154888,
-    "qty": -94.32466990117165
-   },
-   "SQQQUSDT": {
-    "entry_book_sha256": "ccbf5ea996562ff61fa184d3f6434c52ad73d54b7c6f53f36c41a9132d9bb668",
-    "entry_book_ts": "1792475141877",
-    "entry_mid": 37.875,
-    "entry_price": 37.837667549396095,
-    "entry_ts": 1792475154888,
-    "qty": -660.7172592592592
-   }
-  },
-  "pair": "QQQ/SQQQ",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:TQQQ/SQQQ:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SQQQUSDT": {
-    "entry_book_sha256": "ccbf5ea996562ff61fa184d3f6434c52ad73d54b7c6f53f36c41a9132d9bb668",
-    "entry_book_ts": "1792475141877",
-    "entry_mid": 37.875,
-    "entry_price": 37.91617148406408,
-    "entry_ts": 1792475154888,
-    "qty": 659.3492702845101
-   },
-   "TQQQUSDT": {
-    "entry_book_sha256": "b5f719f9b80718f1afce0c458d9b52717bea2b16053df55f20620571fa2707a9",
-    "entry_book_ts": "1792475142830",
-    "entry_mid": 70.22,
-    "entry_price": 70.26432608293169,
-    "entry_ts": 1792475154888,
-    "qty": 346.93225281965874
-   }
-  },
-  "pair": "TQQQ/SQQQ",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
   "id": "1792475154888:SOXX/SMH:1",
   "ledger_ts": 1792475154888,
   "legs": {
@@ -1583,474 +751,6 @@
    }
   },
   "pair": "SOXX/SMH",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:SMH/SOXL:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SMHUSDT": {
-    "entry_book_sha256": "cbcaa05f1761de9ae166324ff0dc4653dd10334fb08269e247bdc2296b7e66d5",
-    "entry_book_ts": "1792475139956",
-    "entry_mid": 545.855,
-    "entry_price": 546.8858762076794,
-    "entry_ts": 1792475154888,
-    "qty": 138.54818906979364
-   },
-   "SOXLUSDT": {
-    "entry_book_sha256": "1af12f3fee2cbbc4d8977f98b9c435040f4d79533cdd4a952d5ab78c8d3c3f9e",
-    "entry_book_ts": "1792475140281",
-    "entry_mid": 95.805,
-    "entry_price": 95.78342713102276,
-    "entry_ts": 1792475154888,
-    "qty": -261.005486531635
-   }
-  },
-  "pair": "SMH/SOXL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:SMH/SOXS:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SMHUSDT": {
-    "entry_book_sha256": "cbcaa05f1761de9ae166324ff0dc4653dd10334fb08269e247bdc2296b7e66d5",
-    "entry_book_ts": "1792475139956",
-    "entry_mid": 545.855,
-    "entry_price": 542.5509034175894,
-    "entry_ts": 1792475154888,
-    "qty": -171.97194350777286
-   },
-   "SOXSUSDT": {
-    "entry_book_sha256": "08b25c35d3ca037d2b97e50ef3dcafeab2e21cbc74034c55d50b61f6dad9c054",
-    "entry_book_ts": "1792475140597",
-    "entry_mid": 48.1165,
-    "entry_price": 48.10056749481715,
-    "entry_ts": 1792475154888,
-    "qty": -519.744387687188
-   }
-  },
-  "pair": "SMH/SOXS",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:SOXL/SOXS:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SOXLUSDT": {
-    "entry_book_sha256": "1af12f3fee2cbbc4d8977f98b9c435040f4d79533cdd4a952d5ab78c8d3c3f9e",
-    "entry_book_ts": "1792475140281",
-    "entry_mid": 95.805,
-    "entry_price": 95.78315820839829,
-    "entry_ts": 1792475154888,
-    "qty": -283.23020117531615
-   },
-   "SOXSUSDT": {
-    "entry_book_sha256": "08b25c35d3ca037d2b97e50ef3dcafeab2e21cbc74034c55d50b61f6dad9c054",
-    "entry_book_ts": "1792475140597",
-    "entry_mid": 48.1165,
-    "entry_price": 48.10056749481715,
-    "entry_ts": 1792475154888,
-    "qty": -519.744387687188
-   }
-  },
-  "pair": "SOXL/SOXS",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:XAU/XAUT:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "XAUTUSDT": {
-    "entry_book_sha256": "5eed683aa70532b95f15058473f97a785a1309f1e823bf4934243046e704bfee",
-    "entry_book_ts": "1792475144174",
-    "entry_mid": 4130.135,
-    "entry_price": 4130.7471680975705,
-    "entry_ts": 1792475154888,
-    "qty": 6.052173852004076
-   },
-   "XAUUSDT": {
-    "entry_book_sha256": "2022e15419b12321a144747b3f8c01016399f5c0a66e1f02d9674567d30db084",
-    "entry_book_ts": "1792475144495",
-    "entry_mid": 4138.795,
-    "entry_price": 4138.757556484157,
-    "entry_ts": 1792475154888,
-    "qty": -5.786154671727925
-   }
-  },
-  "pair": "XAU/XAUT",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:XAU/PAXG:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "PAXGUSDT": {
-    "entry_book_sha256": "989ca9e62b99a9a3c0a8108468bedf6ca60a6c1f3e012f2e2d358ff8a32c7c45",
-    "entry_book_ts": "1792475138694",
-    "entry_mid": 4130.265,
-    "entry_price": 4129.331658399045,
-    "entry_ts": 1792475154888,
-    "qty": -6.054248500274879
-   },
-   "XAUUSDT": {
-    "entry_book_sha256": "2022e15419b12321a144747b3f8c01016399f5c0a66e1f02d9674567d30db084",
-    "entry_book_ts": "1792475144495",
-    "entry_mid": 4138.795,
-    "entry_price": 4139.077686061538,
-    "entry_ts": 1792475154888,
-    "qty": 5.920120538298307
-   }
-  },
-  "pair": "XAU/PAXG",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:XAUT/PAXG:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "PAXGUSDT": {
-    "entry_book_sha256": "989ca9e62b99a9a3c0a8108468bedf6ca60a6c1f3e012f2e2d358ff8a32c7c45",
-    "entry_book_ts": "1792475138694",
-    "entry_mid": 4130.265,
-    "entry_price": 4129.331658399045,
-    "entry_ts": 1792475154888,
-    "qty": -6.054248500274879
-   },
-   "XAUTUSDT": {
-    "entry_book_sha256": "5eed683aa70532b95f15058473f97a785a1309f1e823bf4934243046e704bfee",
-    "entry_book_ts": "1792475144174",
-    "entry_mid": 4130.135,
-    "entry_price": 4130.757141210177,
-    "entry_ts": 1792475154888,
-    "qty": 6.157538406782342
-   }
-  },
-  "pair": "XAUT/PAXG",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:TSLA/TSLL:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "TSLAUSDT": {
-    "entry_book_sha256": "07f65c32b480556d1dbef9eccb516dfcc22dea8a3222cc2aecf3a890a7d0f221",
-    "entry_book_ts": "1792475143155",
-    "entry_mid": 366.405,
-    "entry_price": 366.2689990834651,
-    "entry_ts": 1792475154888,
-    "qty": -130.72209533472147
-   },
-   "TSLLUSDT": {
-    "entry_book_sha256": "19dbf70ee5166dad00a1e6c0def4713623aff54ae5d3fc52709e6e1881e56500",
-    "entry_book_ts": "1792475143487",
-    "entry_mid": 9.463000000000001,
-    "entry_price": 9.508667756609555,
-    "entry_ts": 1792475154888,
-    "qty": 2629.1800954578825
-   }
-  },
-  "pair": "TSLA/TSLL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:NVDA/NVDL:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "NVDAUSDT": {
-    "entry_book_sha256": "815b312129924c77ca59b9e808b4a30e22ddd2ebed3045850ba1c29c22e721ee",
-    "entry_book_ts": "1792475138022",
-    "entry_mid": 217.14499999999998,
-    "entry_price": 217.08580623797317,
-    "entry_ts": 1792475154888,
-    "qty": -213.62451999849455
-   },
-   "NVDLUSDT": {
-    "entry_book_sha256": "bfeba6c9b2064b9c9e8c6c2c95bea2f29d7df0a170b0302bc67865da9f36f906",
-    "entry_book_ts": "1792475138337",
-    "entry_mid": 32.822,
-    "entry_price": 32.90595414311556,
-    "entry_ts": 1792475154888,
-    "qty": 759.7409238239759
-   }
-  },
-  "pair": "NVDA/NVDL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:AAPL/AAPU:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "AAPLUSDT": {
-    "entry_book_sha256": "1b37f18ea753b8fa66432e60f31bee119629a510b78eb6192af33e9bd91a58f3",
-    "entry_book_ts": "1792475133490",
-    "entry_mid": 343.14,
-    "entry_price": 342.90437034221935,
-    "entry_ts": 1792475154888,
-    "qty": -136.03760614682233
-   },
-   "AAPUUSDT": {
-    "entry_book_sha256": "2788ec40cee3f62f5bb0bb4ea8446da511d029c319b403a7fac87117bbb60d2e",
-    "entry_book_ts": "1792475133799",
-    "entry_mid": 46.635,
-    "entry_price": 46.87175342007384,
-    "entry_ts": 1792475154888,
-    "qty": 533.3702747568477
-   }
-  },
-  "pair": "AAPL/AAPU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:MSFT/MSFU:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "MSFTUSDT": {
-    "entry_book_sha256": "195ef175390b63c9a5cd86b1bf582388082729cb5f1690d4be388bc81af16f49",
-    "entry_book_ts": "1792475137062",
-    "entry_mid": 535.02,
-    "entry_price": 534.7774298321366,
-    "entry_ts": 1792475154888,
-    "qty": -84.93307536141315
-   },
-   "MSFUUSDT": {
-    "entry_book_sha256": "21ed5293e57c0db1a91ee0a4b9e9f3f4b11129c0b0b4bc1fa8cac55a98076448",
-    "entry_book_ts": "1792475137391",
-    "entry_mid": 42.2635,
-    "entry_price": 42.50040543039421,
-    "entry_ts": 1792475154888,
-    "qty": 588.2296826778321
-   }
-  },
-  "pair": "MSFT/MSFU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:AMZN/AMZU:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "AMZNUSDT": {
-    "entry_book_sha256": "53e128a38cfc904073e1cab5bf4b118f920a5fbae7987ee85ec2675ee227f12b",
-    "entry_book_ts": "1792475134123",
-    "entry_mid": 263.505,
-    "entry_price": 263.358679786138,
-    "entry_ts": 1792475154888,
-    "qty": -169.87470946240796
-   },
-   "AMZUUSDT": {
-    "entry_book_sha256": "3ca85dc6ff8ca8c9e39044efc1073b791ea20010b24da4d051067f9bfffdc737",
-    "entry_book_ts": "1792475134529",
-    "entry_mid": 37.518,
-    "entry_price": 37.69969358127361,
-    "entry_ts": 1792475154888,
-    "qty": 663.1353633181287
-   }
-  },
-  "pair": "AMZN/AMZU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:META/METU:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "METAUSDT": {
-    "entry_book_sha256": "ea5133180d7b664500bc2d466139d5ec89b958cc590f3d77908f25622b0ed22b",
-    "entry_book_ts": "1792475135819",
-    "entry_mid": 705.7149999999999,
-    "entry_price": 705.1002331339911,
-    "entry_ts": 1792475154888,
-    "qty": -63.15539317002018
-   },
-   "METUUSDT": {
-    "entry_book_sha256": "72b1f9945cc42c28d04ab6e100e9b45370ec3b0b3c0d61f1e4c09f2a9cd64f6f",
-    "entry_book_ts": "1792475136123",
-    "entry_mid": 28.633,
-    "entry_price": 28.793356339915192,
-    "entry_ts": 1792475154888,
-    "qty": 868.255847108154
-   }
-  },
-  "pair": "META/METU",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:GOOGL/GGLL:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "GGLLUSDT": {
-    "entry_book_sha256": "926a30e16f2b281319952eb8a5e71d9a25d550cce83422ddfe1e59557bbd3936",
-    "entry_book_ts": "1792475135191",
-    "entry_mid": 98.935,
-    "entry_price": 99.1499283581542,
-    "entry_ts": 1792475154888,
-    "qty": 252.14339953624358
-   },
-   "GOOGLUSDT": {
-    "entry_book_sha256": "8133c6f899c06b9aee25b68787c1187286986ae263ab8cbc63b402b49197bfd3",
-    "entry_book_ts": "1792475135509",
-    "entry_mid": 344.625,
-    "entry_price": 344.4973317834526,
-    "entry_ts": 1792475154888,
-    "qty": -131.31285208011943
-   }
-  },
-  "pair": "GOOGL/GGLL",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:TENCENT/TENCENTHKD:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "TENCENTHKDUSDT": {
-    "entry_book_sha256": "b24cfc2e538b93d30b94f9c50a5cc62ad1c496b05d93ce34dc2e0a01b5bc5b6f",
-    "entry_book_ts": "1792475142189",
-    "entry_mid": 410.515,
-    "entry_price": 409.62709107216244,
-    "entry_ts": 1792475154888,
-    "qty": -61.03111963265107
-   },
-   "TENCENTUSDT": {
-    "entry_book_sha256": "16fd20158e69b50eb2cfaf2b9424d488c47cffa9074b26dc0cf744714a560d12",
-    "entry_book_ts": "1792475142524",
-    "entry_mid": 52.45,
-    "entry_price": 52.499587273382346,
-    "entry_ts": 1792475154888,
-    "qty": 339.6516714466306
-   }
-  },
-  "pair": "TENCENT/TENCENTHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:XIAOMI/XIAOMIHKD:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "XIAOMIHKDUSDT": {
-    "entry_book_sha256": "2ad1d8903db72987373aebb1e5136bf1673389d8f0586a867132f1773499ab03",
-    "entry_book_ts": "1792475144861",
-    "entry_mid": 27.126,
-    "entry_price": 27.204429934412538,
-    "entry_ts": 1792475154888,
-    "qty": 918.9679791222525
-   },
-   "XIAOMIUSDT": {
-    "entry_book_sha256": "736ae77d8e4682e386c039ed5da9e102eca6332d7801e15e670c52b5629af592",
-    "entry_book_ts": "1792475145220",
-    "entry_mid": 3.4653,
-    "entry_price": 3.4563422357678575,
-    "entry_ts": 1792475154888,
-    "qty": -5838.451355349448
-   }
-  },
-  "pair": "XIAOMI/XIAOMIHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:ZHIPU/ZHIPUHKD:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "ZHIPUHKDUSDT": {
-    "entry_book_sha256": "74e6f7434f5cb84b7658a565afa80583a17325e50e56d40debf9b5b93beeee92",
-    "entry_book_ts": "1792475145551",
-    "entry_mid": 483.65999999999997,
-    "entry_price": 484.60612342962156,
-    "entry_ts": 1792475154888,
-    "qty": 51.588287459249784
-   },
-   "ZHIPUUSDT": {
-    "entry_book_sha256": "eb10ea35973f790385e5ce27f8a31ec6be9745077fe10f8ad4e115f6dd4a7035",
-    "entry_book_ts": "1792475145957",
-    "entry_mid": 61.75,
-    "entry_price": 61.663670027468086,
-    "entry_ts": 1792475154888,
-    "qty": -352.63410495452604
-   }
-  },
-  "pair": "ZHIPU/ZHIPUHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:MINIMAX/MINIMAXHKD:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "MINIMAXHKDUSDT": {
-    "entry_book_sha256": "ac55ab3cad5897ca413d38d0a76e82d516229e2f0e95dba840cb6c2f31bd3753",
-    "entry_book_ts": "1792475136437",
-    "entry_mid": 170.55,
-    "entry_price": 171.08399680293903,
-    "entry_ts": 1792475154888,
-    "qty": 146.12705143191118
-   },
-   "MINIMAXUSDT": {
-    "entry_book_sha256": "14b50f6e5abe9012bd9d0a99db49c70fc1739bdcccb36afa640114a094c0515a",
-    "entry_book_ts": "1792475136739",
-    "entry_mid": 21.769,
-    "entry_price": 21.724197936780808,
-    "entry_ts": 1792475154888,
-    "qty": -1026.1736288821744
-   }
-  },
-  "pair": "MINIMAX/MINIMAXHKD",
-  "verdict": "UNFAVOURABLE"
- },
- {
-  "end_ms": 1792561554888,
-  "hold_days": 1,
-  "id": "1792475154888:SHEIN/SHEINHKD:1",
-  "ledger_ts": 1792475154888,
-  "legs": {
-   "SHEINHKDUSDT": {
-    "entry_book_sha256": "38e7dd2b7426a0988bdb7f2c563931397cebddacd7ecf0235a0363c752215ad7",
-    "entry_book_ts": "1792475139306",
-    "entry_mid": 37.040000000000006,
-    "entry_price": 36.86010127190492,
-    "entry_ts": 1792475154888,
-    "qty": -678.2401332970621
-   },
-   "SHEINUSDT": {
-    "entry_book_sha256": "8629d38c7dc9871082d0c92a60c498c18cc06743d33efd6e0b5f16002f3a6ff2",
-    "entry_book_ts": "1792475139630",
-    "entry_mid": 4.7415,
-    "entry_price": 4.7530366775054675,
-    "entry_ts": 1792475154888,
-    "qty": 4832.78219773953
-   }
-  },
-  "pair": "SHEIN/SHEINHKD",
   "verdict": "UNFAVOURABLE"
  },
  {
@@ -4128,6 +2828,656 @@
     "entry_price": 4.766423169059684,
     "entry_ts": 1792546127731,
     "qty": 4863.105988152835
+   }
+  },
+  "pair": "SHEIN/SHEINHKD",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:SPY/VOO:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SPYUSDT": {
+    "entry_book_sha256": "9007e3a232323cc27a561cdc3e3fb9a95d40c8b3fbbc3d97ac7767891786684e",
+    "entry_book_ts": "1792563944382",
+    "entry_mid": 771.965,
+    "entry_price": 771.9494633725276,
+    "entry_ts": 1792563956424,
+    "qty": -24.17843515684489
+   },
+   "VOOUSDT": {
+    "entry_book_sha256": "99d09adf3c5b6c9b568552607deea15041b89e832cd64c4a4e8bec66583f266f",
+    "entry_book_ts": "1792563946201",
+    "entry_mid": 709.685,
+    "entry_price": 711.9541152266664,
+    "entry_ts": 1792563956424,
+    "qty": 35.114622509121524
+   }
+  },
+  "pair": "SPY/VOO",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:SPY/SP500:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SP500USDT": {
+    "entry_book_sha256": "d4f9a997644e56c078a8ffef7937072a0f211dc7bffe5d1b2ac07e8e6977e3ff",
+    "entry_book_ts": "1792563944128",
+    "entry_mid": 7739.55,
+    "entry_price": 7761.99958510064,
+    "entry_ts": 1792563956424,
+    "qty": 3.2208195486106637
+   },
+   "SPYUSDT": {
+    "entry_book_sha256": "9007e3a232323cc27a561cdc3e3fb9a95d40c8b3fbbc3d97ac7767891786684e",
+    "entry_book_ts": "1792563944382",
+    "entry_mid": 771.965,
+    "entry_price": 771.9376023794973,
+    "entry_ts": 1792563956424,
+    "qty": -28.13393898825769
+   }
+  },
+  "pair": "SPY/SP500",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:VOO/SP500:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SP500USDT": {
+    "entry_book_sha256": "d4f9a997644e56c078a8ffef7937072a0f211dc7bffe5d1b2ac07e8e6977e3ff",
+    "entry_book_ts": "1792563944128",
+    "entry_mid": 7739.55,
+    "entry_price": 7761.99958510064,
+    "entry_ts": 1792563956424,
+    "qty": 3.2208195486106637
+   },
+   "VOOUSDT": {
+    "entry_book_sha256": "99d09adf3c5b6c9b568552607deea15041b89e832cd64c4a4e8bec66583f266f",
+    "entry_book_ts": "1792563946201",
+    "entry_mid": 709.685,
+    "entry_price": 707.8127326277943,
+    "entry_ts": 1792563956424,
+    "qty": -9.075513339721857
+   }
+  },
+  "pair": "VOO/SP500",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:QQQ/NDX100:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "NDX100USDT": {
+    "entry_book_sha256": "6161d706bd72a370ee7feb5f13b0bdb8223b80dae02bfdf5a71ff5f94ff917e7",
+    "entry_book_ts": "1792563941326",
+    "entry_mid": 29736.5,
+    "entry_price": 29766.949991524016,
+    "entry_ts": 1792563956424,
+    "qty": 0.8398576275741593
+   },
+   "QQQUSDT": {
+    "entry_book_sha256": "d5f30b02be481e520b3868e79ea5910e65e551780368612362d1f47f33e92887",
+    "entry_book_ts": "1792563942366",
+    "entry_mid": 721.995,
+    "entry_price": 721.9369929904515,
+    "entry_ts": 1792563956424,
+    "qty": -31.840757707752008
+   }
+  },
+  "pair": "QQQ/NDX100",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:QQQ/TQQQ:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "QQQUSDT": {
+    "entry_book_sha256": "d5f30b02be481e520b3868e79ea5910e65e551780368612362d1f47f33e92887",
+    "entry_book_ts": "1792563942366",
+    "entry_mid": 721.995,
+    "entry_price": 721.861412873235,
+    "entry_ts": 1792563956424,
+    "qty": -94.72443957680368
+   },
+   "TQQQUSDT": {
+    "entry_book_sha256": "758b4f0498c8eb0c7397b3d6cc9e6a763541548ee9d57fb5131d584239762c81",
+    "entry_book_ts": "1792563945405",
+    "entry_mid": 71.485,
+    "entry_price": 71.53922632182416,
+    "entry_ts": 1792563956424,
+    "qty": 349.45862969688505
+   }
+  },
+  "pair": "QQQ/TQQQ",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:QQQ/SQQQ:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "QQQUSDT": {
+    "entry_book_sha256": "d5f30b02be481e520b3868e79ea5910e65e551780368612362d1f47f33e92887",
+    "entry_book_ts": "1792563942366",
+    "entry_mid": 721.995,
+    "entry_price": 721.8620488308668,
+    "entry_ts": 1792563956424,
+    "qty": -93.75357953935314
+   },
+   "SQQQUSDT": {
+    "entry_book_sha256": "16e73b3cebf153cc2305cb4ed45abd6d11f573c7dd451c43300e0cce03564051",
+    "entry_book_ts": "1792563944640",
+    "entry_mid": 37.224999999999994,
+    "entry_price": 37.138823885761546,
+    "entry_ts": 1792563956424,
+    "qty": -673.150018883194
+   }
+  },
+  "pair": "QQQ/SQQQ",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:TQQQ/SQQQ:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SQQQUSDT": {
+    "entry_book_sha256": "16e73b3cebf153cc2305cb4ed45abd6d11f573c7dd451c43300e0cce03564051",
+    "entry_book_ts": "1792563944640",
+    "entry_mid": 37.224999999999994,
+    "entry_price": 37.138823885761546,
+    "entry_ts": 1792563956424,
+    "qty": -673.150018883194
+   },
+   "TQQQUSDT": {
+    "entry_book_sha256": "758b4f0498c8eb0c7397b3d6cc9e6a763541548ee9d57fb5131d584239762c81",
+    "entry_book_ts": "1792563945405",
+    "entry_mid": 71.485,
+    "entry_price": 71.4572598913787,
+    "entry_ts": 1792563956424,
+    "qty": -341.11287792093424
+   }
+  },
+  "pair": "TQQQ/SQQQ",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:SMH/SOXL:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SMHUSDT": {
+    "entry_book_sha256": "ec3a80033b1473ac0fd5d648f391b56d40609d470eecc98e46d7de02a45e5920",
+    "entry_book_ts": "1792563943122",
+    "entry_mid": 557.9,
+    "entry_price": 559.6652541909355,
+    "entry_ts": 1792563956424,
+    "qty": 135.44710366853258
+   },
+   "SOXLUSDT": {
+    "entry_book_sha256": "4ce5379f52e8ab5e04fbc6f6eb634c6ba20dae293bb5445af679da56c554988e",
+    "entry_book_ts": "1792563943378",
+    "entry_mid": 103.555,
+    "entry_price": 103.53210166029888,
+    "entry_ts": 1792563956424,
+    "qty": -241.4709988408037
+   }
+  },
+  "pair": "SMH/SOXL",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:SMH/SOXS:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SMHUSDT": {
+    "entry_book_sha256": "ec3a80033b1473ac0fd5d648f391b56d40609d470eecc98e46d7de02a45e5920",
+    "entry_book_ts": "1792563943122",
+    "entry_mid": 557.9,
+    "entry_price": 554.3769386123721,
+    "entry_ts": 1792563956424,
+    "qty": -168.30319248452716
+   },
+   "SOXSUSDT": {
+    "entry_book_sha256": "300bb1edbfd63eb84faf32a1e604620842132cbcb7a8cd53ff31bc1c9dfbc233",
+    "entry_book_ts": "1792563943629",
+    "entry_mid": 44.418499999999995,
+    "entry_price": 44.39266708797223,
+    "entry_ts": 1792563956424,
+    "qty": -563.1560714849122
+   }
+  },
+  "pair": "SMH/SOXS",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:SOXL/SOXS:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SOXLUSDT": {
+    "entry_book_sha256": "4ce5379f52e8ab5e04fbc6f6eb634c6ba20dae293bb5445af679da56c554988e",
+    "entry_book_ts": "1792563943378",
+    "entry_mid": 103.555,
+    "entry_price": 103.53115238046814,
+    "entry_ts": 1792563956424,
+    "qty": -262.02477653544923
+   },
+   "SOXSUSDT": {
+    "entry_book_sha256": "300bb1edbfd63eb84faf32a1e604620842132cbcb7a8cd53ff31bc1c9dfbc233",
+    "entry_book_ts": "1792563943629",
+    "entry_mid": 44.418499999999995,
+    "entry_price": 44.39266708797223,
+    "entry_ts": 1792563956424,
+    "qty": -563.1560714849122
+   }
+  },
+  "pair": "SOXL/SOXS",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:XAU/XAUT:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "XAUTUSDT": {
+    "entry_book_sha256": "1e3174473fe091b8f75fafc4c8c9c529234c1ac6e353ee41a0d565da2f774c26",
+    "entry_book_ts": "1792563946453",
+    "entry_mid": 4114.5650000000005,
+    "entry_price": 4115.0222429418955,
+    "entry_ts": 1792563956424,
+    "qty": 6.075301304356279
+   },
+   "XAUUSDT": {
+    "entry_book_sha256": "4b69f038851b61aab6a5cc97788f14df1e63f116dc8abcfbdf73854f3afad7b6",
+    "entry_book_ts": "1792563946711",
+    "entry_mid": 4121.545,
+    "entry_price": 4121.54,
+    "entry_ts": 1792563956424,
+    "qty": -5.810458899691451
+   }
+  },
+  "pair": "XAU/XAUT",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:XAU/PAXG:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "PAXGUSDT": {
+    "entry_book_sha256": "33e84a43c54e72028f27f3007a10a938a65086eb5d510f3dba7f1f7fdd8d7e89",
+    "entry_book_ts": "1792563942114",
+    "entry_mid": 4119.295,
+    "entry_price": 4120.675417914288,
+    "entry_ts": 1792563956424,
+    "qty": 6.066966568469483
+   },
+   "XAUUSDT": {
+    "entry_book_sha256": "4b69f038851b61aab6a5cc97788f14df1e63f116dc8abcfbdf73854f3afad7b6",
+    "entry_book_ts": "1792563946711",
+    "entry_mid": 4121.545,
+    "entry_price": 4121.54,
+    "entry_ts": 1792563956424,
+    "qty": -5.945211572560991
+   }
+  },
+  "pair": "XAU/PAXG",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:XAUT/PAXG:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "PAXGUSDT": {
+    "entry_book_sha256": "33e84a43c54e72028f27f3007a10a938a65086eb5d510f3dba7f1f7fdd8d7e89",
+    "entry_book_ts": "1792563942114",
+    "entry_mid": 4119.295,
+    "entry_price": 4120.675417914288,
+    "entry_ts": 1792563956424,
+    "qty": 6.066966568469483
+   },
+   "XAUTUSDT": {
+    "entry_book_sha256": "1e3174473fe091b8f75fafc4c8c9c529234c1ac6e353ee41a0d565da2f774c26",
+    "entry_book_ts": "1792563946453",
+    "entry_mid": 4114.5650000000005,
+    "entry_price": 4113.647537209065,
+    "entry_ts": 1792563956424,
+    "qty": -6.182641766851533
+   }
+  },
+  "pair": "XAUT/PAXG",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:TSLA/TSLL:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "TSLAUSDT": {
+    "entry_book_sha256": "c3212a4b6a3acaf2e4ca652f3090cfb34e923daaa6ea1e34e0dd70039bd12f34",
+    "entry_book_ts": "1792563945665",
+    "entry_mid": 380.19,
+    "entry_price": 380.06647516580193,
+    "entry_ts": 1792563956424,
+    "qty": -125.87430226399246
+   },
+   "TSLLUSDT": {
+    "entry_book_sha256": "7d8757f97dda8e9fe1e6ea35bced7492f5fa850fa83d911d666add38f0a8c617",
+    "entry_book_ts": "1792563945932",
+    "entry_mid": 10.2,
+    "entry_price": 10.222723477295771,
+    "entry_ts": 1792563956424,
+    "qty": 2445.5322552276725
+   }
+  },
+  "pair": "TSLA/TSLL",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:NVDA/NVDL:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "NVDAUSDT": {
+    "entry_book_sha256": "53e7945e7bbbc505036bb563f3032c0abf878d053fe4c09e1c3ca3ab0792dbf4",
+    "entry_book_ts": "1792563941589",
+    "entry_mid": 220.845,
+    "entry_price": 220.7849437813958,
+    "entry_ts": 1792563956424,
+    "qty": -209.616873610656
+   },
+   "NVDLUSDT": {
+    "entry_book_sha256": "6f3c48ed85b438dacc7cb0946ada1adf995d8959e0bae79e8810b9a8d1f3b33b",
+    "entry_book_ts": "1792563941855",
+    "entry_mid": 33.923,
+    "entry_price": 34.03266190475253,
+    "entry_ts": 1792563956424,
+    "qty": 734.5884394810988
+   }
+  },
+  "pair": "NVDA/NVDL",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:AAPL/AAPU:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "AAPLUSDT": {
+    "entry_book_sha256": "f9df87b8847f779ec8b179f459ee70c2973ee3d3596154b635f0bb61f6840e91",
+    "entry_book_ts": "1792563937961",
+    "entry_mid": 338.29499999999996,
+    "entry_price": 337.99652870527854,
+    "entry_ts": 1792563956424,
+    "qty": -137.84721345138942
+   },
+   "AAPUUSDT": {
+    "entry_book_sha256": "9b044fb93c160c2fc012117d1203b58d306a21a525fcf1a530b7430998b72af5",
+    "entry_book_ts": "1792563938219",
+    "entry_mid": 45.287,
+    "entry_price": 45.81430730133531,
+    "entry_ts": 1792563956424,
+    "qty": 545.6810649906158
+   }
+  },
+  "pair": "AAPL/AAPU",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:MSFT/MSFU:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "MSFTUSDT": {
+    "entry_book_sha256": "bb08a6b29fa1099755a42811b91178b3697feb58e2d506c23300fb31b915b691",
+    "entry_book_ts": "1792563940751",
+    "entry_mid": 528.815,
+    "entry_price": 528.6491968424425,
+    "entry_ts": 1792563956424,
+    "qty": -85.84431004243247
+   },
+   "MSFUUSDT": {
+    "entry_book_sha256": "f719d8ee9e03ad552b5e0d6141d431cc07dd07c088fcff4cc223aa19dd294b8b",
+    "entry_book_ts": "1792563941035",
+    "entry_mid": 41.318,
+    "entry_price": 42.97857343477069,
+    "entry_ts": 1792563956424,
+    "qty": 581.6851980427625
+   }
+  },
+  "pair": "MSFT/MSFU",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:AMZN/AMZU:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "AMZNUSDT": {
+    "entry_book_sha256": "ae01f46050dcad17f79f77b253b96f7f8b31ebfc3a3de12f145f84d263f56b49",
+    "entry_book_ts": "1792563938475",
+    "entry_mid": 263.875,
+    "entry_price": 263.7793636435882,
+    "entry_ts": 1792563956424,
+    "qty": -169.35945955970965
+   },
+   "AMZUUSDT": {
+    "entry_book_sha256": "242012e70895dd530666b66cc8f85df14e7ac6d7109bc054aa9c8dcdd8fbea81",
+    "entry_book_ts": "1792563938726",
+    "entry_mid": 37.6955,
+    "entry_price": 38.04371324281306,
+    "entry_ts": 1792563956424,
+    "qty": 657.1387982145201
+   }
+  },
+  "pair": "AMZN/AMZU",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:META/METU:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "METAUSDT": {
+    "entry_book_sha256": "83fa0bfb4ba03bd51c4cf95f7a7ffb53e5b9d3fe0bb39220bc5a8665bd60d519",
+    "entry_book_ts": "1792563939737",
+    "entry_mid": 699.9449999999999,
+    "entry_price": 699.3214531491996,
+    "entry_ts": 1792563956424,
+    "qty": -63.63715714502679
+   },
+   "METUUSDT": {
+    "entry_book_sha256": "6453574ef236fb78290cb478b02b3986c8c1d6cba5ecd9de387f4205de6c115f",
+    "entry_book_ts": "1792563940000",
+    "entry_mid": 28.297,
+    "entry_price": 28.436392974006466,
+    "entry_ts": 1792563956424,
+    "qty": 879.1551032106058
+   }
+  },
+  "pair": "META/METU",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:GOOGL/GGLL:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "GGLLUSDT": {
+    "entry_book_sha256": "4dd4cd497ec6871a97f68bccc9058b52835141f4ef360b471cfd6b08e9b72fea",
+    "entry_book_ts": "1792563939225",
+    "entry_mid": 97.535,
+    "entry_price": 98.61287984931211,
+    "entry_ts": 1792563956424,
+    "qty": 253.51657956041726
+   },
+   "GOOGLUSDT": {
+    "entry_book_sha256": "a55e146e99a68655b188e41ec0ed8c10ee68f7e1ce3b70684d9250aaa2454125",
+    "entry_book_ts": "1792563939482",
+    "entry_mid": 341.775,
+    "entry_price": 341.6729219117385,
+    "entry_ts": 1792563956424,
+    "qty": -132.37979291442494
+   }
+  },
+  "pair": "GOOGL/GGLL",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:TENCENT/TENCENTHKD:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "TENCENTHKDUSDT": {
+    "entry_book_sha256": "245267f2fbac7aa31066cba9d9d93e94298015c649ad85ecdd56bffab2d191db",
+    "entry_book_ts": "1792563944896",
+    "entry_mid": 402.575,
+    "entry_price": 402.95349986008773,
+    "entry_ts": 1792563956424,
+    "qty": 62.041898156190285
+   },
+   "TENCENTUSDT": {
+    "entry_book_sha256": "c5eedcd1fa4f4cc9f84c2d9c43eeefb900299087e616ebc02e6f946cc2863c1e",
+    "entry_book_ts": "1792563945155",
+    "entry_mid": 51.385,
+    "entry_price": 51.22554836977032,
+    "entry_ts": 1792563956424,
+    "qty": -347.804951894146
+   }
+  },
+  "pair": "TENCENT/TENCENTHKD",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:XIAOMI/XIAOMIHKD:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "XIAOMIHKDUSDT": {
+    "entry_book_sha256": "a1e22ec8813a45878b4918523974dca6154bb6858715b7e637cd471083762611",
+    "entry_book_ts": "1792563946960",
+    "entry_mid": 26.825499999999998,
+    "entry_price": 26.93129460317963,
+    "entry_ts": 1792563956424,
+    "qty": 928.2880889449848
+   },
+   "XIAOMIUSDT": {
+    "entry_book_sha256": "b9dc2c9076dcbf9344f519745a03d413c4c0398ea8dd849c367e82505b4429ee",
+    "entry_book_ts": "1792563947218",
+    "entry_mid": 3.4269499999999997,
+    "entry_price": 3.419564876822278,
+    "entry_ts": 1792563956424,
+    "qty": -5900.135508030941
+   }
+  },
+  "pair": "XIAOMI/XIAOMIHKD",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:ZHIPU/ZHIPUHKD:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "ZHIPUHKDUSDT": {
+    "entry_book_sha256": "31903b6799c1b5bbc8fa1facd664d0e1ccbe1a9fee09e15297e03ac499603863",
+    "entry_book_ts": "1792563947467",
+    "entry_mid": 492.885,
+    "entry_price": 494.4179857622332,
+    "entry_ts": 1792563956424,
+    "qty": 50.56450355756791
+   },
+   "ZHIPUUSDT": {
+    "entry_book_sha256": "c7e195e203e81351ed3ffc1e03f4421b51a4ed14ec4ca729df7280cb74539f1a",
+    "entry_book_ts": "1792563947723",
+    "entry_mid": 62.849999999999994,
+    "entry_price": 62.78022529505073,
+    "entry_ts": 1792563956424,
+    "qty": -346.3743927270389
+   }
+  },
+  "pair": "ZHIPU/ZHIPUHKD",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:MINIMAX/MINIMAXHKD:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "MINIMAXHKDUSDT": {
+    "entry_book_sha256": "a0dadb086ce20c052f2dee3a7ec1c26836527991d524374f654856683168c1fb",
+    "entry_book_ts": "1792563940250",
+    "entry_mid": 171.135,
+    "entry_price": 171.7653217786215,
+    "entry_ts": 1792563956424,
+    "qty": 145.54742331645423
+   },
+   "MINIMAXUSDT": {
+    "entry_book_sha256": "97cace382755259c4adc00090b5fbf53c51b985e6416484212bb1fd291131fd8",
+    "entry_book_ts": "1792563940499",
+    "entry_mid": 21.8405,
+    "entry_price": 21.789533075624878,
+    "entry_ts": 1792563956424,
+    "qty": -1023.4706375183753
+   }
+  },
+  "pair": "MINIMAX/MINIMAXHKD",
+  "verdict": "UNFAVOURABLE"
+ },
+ {
+  "end_ms": 1792823156424,
+  "hold_days": 3,
+  "id": "1792563956424:SHEIN/SHEINHKD:3",
+  "ledger_ts": 1792563956424,
+  "legs": {
+   "SHEINHKDUSDT": {
+    "entry_book_sha256": "ebede5fd829d42355f6116771cc8d4288ff983576d70a29fa4f8d5a50d939b40",
+    "entry_book_ts": "1792563942612",
+    "entry_mid": 36.85,
+    "entry_price": 36.69317436313725,
+    "entry_ts": 1792563956424,
+    "qty": -681.3256261937244
+   },
+   "SHEINUSDT": {
+    "entry_book_sha256": "8c30dddfefb2d96eb0c650833f3428686dd02e859838f8a168bb3edfa04c88fc",
+    "entry_book_ts": "1792563942872",
+    "entry_mid": 4.713,
+    "entry_price": 4.725300972230996,
+    "entry_ts": 1792563956424,
+    "qty": 4905.427440864275
    }
   },
   "pair": "SHEIN/SHEINHKD",
