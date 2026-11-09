@@ -162003,6 +162003,52 @@
   "pair": "SPY/VOO",
   "status": "closed"
  },
+ "1794092128774:TENCENT/TENCENTHKD:1": {
+  "execution": {
+   "TENCENTHKDUSDT": {
+    "entry_book_sha256": "4601b7dea4b45f48e1b4bb9eddd0a1b379debc64ea16afbff18e2b41b2da4468",
+    "entry_book_ts": "1794092116116",
+    "entry_mid": 418.64,
+    "entry_price": 420.2003380083052,
+    "entry_ts": 1794092128774,
+    "exit_book_sha256": "b4d8386f8a19a4f5ae5bf635099389818134b3535f02f0d30b00bcf7081eb50d",
+    "exit_book_ts": "1794210373258",
+    "exit_mid": 417.5,
+    "exit_price": 416.5920632334941,
+    "exit_ts": 1794210385978,
+    "fees_usdt": 29.871194483377366,
+    "qty": 59.49543048560298,
+    "settlement_marks": {
+     "1794096000000": 418.63,
+     "1794124800000": 418.81,
+     "1794153600000": 419.05
+    }
+   },
+   "TENCENTUSDT": {
+    "entry_book_sha256": "077cde48c644a7b4cb509cc0fe3a6609908a4a0561c6d82673a0da4eb7ff394b",
+    "entry_book_ts": "1794092116446",
+    "entry_mid": 53.510000000000005,
+    "entry_price": 53.35640366672465,
+    "entry_ts": 1794092128774,
+    "exit_book_sha256": "ec7d318322475f91fbf29f3df425a75f3a3099db319214ccf4a7483c1557742f",
+    "exit_book_ts": "1794210373500",
+    "exit_mid": 53.364999999999995,
+    "exit_price": 53.55956726651032,
+    "exit_ts": 1794210385978,
+    "fees_usdt": 23.079496593172728,
+    "qty": -359.776255310896,
+    "settlement_marks": {
+     "1794096000000": 53.5,
+     "1794124800000": 53.48,
+     "1794153600000": 53.5
+    }
+   }
+  },
+  "execution_type": "shadow",
+  "hold_days": 1,
+  "pair": "TENCENT/TENCENTHKD",
+  "status": "closed"
+ },
  "1794092128774:TQQQ/SQQQ:1": {
   "execution": {
    "SQQQUSDT": {
