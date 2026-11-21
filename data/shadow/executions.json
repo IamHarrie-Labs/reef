@@ -204011,6 +204011,64 @@
   "pair": "GOOGL/GGLL",
   "status": "closed"
  },
+ "1794944559313:GOOGL/GGLL:3": {
+  "execution": {
+   "GGLLUSDT": {
+    "entry_book_sha256": "ea94600da64376b8d4de9445dc2c2d662bdd00b9b7727ccc2f0612cc8e48e267",
+    "entry_book_ts": "1794944542383",
+    "entry_mid": 63.285,
+    "entry_price": 63.52980389809773,
+    "entry_ts": 1794944559313,
+    "exit_book_sha256": "1110b3e80c31e5dac455105e907c77600a89d21025cf2aa5f4cb66fda87df679",
+    "exit_book_ts": "1795234345368",
+    "exit_mid": 56.86,
+    "exit_price": 56.4657155158897,
+    "exit_ts": 1795234364149,
+    "fees_usdt": 28.332100538149255,
+    "qty": 393.51608955223884,
+    "settlement_marks": {
+     "1794960000000": 64.55,
+     "1794988800000": 64.09,
+     "1795017600000": 64.16,
+     "1795046400000": 65.53,
+     "1795075200000": 67.14,
+     "1795104000000": 67.22,
+     "1795132800000": 60.21,
+     "1795161600000": 59.68,
+     "1795190400000": 61.98
+    }
+   },
+   "GOOGLUSDT": {
+    "entry_book_sha256": "6b6b444c18074dea663cbab7eefad9df8fceae45891bcee6348c2551bce7b4f6",
+    "entry_book_ts": "1794944542641",
+    "entry_mid": 280.58000000000004,
+    "entry_price": 280.47972222322505,
+    "entry_ts": 1794944559313,
+    "exit_book_sha256": "8d2ac61b09a329231298e12fb61c1d18745cc7a9e21fade079c0ef6e11e63d0e",
+    "exit_book_ts": "1795234345629",
+    "exit_mid": 266.03,
+    "exit_price": 266.18231963584515,
+    "exit_ts": 1795234364149,
+    "fees_usdt": 53.56823021106053,
+    "qty": -163.31915671605643,
+    "settlement_marks": {
+     "1794960000000": 283.62,
+     "1794988800000": 282.67,
+     "1795017600000": 282.68,
+     "1795046400000": 285.89,
+     "1795075200000": 289.94,
+     "1795104000000": 289.64,
+     "1795132800000": 274.35,
+     "1795161600000": 272.71,
+     "1795190400000": 278.16
+    }
+   }
+  },
+  "execution_type": "shadow",
+  "hold_days": 3,
+  "pair": "GOOGL/GGLL",
+  "status": "closed"
+ },
  "1794944559313:META/METU:1": {
   "execution": {
    "METAUSDT": {
@@ -210652,6 +210710,12 @@
   "hold_days": 1,
   "pair": "AMZN/AMZU",
   "status": "closed"
+ },
+ "1795111498070:GOOGL/GGLL:1": {
+  "execution_type": "shadow",
+  "hold_days": 1,
+  "pair": "GOOGL/GGLL",
+  "status": "missed_exit_window"
  },
  "1795111498070:META/METU:1": {
   "execution": {
